@@ -29,6 +29,14 @@ describe("findBilingualViolations", () => {
     expect(findBilingualViolations(source)).toEqual([]);
   });
 
+  it("exime las directivas de empaquetadores (turbopackIgnore, webpackIgnore)", () => {
+    const source = [
+      "const p = path.join(/* turbopackIgnore: true */ root, file);",
+      "import(/* webpackIgnore: true */ url);",
+    ].join("\n");
+    expect(findBilingualViolations(source)).toEqual([]);
+  });
+
   it("ignora el shebang", () => {
     expect(findBilingualViolations("#!/usr/bin/env node\nconst a = 1;")).toEqual([]);
   });

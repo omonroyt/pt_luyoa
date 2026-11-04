@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
-
 /**
  * ES: Indica qué variables están configuradas, sin revelar ningún valor.
  * EN: Reports which variables are configured, without revealing any value.

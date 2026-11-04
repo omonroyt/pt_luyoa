@@ -63,7 +63,7 @@
 ### 1.4 Por confirmar con `/openapi.json`
 
 - Filtros de `/v1/visits` y `/v1/transactions` (no se usan en las herramientas iniciales).
-- Respuesta exacta de `POST /v1/campaigns` y `POST /v1/campaigns/{id}/send` (códigos y campos).
+- ~~Respuesta exacta de `POST /v1/campaigns` y `POST /v1/campaigns/{id}/send`~~ **Verificado el 2026-11-04 con una campaña de prueba autorizada** (`cmp_297f6b6a1b0d`): crear devuelve al menos `id` y `status`; la respuesta de `/send` tiene una forma distinta a la campaña, así que `send_campaign` no la interpreta y confirma el estado releyendo la campaña. Las campañas propias incluyen además `audience` con los filtros usados.
 - Si `/v1/campaigns` acepta filtros por estado o canal.
 
 ---
@@ -338,8 +338,9 @@ type Offer =
 
 - **Entrada:** `{ campaign_id: string; approval_token: string }`.
 - **Token:** acción `send`, mismo `campaign_id` y hash del borrador.
-- **Errores:** `409` → "Este borrador ya se envió" con su estado actual.
-- **Salida:** `{ campaign_id, status: "sent", sent_at, audience_size }`.
+- **Errores:** si el borrador ya no está en `draft` responde `conflict` sin llamar a `/send` (verificado contra la API real); un `409` de la API también se traduce a `conflict`. Si la API acepta el envío pero la campaña no queda `sent`, responde `upstream_error` explicándolo.
+- **Confirmación:** el cuerpo de la respuesta de `/send` no se interpreta; tras enviar se relee la campaña (fuente de verdad).
+- **Salida:** `{ campaign_id, status: "sent", sent_at, audience_size }`, tomados de la campaña releída.
 
 ---
 
@@ -401,6 +402,15 @@ sequenceDiagram
 | `cid` | Id de campaña (solo `send`) |
 | `h` | Hash SHA-256 del contenido canónico (JSON con llaves ordenadas) |
 | `exp` | Expiración (10 minutos) |
+
+**Contenido firmado** (`approvals/campaign-content.ts`, compartido con la aplicación para que el hash coincida):
+
+| Acción | Contenido | Origen al verificar |
+|---|---|---|
+| `create` | `name`, `objective`, `channel`, `audience`, `offer` (con vigencia), `message` | Lo que recibe la herramienta |
+| `send` | `campaign_id`, `name`, `channel`, `message`, `offer` | El borrador **guardado en la API**, no lo que diga el modelo |
+
+**Orden en las herramientas de escritura:** (1) validar el borrador (mensaje, vigencia, oferta) sin consumir el token; (2) verificar y consumir el token; (3) escribir en la API; (4) vaciar la caché del cliente para que las lecturas siguientes vean el estado nuevo. Sin `APPROVAL_SECRET` y almacén inyectados (caso del CLI stdio), las escrituras responden `approval_required`.
 
 ---
 

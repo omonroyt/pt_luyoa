@@ -4,7 +4,7 @@ Copiloto de negocio para la dueña de Café Alborada. Responde cómo va el negoc
 
 Prueba técnica de AI Engineer para Luyoa · Oscar Monroy.
 
-> **Estado:** servidor MCP de lectura completo (11 herramientas) sobre la base del monorepo, arneses de calidad y gobernanza de IA. En construcción: escrituras con aprobación, agente e interfaz (ver el [plan de implementación](docs/specs/09_PLAN_IMPLEMENTACION.md)).
+> **Estado:** servidor MCP con 13 herramientas (11 de lectura y 2 de escritura protegidas por aprobación), base de datos, endpoints `/api/mcp` y `/api/approvals`, arneses de calidad y gobernanza de IA. En construcción: agente e interfaz (ver el [plan de implementación](docs/specs/09_PLAN_IMPLEMENTACION.md)).
 
 ## Arquitectura
 
@@ -83,6 +83,10 @@ Herramientas de nivel de tarea sobre la API de Café Alborada. Toda cifra se cal
 | `offer_economics` | Costo por canje y efecto en margen de una oferta |
 | `estimate_campaign_impact` | Rango de visitas, ventas y utilidad esperadas de una campaña |
 | `lookup` | Detalle de un producto, cliente (sin datos personales) o campaña |
+| `create_campaign_draft` | Crea un borrador; exige un token de aprobación emitido para el contenido exacto |
+| `send_campaign` | Envía un borrador; exige un segundo token de aprobación y verifica contra el borrador guardado |
+
+Las dos herramientas de escritura exigen un token HMAC de un solo uso, ligado a la acción, la campaña y el hash del contenido que la persona aprobó (ADR-08). Por stdio no hay aprobaciones configuradas, así que ahí el servidor solo permite lecturas.
 
 Uso fuera de la aplicación:
 
@@ -92,6 +96,18 @@ Uso fuera de la aplicación:
 | `npx @modelcontextprotocol/inspector node --env-file=.env --import tsx packages/mcp-server/src/cli.ts` | Inspector de MCP (desde la raíz del repositorio) |
 | `pnpm --filter @alborada/mcp-server smoke` | Prueba de humo por stdio contra la API real |
 | `pnpm --filter @alborada/mcp-server fixtures:record` | Regrabación de fixtures de prueba, sin datos personales |
+
+## Endpoints de la aplicación
+
+| Endpoint | Uso | Protección |
+|---|---|---|
+| `GET /api/health` | Variables configuradas, sin exponer valores | Pública |
+| `POST /api/mcp` | Servidor MCP por Streamable HTTP sin sesión | `Authorization: Bearer <MCP_SERVICE_TOKEN>` |
+| `POST /api/approvals` | Emite el token de aprobación cuando la persona aprueba una campaña | Solo mismo origen |
+
+## Base de datos
+
+SQLite local en `data/local.db` (ignorado por git) o Turso en despliegue, según `DATABASE_URL`. Las migraciones de `apps/web/lib/db/migrations` se aplican automáticamente al abrir la conexión. Tras cambiar el esquema: `pnpm --filter @alborada/web db:generate`.
 
 ## Respuestas de referencia
 

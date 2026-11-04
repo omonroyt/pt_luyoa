@@ -48,3 +48,17 @@ export const offerSchema = z
   })
   .describe("Oferta de la campaña");
 export type Offer = z.infer<typeof offerSchema>;
+
+export const campaignDraftSchema = z
+  .object({
+    name: z.string().min(1).max(120),
+    objective: z.string().min(1).max(300),
+    channel: channelSchema,
+    audience: audienceSchema,
+    offer: offerSchema.extend({
+      valid_from: z.string().describe("Inicio AAAA-MM-DD, posterior a data_as_of"),
+      valid_to: z.string().describe("Fin AAAA-MM-DD"),
+    }),
+    message: z.string().describe("Máximo 140 caracteres en push, 1024 en WhatsApp, 5000 en email"),
+  })
+  .describe("Contenido exacto de la campaña que la persona aprobó");

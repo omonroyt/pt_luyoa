@@ -111,7 +111,7 @@ Reglas del formato:
 - Un bloque de comentario (JSDoc, `/* */` o líneas `//` consecutivas) debe tener al menos una línea `ES:` y una `EN:`.
 - Las continuaciones se indentan bajo el texto, no se repite la etiqueta.
 - Etiquetas JSDoc (`@param`, `@returns`, `@throws`, `@example`) van después del texto bilingüe; su descripción también es bilingüe: `@param activeDays ES: días con ventas. EN: days with sales.`
-- Están exentos de la regla: directivas de herramientas (`eslint-…`, `prettier-ignore`), bloques que solo contienen anotaciones de tipo JSDoc (`@type`, `@typedef`, `@template`), el shebang `#!` y las referencias `/// <reference … />`. `@ts-expect-error` no está exento: su explicación va en formato bilingüe.
+- Están exentos de la regla: directivas de herramientas (`eslint-…`, `prettier-ignore`, `turbopackIgnore`, `webpackIgnore`), bloques que solo contienen anotaciones de tipo JSDoc (`@type`, `@typedef`, `@template`), el shebang `#!` y las referencias `/// <reference … />`. `@ts-expect-error` no está exento: su explicación va en formato bilingüe.
 - En archivos de shell (`.githooks/`) se usa el mismo formato con `#`.
 
 ---

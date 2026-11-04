@@ -4,6 +4,7 @@
  * EN: Typed functions per endpoint. Tools only use these functions, never raw
  *     paths or parameters.
  */
+import { z } from "zod";
 import { ToolFailure } from "../errors";
 import type { ApiClient, ApiResponse } from "./http-client";
 import {
@@ -11,6 +12,7 @@ import {
   AudiencePreview,
   Business,
   Campaign,
+  CampaignWriteResult,
   CustomerSummary,
   listOf,
   Location,
@@ -103,3 +105,15 @@ export const previewAudience = (
   channel: (typeof CHANNELS)[number],
   audience: AudienceFilters,
 ) => api.post("/v1/campaigns/preview", AudiencePreview, { channel, audience });
+
+export const createCampaign = (api: ApiClient, body: Record<string, unknown>) =>
+  api.post("/v1/campaigns", CampaignWriteResult, body);
+
+/**
+ * ES: El cuerpo de la respuesta de /send no se interpreta; el estado se confirma después
+ *     releyendo la campaña (ver tools/send-campaign.ts).
+ * EN: The /send response body is not interpreted; the state is confirmed afterwards by
+ *     re-reading the campaign (see tools/send-campaign.ts).
+ */
+export const sendCampaign = (api: ApiClient, id: string) =>
+  api.post(`/v1/campaigns/${encodeURIComponent(id)}/send`, z.unknown(), {});

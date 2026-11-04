@@ -1,6 +1,7 @@
 import { fetchBusiness, fetchLocations, fetchSegments } from "./api/endpoints";
 import type { ApiClient } from "./api/http-client";
 import type { Business, Location, Segment } from "./api/schemas";
+import type { ApprovalStore } from "./approvals/approval-store";
 import type { DataWindow } from "./domain/periods";
 import { ToolFailure } from "./errors";
 
@@ -12,11 +13,16 @@ export type BusinessSnapshot = {
   endpoints: string[];
 };
 
+export type ApprovalSettings = { secret: string; store: ApprovalStore };
+
 export type ToolContext = {
   api: ApiClient;
   now: () => Date;
+  approvals?: ApprovalSettings;
   getSnapshot(): Promise<BusinessSnapshot>;
 };
+
+export type ToolContextOptions = { now?: () => Date; approvals?: ApprovalSettings };
 
 async function loadSnapshot(api: ApiClient): Promise<BusinessSnapshot> {
   const [business, locations, segments] = await Promise.all([
@@ -39,11 +45,12 @@ async function loadSnapshot(api: ApiClient): Promise<BusinessSnapshot> {
  * EN: Context shared by the tools. The business snapshot (cutoff date, locations,
  *     segments) is loaded once; if it fails, the next attempt reloads it.
  */
-export function createToolContext(api: ApiClient, now: () => Date = () => new Date()): ToolContext {
+export function createToolContext(api: ApiClient, options: ToolContextOptions = {}): ToolContext {
   let pending: Promise<BusinessSnapshot> | undefined;
   return {
     api,
-    now,
+    now: options.now ?? (() => new Date()),
+    approvals: options.approvals,
     getSnapshot() {
       pending ??= loadSnapshot(api).catch((error: unknown) => {
         pending = undefined;
@@ -69,4 +76,22 @@ export function requireLocation(snapshot: BusinessSnapshot, locationId: string):
     });
   }
   return location;
+}
+
+/**
+ * ES: Devuelve la configuración de aprobaciones o rechaza la escritura: sin llave de
+ *     firma no hay forma de verificar que una persona aprobó.
+ * EN: Returns the approval settings or rejects the write: without a signing key there
+ *     is no way to verify that a person approved.
+ */
+export function requireApprovals(ctx: ToolContext): ApprovalSettings {
+  if (!ctx.approvals) {
+    throw new ToolFailure({
+      code: "approval_required",
+      message: "Las escrituras están deshabilitadas en este servidor: falta APPROVAL_SECRET.",
+      suggestion:
+        "Crear y enviar campañas solo es posible desde la aplicación, con aprobación de la persona.",
+    });
+  }
+  return ctx.approvals;
 }

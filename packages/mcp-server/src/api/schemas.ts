@@ -160,6 +160,20 @@ export const Campaign = z.object({
 });
 export type Campaign = z.infer<typeof Campaign>;
 
+/**
+ * ES: Respuesta de crear o enviar una campaña. Se exige solo id y status y se conservan
+ *     los demás campos, porque la forma exacta aún no está verificada contra /openapi.json.
+ * EN: Response of creating or sending a campaign. Only id and status are required and
+ *     other fields are kept, because the exact shape is not yet verified against /openapi.json.
+ */
+export const CampaignWriteResult = z.looseObject({
+  id: z.string(),
+  status: z.string(),
+  sent_at: z.string().nullable().optional(),
+  audience_size: z.number().nullable().optional(),
+});
+export type CampaignWriteResult = z.infer<typeof CampaignWriteResult>;
+
 export const AudiencePreview = z.object({
   channel: z.enum(CHANNELS),
   matched: z.number(),

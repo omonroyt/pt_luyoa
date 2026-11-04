@@ -26,7 +26,7 @@ gantt
 
     section MCP
     M2 Dominio, cliente y lecturas       :done, m2, 2026-11-04, 1d
-    M3 Escrituras, tokens y /api/mcp     :m3, 2026-11-06, 1d
+    M3 Escrituras, tokens y /api/mcp     :done, m3, 2026-11-04, 1d
 
     section Agente e interfaz
     M4 Orquestador del agente            :m4, 2026-11-06, 2d
@@ -90,7 +90,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-16 | Script de respuestas de referencia (`pnpm golden`) | `08_PLAN_EVALUACION.md` §2 |
 | IMP-17 | MCP por stdio probado contra la API real (`smoke`) y compatible con el Inspector de MCP | CA-M08 |
 
-### M3 · MCP: escrituras, tokens y HTTP — rama sugerida `feat/mcp-escrituras`
+### M3 · MCP: escrituras, tokens y HTTP (hecho, rama `feat/mcp-escrituras`)
 
 | ID | Tarea | Criterio |
 |---|---|---|
