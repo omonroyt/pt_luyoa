@@ -359,7 +359,24 @@ sequenceDiagram
 1. **En el agente:** las acciones de escritura solo se piden mediante herramientas de aprobación que se resuelven en la interfaz, no en el servidor. El modelo no puede "auto-aprobar".
 2. **En el MCP:** aunque alguien llame la herramienta directamente (por ejemplo desde Claude Desktop), sin un token válido emitido por `/api/approvals` la escritura se rechaza. El token está ligado al hash del contenido: si el modelo cambia una coma del mensaje después de aprobado, el token ya no sirve.
 
-### 5.3 Fallo de herramienta y recuperación (B-07)
+### 5.3 Ciclo de vida de una cifra (veracidad)
+
+Cómo una cifra viaja de la API a la pantalla sin que el modelo la invente ni la recalcule:
+
+```mermaid
+flowchart LR
+    api[("API<br/>Café Alborada")] --> client["Cliente del MCP<br/>lista blanca de filtros,<br/>caché, reintentos"]
+    client --> domain["Dominio (código)<br/>periodos desde data_as_of,<br/>variaciones, normalización,<br/>lift, costos"]
+    domain --> result["Resultado de herramienta<br/>cifras + notes + warnings<br/>+ source {id, endpoint,<br/>periodo, data_as_of}"]
+    result --> llm["Modelo<br/>elige, interpreta y explica;<br/>no calcula"]
+    llm --> block["Bloque visual<br/>cita source.id"]
+    block --> verifier{"Verificador de cifras<br/>¿cada número está en<br/>una fuente citada?"}
+    verifier -- no --> llm
+    verifier -- sí --> ui["Interfaz<br/>bloque + chip de fuente"]
+    result -. "mismo dato" .-> evals["Evaluaciones<br/>cifras vs respuestas<br/>de referencia"]
+```
+
+### 5.4 Fallo de herramienta y recuperación (B-07)
 
 ```mermaid
 sequenceDiagram
@@ -462,7 +479,7 @@ flowchart LR
     subgraph local["Desarrollo local"]
         devNext["next dev<br/>(chat + /api/mcp)"]
         devDb[("SQLite<br/>archivo local")]
-        devEnv[".env.local<br/>(ignorado por git)"]
+        devEnv[".env en la raíz<br/>(ignorado por git)"]
         devCli["mcp-server CLI (stdio)"]
     end
 
@@ -490,27 +507,33 @@ flowchart LR
 
 ---
 
-## 8. Estructura del repositorio (propuesta)
+## 8. Estructura del repositorio
 
 ```text
-02_repositorio/
+pt_luyoa/
 ├─ apps/
 │  └─ web/                      Next.js: chat, /api/chat, /api/mcp, /api/approvals, /api/cron
 │     ├─ app/
 │     ├─ components/blocks/     chart, table, kpis, campaign-card, source, error
+│     ├─ components/chat/       hilo, entrada, panel de trazas
 │     ├─ lib/agent/             prompt, herramientas de presentación, verificador, trazas
+│     ├─ lib/approvals/         emisión de tokens de aprobación
 │     └─ lib/db/                esquema Drizzle y consultas
 ├─ packages/
-│  ├─ mcp-server/               herramientas, dominio, cliente de API, CLI stdio
+│  ├─ mcp-server/               src/tools, src/domain, src/api, CLI stdio
 │  └─ shared/                   esquemas zod compartidos
 ├─ evals/
-│  ├─ cases/                    escenarios, ejemplo, negativos (YAML/JSON)
+│  ├─ cases/                    escenarios, ejemplo, negativos
 │  ├─ golden/                   respuestas de referencia sacadas de la API
-│  ├─ run.ts                    corredor de evaluaciones
-│  └─ compare-models.ts         comparación de modelos (calidad, costo, latencia)
-├─ docs/                        versión final de la documentación entregable
-├─ .env.example
-├─ .gitleaks.toml
+│  ├─ reports/                  reportes de evaluación y comparación de modelos
+│  └─ src/                      golden, corredor y comparación
+├─ scripts/quality/             arneses propios (comentarios bilingües)
+├─ docs/                        especificaciones, estándares y gobernanza
+├─ .claude/                     permisos, hooks, comandos y subagentes de Claude Code
+├─ .githooks/                   commit-msg y pre-commit
+├─ .github/                     CI, plantilla de PR, CODEOWNERS
+├─ CLAUDE.md · AGENTS.md        contexto para agentes de IA
+├─ .env.example                 variables sin valores
 └─ README.md
 ```
 
@@ -533,9 +556,11 @@ flowchart LR
 
 ---
 
-## 10. Pendientes que dependen de la exploración de la API
+## 10. Exploración de la API (resuelto)
 
-- Confirmar filtros reales de `/customers`, `/visits` y `/transactions` y campos de `results` en campañas (Q-04).
-- Confirmar si `/segments` acepta filtro por sucursal o hay que calcularlo desde `/customers`.
-- Medir latencia real de la API para fijar el presupuesto de reintentos y la caché.
-- Con eso se cierra el catálogo de herramientas en `05_DISENO_MCP.md`.
+La exploración del 2026-11-04 cerró los pendientes de esta sección. Resultados en [`05_DISENO_MCP.md`](05_DISENO_MCP.md) §1:
+
+- `/customers` filtra con `segment` (no con `segment_id`, que se ignora en silencio); `/segments` ignora el filtro por sucursal, así que los conteos por sucursal salen de `/customers`.
+- Campos de `results` en campañas confirmados; solo una de cuatro campañas históricas tiene grupo de control.
+- Latencia observada de 170 ms a 1.8 s, sin cabeceras de límite de rata: caché y limitador propios.
+- Queda por confirmar con `/openapi.json` (detrás de Cloudflare Access) la respuesta exacta de crear y enviar campañas.
