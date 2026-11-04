@@ -21,9 +21,11 @@ Copiloto de negocio para la dueña de **Café Alborada** (prueba técnica de AI 
 | Criterios de aceptación del producto (`CA-`) | [`docs/specs/02_CRITERIOS_ACEPTACION.md`](docs/specs/02_CRITERIOS_ACEPTACION.md) |
 | Arquitectura y diagramas | [`docs/specs/03_ARQUITECTURA.md`](docs/specs/03_ARQUITECTURA.md) |
 | Decisiones técnicas (`ADR-`) | [`docs/specs/04_DECISIONES_TECNICAS.md`](docs/specs/04_DECISIONES_TECNICAS.md) |
+| Hallazgos verificados de la API y catálogo de herramientas MCP | [`docs/specs/05_DISENO_MCP.md`](docs/specs/05_DISENO_MCP.md) |
 | Diseño del agente | [`docs/specs/06_DISENO_AGENTE.md`](docs/specs/06_DISENO_AGENTE.md) |
 | Bloques visuales | [`docs/specs/07_RESPUESTAS_VISUALES.md`](docs/specs/07_RESPUESTAS_VISUALES.md) |
 | Plan de evaluación | [`docs/specs/08_PLAN_EVALUACION.md`](docs/specs/08_PLAN_EVALUACION.md) |
+| Plan de implementación: hitos, tareas `IMP-`, pruebas | [`docs/specs/09_PLAN_IMPLEMENTACION.md`](docs/specs/09_PLAN_IMPLEMENTACION.md) |
 | Estándares de código (Clean Code, nombres, comentarios bilingües, límites) | [`docs/standards/coding-standards.md`](docs/standards/coding-standards.md) |
 | Flujo de git, Conventional Commits y autoría | [`docs/standards/git-workflow.md`](docs/standards/git-workflow.md) |
 | Política de gobernanza de IA (ISO/IEC 42001 y otros marcos) | [`docs/governance/ai-governance-policy.md`](docs/governance/ai-governance-policy.md) |
