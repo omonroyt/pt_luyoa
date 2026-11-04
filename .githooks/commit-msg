@@ -1,0 +1,4 @@
+#!/bin/sh
+# ES: Valida que el mensaje siga Conventional Commits y no tenga atribución a IA.
+# EN: Validates that the message follows Conventional Commits and has no AI attribution.
+exec node_modules/.bin/commitlint --edit "$1"

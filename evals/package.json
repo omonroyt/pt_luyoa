@@ -1,0 +1,16 @@
+{
+  "name": "@alborada/evals",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Respuestas de referencia, evaluaciones del agente y comparación de modelos.",
+  "scripts": {
+    "golden": "tsx --env-file-if-exists=../.env src/golden.ts",
+    "eval": "tsx --env-file-if-exists=../.env src/run.ts",
+    "compare": "tsx --env-file-if-exists=../.env src/compare-models.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@alborada/shared": "workspace:*"
+  }
+}

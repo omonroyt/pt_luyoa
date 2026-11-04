@@ -1,0 +1,8 @@
+packages:
+  - apps/*
+  - packages/*
+  - evals
+
+# esbuild (lo usa tsx) necesita su script de instalación para elegir el binario de la plataforma.
+allowBuilds:
+  esbuild: true
