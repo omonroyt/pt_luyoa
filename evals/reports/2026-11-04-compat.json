@@ -1,0 +1,128 @@
+{
+  "question": "¿Cuántos clientes estoy perdiendo y a cuántos de ellos puedo contactar por WhatsApp?",
+  "results": [
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "ok": true,
+      "steps": 3,
+      "tools": [
+        "customer_segments",
+        "audience_reach",
+        "audience_reach",
+        "show_kpis"
+      ],
+      "invalidToolCalls": 0,
+      "kpis": {
+        "valid": true,
+        "sourcesFound": true,
+        "valuesFound": true
+      },
+      "firstTextMs": 17887,
+      "totalMs": 20608,
+      "reasoningTokens": 46,
+      "inputTokens": 14945,
+      "cachedTokens": 9472,
+      "costUsd": 0.00137261,
+      "answer": "Tienes **850 clientes en riesgo de pérdida**, en dos grupos (a corte del 2026-10-31):\n\n- **En riesgo (at_risk): 483** — 10+ visitas históricas y entre 30 y 90 días sin venir. Gasto promedio alto: $3,276.78.\n- **Dormidos (dormant): 367** — más de 90 días sin venir. Gasto promedio: $1,279.79.\n\n**Alcance real por WhatsApp:**\n- En riesgo: **267 contactables** (se excluyen 214 sin consentimiento y 2 du"
+    },
+    {
+      "model": "deepseek/deepseek-v4.1-flash-1017",
+      "ok": true,
+      "steps": 4,
+      "tools": [
+        "get_business_context",
+        "customer_segments",
+        "audience_reach",
+        "audience_reach",
+        "show_kpis"
+      ],
+      "invalidToolCalls": 0,
+      "kpis": {
+        "valid": true,
+        "sourcesFound": true,
+        "valuesFound": false
+      },
+      "firstTextMs": 8755,
+      "totalMs": 13233,
+      "reasoningTokens": 98,
+      "inputTokens": 24161,
+      "cachedTokens": 11264,
+      "costUsd": 0.0006295900000000001,
+      "answer": "**Estás perdiendo 850 clientes** a la fecha de corte (2026-10-31):\n\n| Segmento | Definición | Clientes |\n|---|---|---|\n| En riesgo | 10+ visitas y 30-90 días sin venir | 483 |\n| Dormidos | +90 días sin venir (o sin visitas) | 367 |\n\n**Por WhatsApp puedes contactar a 454 de ellos:**\n- En riesgo: **267** alcanzables (de 483; 214 sin consentimiento, 2 duplicados)\n- Dormidos: **187** alcanzables (de 3"
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "ok": true,
+      "steps": 3,
+      "tools": [
+        "customer_segments",
+        "audience_reach",
+        "audience_reach",
+        "show_kpis"
+      ],
+      "invalidToolCalls": 0,
+      "kpis": {
+        "valid": true,
+        "sourcesFound": true,
+        "valuesFound": true
+      },
+      "firstTextMs": 4042,
+      "totalMs": 4973,
+      "reasoningTokens": 152,
+      "inputTokens": 23328,
+      "cachedTokens": 0,
+      "costUsd": 0.0028108,
+      "answer": "Estás perdiendo a unos **850 clientes** (483 en riesgo y 367 dormidos). Por WhatsApp puedes contactar a **454** de ellos:\n\n- **En riesgo** (10+ visitas, 30 a 90 días sin venir): 267 alcanzables de 483. Se descartan 214 sin consentimiento de WhatsApp y 2 duplicados.\n- **Dormidos** (más de 90 días sin venir): 187 alcanzables de 367. Se descartan 176 sin consentimiento, 4 con tarjeta suspendida.\n\nCor"
+    },
+    {
+      "model": "openai/gpt-6.1-terra",
+      "ok": true,
+      "steps": 4,
+      "tools": [
+        "get_business_context",
+        "customer_segments",
+        "audience_reach",
+        "audience_reach",
+        "show_kpis"
+      ],
+      "invalidToolCalls": 0,
+      "kpis": {
+        "valid": true,
+        "sourcesFound": true,
+        "valuesFound": true
+      },
+      "firstTextMs": 6816,
+      "totalMs": 7658,
+      "reasoningTokens": 12,
+      "inputTokens": 15989,
+      "cachedTokens": 11277,
+      "costUsd": 0.00811085,
+      "answer": "Al 31 de octubre de 2026:\n\n- **En riesgo:** 483 clientes; puedes contactar a **267 por WhatsApp**.\n- **Dormidos:** 367 clientes; puedes contactar a **187 por WhatsApp**.\n\nEl alcance ya excluye tarjetas suspendidas, clientes sin consentimiento y duplicados."
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "ok": true,
+      "steps": 3,
+      "tools": [
+        "get_business_context",
+        "customer_segments",
+        "audience_reach",
+        "audience_reach",
+        "show_kpis"
+      ],
+      "invalidToolCalls": 0,
+      "kpis": {
+        "valid": true,
+        "sourcesFound": true,
+        "valuesFound": true
+      },
+      "firstTextMs": 13616,
+      "totalMs": 15829,
+      "reasoningTokens": 0,
+      "inputTokens": 17301,
+      "cachedTokens": 8650,
+      "costUsd": 0.023857,
+      "answer": "Al corte del **31 de octubre de 2026**, estos son los clientes que estás perdiendo y a cuántos puedes contactar realmente por **WhatsApp** (descontando tarjetas suspendidas, duplicadas y sin consentimiento en el canal):\n\n* **Clientes en riesgo (`at_risk`)** — *10 o más visitas históricas y entre 30 y 90 días sin venir*:\n  * **Tamaño del segmento:** 483 clientes (gasto histórico promedio de $3,276."
+    }
+  ]
+}
