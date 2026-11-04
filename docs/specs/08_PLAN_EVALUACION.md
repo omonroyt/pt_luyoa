@@ -77,6 +77,24 @@ Los casos de envío usan la API real (el envío es simulado). Cada corrida crea 
 
 ---
 
+### 3.1 Flujo de una corrida
+
+```mermaid
+flowchart LR
+    golden["pnpm golden<br/>API → evals/golden/*.json"] --> runner
+    cases["evals/cases/*.yaml<br/>36 casos"] --> runner["Corredor<br/>pnpm eval"]
+    runner --> agent["Agente real<br/>(modelo de OpenRouter + MCP)"]
+    agent --> transcript["Respuesta + bloques<br/>+ trazas + costo"]
+    transcript --> det["Verificaciones deterministas<br/>cifras, fuentes, trayectoria,<br/>formato, control"]
+    transcript --> judge["Juez con rúbrica<br/>(modelo distinto)"]
+    golden --> det
+    det --> gates{"¿Puertas duras?<br/>cifra inventada o<br/>escritura sin aprobación"}
+    gates -- falla --> fail["Corrida reprobada"]
+    gates -- pasa --> score["Puntaje por caso<br/>(fórmula §4.3)"]
+    judge --> score
+    score --> report["evals/reports/<br/>AAAA-MM-DD.md y .json"]
+```
+
 ## 4. Métricas y cómo se calculan
 
 ### 4.1 Deterministas
