@@ -30,11 +30,19 @@ describe("buildSystemPrompt", () => {
     expect(prompt).toContain(`Fuente del contexto del negocio: ${context.sourceId}`);
   });
 
-  it("incluye las reglas de veracidad, incluida la prohibición de calcular", () => {
+  it("incluye las reglas de veracidad, incluida la prohibición de calcular y exagerar", () => {
     const prompt = buildSystemPrompt({ context, capabilities: NONE });
     expect(prompt).toContain("REGLAS DE VERACIDAD");
     expect(prompt).toContain("ni sumas, ni restas, ni porcentajes");
     expect(prompt).toContain("utilidad antes de descuentos");
+    expect(prompt).toContain('evita absolutos ("nadie", "todos", "siempre")');
+  });
+
+  it("declara la política de periodos por defecto con las claves del calendario", () => {
+    const prompt = buildSystemPrompt({ context, capabilities: NONE });
+    expect(prompt).toContain("Patrones por día de la semana u hora: last_12_weeks.");
+    expect(prompt).toContain("last_full_month contra previous_full_month");
+    expect(prompt).toContain("Utilidad por categoría o producto: last_3_months.");
   });
 
   it("no nombra herramientas que el turno no tiene", () => {

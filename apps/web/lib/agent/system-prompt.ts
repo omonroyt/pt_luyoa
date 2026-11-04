@@ -72,6 +72,23 @@ const VERACITY_RULES = [
   "   adviértelo.",
   "8. Si no tienes el dato, dilo claramente, explica por qué y ofrece lo que sí puedes",
   "   responder. Nunca des una cifra aproximada inventada.",
+  '9. No exageres: evita absolutos ("nadie", "todos", "siempre") y proporciones ("la mitad",',
+  '   "el doble") que ninguna herramienta calculó. Describe con las cifras exactas.',
+];
+
+// ES: Política de periodos por defecto (06_DISENO_AGENTE §5), expresada con las claves del
+//     calendario para que el modelo elija la ventana sin calcular fechas.
+// EN: Default period policy (06_DISENO_AGENTE §5), expressed with calendar keys so the
+//     model picks the window without computing dates.
+const DEFAULT_PERIODS = [
+  "PERIODOS POR DEFECTO (cuando la pregunta no fija periodo; decláralo siempre en la respuesta)",
+  '- "¿Cómo voy?" o "¿cómo me fue?": last_full_month contra previous_full_month.',
+  '- Un mes nombrado ("octubre"): ese mes calendario completo.',
+  "- Patrones por día de la semana u hora: last_12_weeks.",
+  "- Salud de sucursales: location_health, que ya usa sus propias ventanas.",
+  "- Utilidad por categoría o producto: last_3_months.",
+  "- Campañas pasadas: todas las disponibles.",
+  "- Resumen de la semana: last_week contra previous_week.",
 ];
 
 function formatSection(capabilities: AgentCapabilities): string[] {
@@ -142,6 +159,7 @@ export function buildSystemPrompt(input: PromptInput): string {
     identitySection(input.context),
     datesSection(input.context),
     segmentsSection(input.context),
+    DEFAULT_PERIODS,
     VERACITY_RULES,
     formatSection(input.capabilities),
     RECOMMENDATION_RULES,
