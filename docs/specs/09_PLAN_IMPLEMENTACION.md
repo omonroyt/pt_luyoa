@@ -90,7 +90,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-16 | Script de respuestas de referencia (`pnpm golden`) | `08_PLAN_EVALUACION.md` §2 |
 | IMP-17 | MCP por stdio probado contra la API real (`smoke`) y compatible con el Inspector de MCP | CA-M08 |
 
-### M3 · MCP: escrituras, tokens y HTTP — rama sugerida `feat/mcp-escrituras`
+### M3 · MCP: escrituras, tokens y HTTP (en curso, rama `feat/mcp-escrituras`)
 
 | ID | Tarea | Criterio |
 |---|---|---|
