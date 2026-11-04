@@ -12,6 +12,7 @@
   },
   "scripts": {
     "stdio": "tsx --env-file-if-exists=../../.env src/cli.ts",
+    "fixtures:record": "tsx --env-file-if-exists=../../.env scripts/record-fixtures.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
