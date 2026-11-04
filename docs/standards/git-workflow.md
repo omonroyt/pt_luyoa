@@ -121,6 +121,24 @@ build(deps): actualiza el SDK de MCP a 1.32.2
 
 ## 5. Arneses que hacen cumplir este flujo
 
+```mermaid
+flowchart LR
+    edit["Claude Code edita<br/>o ejecuta un comando"] --> pre{"Hooks de .claude/<br/>PreToolUse"}
+    pre -- "secreto, --no-verify,<br/>atribución, push a main" --> blocked["Bloqueado<br/>con motivo ES/EN"]
+    pre -- ok --> action["Acción"]
+    action --> post{"PostToolUse<br/>tamaño y comentarios"}
+    post -- falla --> fix["Claude corrige"]
+    fix --> edit
+    post -- ok --> review["Revisión humana<br/>/review · subagentes"]
+    review --> commit["git commit<br/>(a nombre del desarrollador)"]
+    commit --> pc{"pre-commit<br/>.env, gitleaks, formato,<br/>lint, comentarios"}
+    pc -- falla --> fix
+    pc -- ok --> cm{"commit-msg<br/>commitlint"}
+    cm -- falla --> fix
+    cm -- ok --> push["push a la rama"] --> ci{"CI<br/>gitleaks · commitlint ·<br/>pnpm verify"}
+    ci -- ok --> pr["Pull request<br/>squash a main"]
+```
+
 | Arnés | Archivo |
 |---|---|
 | Validación del mensaje | `.githooks/commit-msg` + `commitlint.config.mjs` |
