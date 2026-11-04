@@ -99,23 +99,23 @@ build(deps): actualiza el SDK de MCP a 1.32.2
 
 | Rama | Uso |
 |---|---|
-| `main` | Siempre estable y desplegable. Nunca se trabaja ni se hace push directo |
-| `tipo/descripcion-corta` | Trabajo diario: `feat/compare-periods`, `fix/timezone-filters`, `chore/base-proyecto` |
+| `main` | Rama de trabajo para cambios pequeños y medianos: documentación, configuración, correcciones y ajustes acotados. Cada commit en `main` pasa los mismos hooks y debe dejar `pnpm verify` en verde |
+| `tipo/descripcion-corta` | Solo para features grandes (por ejemplo, un hito completo del plan de implementación): `feat/mcp-lecturas`, `feat/interfaz` |
 
-- Se crean desde `main` actualizado.
-- Nombres en `kebab-case`, en español o inglés, cortos.
-- Se borran tras integrarse.
+- La decisión de abrir una rama para un feature grande la toma el desarrollador responsable al iniciar el trabajo; el asistente de IA la consulta antes de empezar.
+- Las ramas de feature se crean desde `main` actualizado, se integran por pull request y se borran tras integrarse.
+- Nombres en `kebab-case`, cortos.
 
 ---
 
-## 4. Pull requests
+## 4. Pull requests (ramas de feature)
 
-1. Título en formato Conventional Commits (se usa como mensaje del *squash*).
+1. Título en formato Conventional Commits.
 2. Descripción con la plantilla `.github/pull_request_template.md`: qué, por qué, requisitos que atiende, cómo se probó y la lista de verificación.
 3. Sin atribución a herramientas de IA.
 4. CI en verde (secretos, formato, lint, comentarios, tipos, pruebas).
-5. Integración por *squash merge* a `main`.
-6. Push forzado prohibido en `main`; en ramas propias solo `--force-with-lease`.
+5. Integración a `main` por *merge* o *squash*, a criterio del desarrollador.
+6. Push forzado prohibido en `main`; en ramas de feature solo `--force-with-lease`.
 
 ---
 
@@ -124,7 +124,7 @@ build(deps): actualiza el SDK de MCP a 1.32.2
 ```mermaid
 flowchart LR
     edit["Claude Code edita<br/>o ejecuta un comando"] --> pre{"Hooks de .claude/<br/>PreToolUse"}
-    pre -- "secreto, --no-verify,<br/>atribución, push a main" --> blocked["Bloqueado<br/>con motivo ES/EN"]
+    pre -- "secreto, --no-verify,<br/>atribución, push forzado" --> blocked["Bloqueado<br/>con motivo ES/EN"]
     pre -- ok --> action["Acción"]
     action --> post{"PostToolUse<br/>tamaño y comentarios"}
     post -- falla --> fix["Claude corrige"]
@@ -135,8 +135,8 @@ flowchart LR
     pc -- falla --> fix
     pc -- ok --> cm{"commit-msg<br/>commitlint"}
     cm -- falla --> fix
-    cm -- ok --> push["push a la rama"] --> ci{"CI<br/>gitleaks · commitlint ·<br/>pnpm verify"}
-    ci -- ok --> pr["Pull request<br/>squash a main"]
+    cm -- ok --> push["push a main<br/>o a la rama de feature"] --> ci{"CI<br/>gitleaks · commitlint ·<br/>pnpm verify"}
+    ci -- "ok (rama de feature)" --> pr["Pull request a main"]
 ```
 
 | Arnés | Archivo |

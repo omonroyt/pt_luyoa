@@ -10,7 +10,7 @@ Reglas (ver `docs/standards/git-workflow.md`):
 - El autor es el desarrollador responsable con la identidad de git ya configurada. **No** cambies `user.name` ni `user.email`, **no** uses `--author`.
 - **Sin** `Co-Authored-By`, `Signed-off-by` de IA, "Generated with…", "Generado con…" ni menciones a herramientas de IA.
 - **Sin** `--no-verify`.
-- Nunca en `main`: si la rama actual es `main`, detente y pide crear una rama.
+- Cambios pequeños y medianos van en `main`. Si los cambios forman parte de un feature grande y no se acordó la rama, pregunta antes de hacer commit.
 
 Pasos:
 

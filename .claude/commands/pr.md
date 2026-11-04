@@ -1,8 +1,8 @@
 ---
-description: Sube la rama y abre un pull request a nombre del desarrollador, sin atribución a IA
+description: Sube una rama de feature y abre un pull request a nombre del desarrollador, sin atribución a IA
 ---
 
-Abre un pull request de la rama actual hacia `main`.
+Abre un pull request de la rama de feature actual hacia `main`. Los cambios hechos directamente en `main` no usan este comando.
 
 1. Verifica que la rama no sea `main`, que no haya cambios sin commit y que `corepack pnpm verify` pase.
 2. Revisa que todos los commits de la rama (`git log main..HEAD`) sigan Conventional Commits y no tengan atribución a IA. Si alguno no cumple, detente y reporta.

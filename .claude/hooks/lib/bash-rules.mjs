@@ -69,14 +69,8 @@ export const BASH_RULES = [
   {
     id: "force-push",
     test: (command) => /\bgit\s+push\b[^;&|]*\s(--force(?!-with-lease)\b|-f\b)/.test(command),
-    es: "Push forzado prohibido. En ramas propias usa --force-with-lease, y solo si el desarrollador lo pide.",
-    en: "Force push is forbidden. On own branches use --force-with-lease, and only if the developer asks.",
-  },
-  {
-    id: "push-to-main",
-    test: (command) => /\bgit\s+push\b[^;&|]*(\s|:)(main|master)\b/.test(command),
-    es: "No se hace push directo a main. Trabaja en una rama y abre un pull request.",
-    en: "Never push directly to main. Work on a branch and open a pull request.",
+    es: "Push forzado prohibido. En ramas de feature se permite --force-with-lease, solo si el desarrollador lo pide.",
+    en: "Force push is forbidden. On feature branches --force-with-lease is allowed, only if the developer asks.",
   },
   {
     id: "git-identity-change",

@@ -8,7 +8,7 @@
 | Entrega | A más tardar 2026-11-11 |
 | Relacionados | [`01_PRD.md`](01_PRD.md) §11 y §13, [`02_CRITERIOS_ACEPTACION.md`](02_CRITERIOS_ACEPTACION.md), [`05_DISENO_MCP.md`](05_DISENO_MCP.md), [`08_PLAN_EVALUACION.md`](08_PLAN_EVALUACION.md) |
 
-> Orden de construcción, tareas con su criterio de aceptación y la estrategia de pruebas. Cada hito se trabaja en su propia rama, se integra por pull request y termina con `pnpm verify` en verde.
+> Orden de construcción, tareas con su criterio de aceptación y la estrategia de pruebas. Al iniciar cada hito se decide si se trabaja en `main` o en la rama sugerida (ver `docs/standards/git-workflow.md` §3). Todo hito termina con `pnpm verify` en verde.
 
 ---
 
@@ -68,7 +68,7 @@ Cada tarea tiene un ID `IMP-xx`, la rama donde se hace y el criterio que la da p
 
 Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/pt_luyoa#1](https://github.com/omonroyt/pt_luyoa/pull/1).
 
-### M1 · Documentación y diseño — rama `docs/diseno-mcp-y-plan`
+### M1 · Documentación y diseño (hecho, PR #2)
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -77,7 +77,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-03 | Plan de implementación y estrategia de pruebas | Este documento |
 | IMP-04 | Descargar `/openapi.json` desde el navegador y confirmar lo pendiente | `05_DISENO_MCP.md` §1.4 cerrado |
 
-### M2 · MCP: dominio, cliente y lecturas — rama `feat/mcp-lecturas`
+### M2 · MCP: dominio, cliente y lecturas — rama sugerida `feat/mcp-lecturas`
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -90,7 +90,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-16 | Script de respuestas de referencia (`pnpm golden`) | `08_PLAN_EVALUACION.md` §2 |
 | IMP-17 | MCP por stdio probado con el Inspector de MCP | CA-M08 |
 
-### M3 · MCP: escrituras, tokens y HTTP — rama `feat/mcp-escrituras`
+### M3 · MCP: escrituras, tokens y HTTP — rama sugerida `feat/mcp-escrituras`
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -99,7 +99,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-22 | `create_campaign_draft` y `send_campaign` con validaciones previas | CA-C08, CA-C09, CA-C10 |
 | IMP-23 | Endpoint `/api/mcp` (Streamable HTTP) con token de servicio por negocio | ADR-04, CA-X05 |
 
-### M4 · Orquestador del agente — rama `feat/agente`
+### M4 · Orquestador del agente — rama sugerida `feat/agente`
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -110,7 +110,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-34 | Herramientas de aprobación (`request_draft_approval`, `request_send_approval`) | CA-C02 a CA-C05 |
 | IMP-35 | Trazas por paso con razón, latencia, tokens y costo | CA-Q05, CA-Q06 |
 
-### M5 · Interfaz y aprobación — rama `feat/interfaz`
+### M5 · Interfaz y aprobación — rama sugerida `feat/interfaz`
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -120,7 +120,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-43 | Panel de trazas | CA-Q05 |
 | IMP-44 | Responsivo y accesible | CA-F07 |
 
-### M6 · Evaluaciones y modelos — rama `feat/evaluaciones`
+### M6 · Evaluaciones y modelos — rama sugerida `feat/evaluaciones`
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -129,7 +129,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-52 | Comparación de al menos 4 modelos y reporte | CA-Q03, ADR-13 |
 | IMP-53 | Ajustes de prompt y herramientas hasta cumplir las metas | `08_PLAN_EVALUACION.md` §4.4 |
 
-### M7 · Extras y demo publicada — rama `feat/extras`
+### M7 · Extras y demo publicada — rama sugerida `feat/extras`
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -138,7 +138,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-62 | Aislamiento de dos negocios probado | CA-X05 |
 | IMP-63 | Despliegue en Vercel + Turso con código de acceso y topes | CA-X01, CA-S04 |
 
-### M8 · Entrega — rama `docs/entrega`
+### M8 · Entrega — rama sugerida `docs/entrega`
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -183,10 +183,10 @@ flowchart TB
 
 ## 5. Flujo de trabajo por hito
 
-1. Rama `tipo/nombre` desde la rama del hito anterior (o desde `main` si ya se integró).
+1. Al iniciar, decidir con el desarrollador si el hito va en `main` o en su rama sugerida, creada desde `main` actualizado.
 2. Implementación en pasos pequeños; commits convencionales y atómicos, a nombre del desarrollador.
 3. `pnpm verify` en verde y revisión con `/review`.
-4. Pull request con la plantilla; CI en verde; integración por *squash*.
+4. Si hay rama de feature: pull request con la plantilla, CI en verde e integración a `main`.
 
 ## 6. Lista de entrega
 
