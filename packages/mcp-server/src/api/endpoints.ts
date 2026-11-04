@@ -11,6 +11,7 @@ import {
   AudiencePreview,
   Business,
   Campaign,
+  CampaignWriteResult,
   CustomerSummary,
   listOf,
   Location,
@@ -103,3 +104,9 @@ export const previewAudience = (
   channel: (typeof CHANNELS)[number],
   audience: AudienceFilters,
 ) => api.post("/v1/campaigns/preview", AudiencePreview, { channel, audience });
+
+export const createCampaign = (api: ApiClient, body: Record<string, unknown>) =>
+  api.post("/v1/campaigns", CampaignWriteResult, body);
+
+export const sendCampaign = (api: ApiClient, id: string) =>
+  api.post(`/v1/campaigns/${encodeURIComponent(id)}/send`, CampaignWriteResult, {});

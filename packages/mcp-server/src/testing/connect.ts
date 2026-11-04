@@ -6,17 +6,18 @@
  */
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import type { ApprovalSettings } from "../context";
 import { createServer } from "../server";
 import { createFakeFetch } from "./fake-api";
 import type { FixtureFile } from "./fixture-key";
 
 export const TEST_NOW = new Date("2026-11-04T12:00:00Z");
 
-export async function connectTestClient(overrides: FixtureFile = {}) {
+export async function connectTestClient(overrides: FixtureFile = {}, approvals?: ApprovalSettings) {
   const fetchImpl = createFakeFetch(overrides);
   const server = createServer(
     { apiKey: "test-key", apiBaseUrl: "https://api.test" },
-    { fetchImpl, now: () => TEST_NOW },
+    { fetchImpl, now: () => TEST_NOW, approvals },
   );
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
   await server.connect(serverTransport);

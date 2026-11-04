@@ -3,6 +3,7 @@ import type { ToolContext } from "../context";
 import { registerAudienceReach } from "./audience-reach";
 import { registerCampaignPerformance } from "./campaign-performance";
 import { registerComparePeriods } from "./compare-periods";
+import { registerCreateCampaignDraft } from "./create-campaign-draft";
 import { registerCustomerSegments } from "./customer-segments";
 import { registerEstimateCampaignImpact } from "./estimate-campaign-impact";
 import { registerGetBusinessContext } from "./get-business-context";
@@ -10,6 +11,7 @@ import { registerLocationHealth } from "./location-health";
 import { registerLookup } from "./lookup";
 import { registerOfferEconomics } from "./offer-economics";
 import { registerSalesBreakdown } from "./sales-breakdown";
+import { registerSendCampaign } from "./send-campaign";
 import { registerVisitsBreakdown } from "./visits-breakdown";
 
 /**
@@ -30,4 +32,6 @@ export function registerTools(server: McpServer, ctx: ToolContext): void {
   registerOfferEconomics(server, ctx);
   registerEstimateCampaignImpact(server, ctx);
   registerLookup(server, ctx);
+  registerCreateCampaignDraft(server, ctx);
+  registerSendCampaign(server, ctx);
 }

@@ -33,6 +33,7 @@ const QUERY_WHITELIST: Record<string, readonly string[]> = {
 const DETAIL_PATHS = [
   /^\/v1\/customers\/[\w-]+$/,
   /^\/v1\/campaigns\/[\w-]+$/,
+  /^\/v1\/campaigns\/[\w-]+\/send$/,
   /^\/v1\/transactions\/[\w-]+$/,
 ];
 

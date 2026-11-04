@@ -97,41 +97,62 @@ function networkFailure(): ToolFailure {
  * EN: Creates the Café Alborada API client: filter whitelist, cache, rate limiter,
  *     429/503 retries within a waiting budget and schema validation of every response.
  */
+type Transport = {
+  baseUrl: string;
+  apiKey: string;
+  fetchImpl: typeof fetch;
+  limiter: RateLimiter;
+  sleep: (ms: number) => Promise<void>;
+  retryBudgetMs: number;
+};
+
+function fetchOnce(transport: Transport, request: ApiRequest): Promise<Response> {
+  const url = `${transport.baseUrl}${request.path}${request.query ? `?${request.query}` : ""}`;
+  return transport.limiter
+    .schedule(() =>
+      transport.fetchImpl(url, {
+        method: request.method,
+        headers: { "X-API-Key": transport.apiKey, "Content-Type": "application/json" },
+        body: request.body === undefined ? undefined : JSON.stringify(request.body),
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      }),
+    )
+    .catch(() => {
+      throw networkFailure();
+    });
+}
+
+/**
+ * ES: Ejecuta la solicitud reintentando 429/503 mientras la espera acumulada quepa en
+ *     el presupuesto.
+ * EN: Runs the request retrying 429/503 while the accumulated wait fits the budget.
+ */
+async function executeWithRetries(transport: Transport, request: ApiRequest): Promise<unknown> {
+  let waitedMs = 0;
+  for (let attempt = 1; ; attempt += 1) {
+    const response = await fetchOnce(transport, request);
+    if (response.ok) return response.json();
+    const failure = await toFailure(response);
+    const waitMs = retryAfterMs(response);
+    const canRetry =
+      failure.retryable && attempt < MAX_ATTEMPTS && waitedMs + waitMs <= transport.retryBudgetMs;
+    if (!canRetry) throw failure;
+    await transport.sleep(waitMs);
+    waitedMs += waitMs;
+  }
+}
+
 export function createApiClient(options: ApiClientOptions): ApiClient {
-  const fetchImpl = options.fetchImpl ?? fetch;
-  const limiter = options.limiter ?? createRateLimiter({ maxPerMinute: 120, maxConcurrent: 6 });
   const cache = options.cache ?? createResponseCache();
-  const sleep = options.sleep ?? realSleep;
-  const retryBudgetMs = options.retryBudgetMs ?? DEFAULT_RETRY_BUDGET_MS;
-
-  const fetchOnce = (request: ApiRequest): Promise<Response> =>
-    limiter
-      .schedule(() =>
-        fetchImpl(`${options.baseUrl}${request.path}${request.query ? `?${request.query}` : ""}`, {
-          method: request.method,
-          headers: { "X-API-Key": options.apiKey, "Content-Type": "application/json" },
-          body: request.body === undefined ? undefined : JSON.stringify(request.body),
-          signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-        }),
-      )
-      .catch(() => {
-        throw networkFailure();
-      });
-
-  const execute = async (request: ApiRequest): Promise<unknown> => {
-    let waitedMs = 0;
-    for (let attempt = 1; ; attempt += 1) {
-      const response = await fetchOnce(request);
-      if (response.ok) return response.json();
-      const failure = await toFailure(response);
-      const waitMs = retryAfterMs(response);
-      const canRetry =
-        failure.retryable && attempt < MAX_ATTEMPTS && waitedMs + waitMs <= retryBudgetMs;
-      if (!canRetry) throw failure;
-      await sleep(waitMs);
-      waitedMs += waitMs;
-    }
+  const transport: Transport = {
+    baseUrl: options.baseUrl,
+    apiKey: options.apiKey,
+    fetchImpl: options.fetchImpl ?? fetch,
+    limiter: options.limiter ?? createRateLimiter({ maxPerMinute: 120, maxConcurrent: 6 }),
+    sleep: options.sleep ?? realSleep,
+    retryBudgetMs: options.retryBudgetMs ?? DEFAULT_RETRY_BUDGET_MS,
   };
+  const execute = (request: ApiRequest) => executeWithRetries(transport, request);
 
   const request = async <T>(apiRequest: ApiRequest, schema: z.ZodType<T>, cacheable: boolean) => {
     const endpoint = describe(apiRequest);
@@ -155,7 +176,14 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     },
     async post(path, schema, body) {
       assertAllowedParams(path, []);
-      return request({ method: "POST", path, query: "", body }, schema, CACHEABLE_POSTS.has(path));
+      const isRead = CACHEABLE_POSTS.has(path);
+      try {
+        return await request({ method: "POST", path, query: "", body }, schema, isRead);
+      } finally {
+        // ES: Una escritura cambia el estado de la API: se descarta todo lo cacheado.
+        // EN: A write changes the API state: everything cached is discarded.
+        if (!isRead) cache.clear();
+      }
     },
   };
 }
