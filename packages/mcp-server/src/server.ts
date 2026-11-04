@@ -22,13 +22,28 @@ export type ServerDependencies = {
  *     Without injected approvals (the CLI case) the write tools stay disabled.
  */
 export function createServer(config: McpConfig, dependencies: ServerDependencies = {}): McpServer {
-  const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
+  return createServerFactory(config, dependencies)();
+}
+
+/**
+ * ES: Fábrica de servidores que comparten cliente de API, caché y contexto. En HTTP sin
+ *     sesión se crea un servidor por solicitud; compartir el contexto conserva la caché.
+ * EN: Factory of servers sharing the API client, cache and context. Over sessionless
+ *     HTTP one server is created per request; sharing the context keeps the cache.
+ */
+export function createServerFactory(
+  config: McpConfig,
+  dependencies: ServerDependencies = {},
+): () => McpServer {
   const api = createApiClient({
     baseUrl: config.apiBaseUrl,
     apiKey: config.apiKey,
     fetchImpl: dependencies.fetchImpl,
   });
   const ctx = createToolContext(api, { now: dependencies.now, approvals: dependencies.approvals });
-  registerTools(server, ctx);
-  return server;
+  return () => {
+    const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
+    registerTools(server, ctx);
+    return server;
+  };
 }

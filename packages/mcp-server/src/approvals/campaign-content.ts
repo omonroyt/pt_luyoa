@@ -42,3 +42,25 @@ export function sendApprovalContent(campaign: Campaign) {
     },
   };
 }
+
+/**
+ * ES: El mismo contenido de envío, armado desde el borrador que la persona vio en la
+ *     tarjeta. Si la API guardó algo distinto, los hashes no coinciden y el envío se rechaza.
+ * EN: The same send content, built from the draft the person saw on the card. If the API
+ *     stored something different, the hashes do not match and the send is rejected.
+ */
+export function sendApprovalContentFromDraft(campaignId: string, draft: CampaignDraft) {
+  return {
+    campaign_id: campaignId,
+    name: draft.name,
+    channel: draft.channel,
+    message: draft.message,
+    offer: {
+      type: draft.offer.type,
+      value: orUndefined(draft.offer.value),
+      product_id: orUndefined(draft.offer.product_id),
+      valid_from: draft.offer.valid_from,
+      valid_to: draft.offer.valid_to,
+    },
+  };
+}

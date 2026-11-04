@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { createMemoryApprovalStore } from "../approvals/approval-store";
 import { issueApprovalToken, verifyApprovalToken } from "../approvals/approval-token";
-import { createApprovalContent, sendApprovalContent } from "../approvals/campaign-content";
+import {
+  createApprovalContent,
+  sendApprovalContent,
+  sendApprovalContentFromDraft,
+} from "../approvals/campaign-content";
 import type { Campaign } from "../api/schemas";
 import type { CampaignDraft } from "../domain/campaign-rules";
 import { connectTestClient, TEST_NOW } from "../testing/connect";
@@ -176,7 +180,11 @@ describe("create_campaign_draft", () => {
 describe("send_campaign", () => {
   it("envía el borrador con un token de envío válido", async () => {
     await connect();
-    const token = await approve("send", sendApprovalContent(STORED_DRAFT), "cmp_test01");
+    const token = await approve(
+      "send",
+      sendApprovalContentFromDraft("cmp_test01", DRAFT),
+      "cmp_test01",
+    );
     const { isError, payload } = await session.call<SendOutput>("send_campaign", {
       campaign_id: "cmp_test01",
       approval_token: token,
