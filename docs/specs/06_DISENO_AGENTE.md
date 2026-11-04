@@ -239,7 +239,7 @@ stateDiagram-v2
 - Resultados de herramientas compactos (decenas de filas como máximo); listados largos se resumen en el MCP.
 - Resultados de turnos anteriores se reemplazan por su `source.id` y un resumen; si el agente los necesita, vuelve a llamar (la caché del MCP lo hace barato).
 - Temperatura baja (0 a 0.3) para consistencia en cifras y formato.
-- Meta: menos de 30 mil tokens de entrada por turno típico; se mide en la comparación de modelos.
+- El prefijo fijo (prompt de sistema, contexto del negocio y definiciones de herramientas) ronda los 9,400 tokens y se reenvía en cada llamada; un turno típico de 5 llamadas suma ~56 mil tokens de entrada, de los que ~43 mil se pueden leer de caché. Por eso el orden del prefijo se mantiene estable. Se mide en la comparación de modelos.
 
 ---
 

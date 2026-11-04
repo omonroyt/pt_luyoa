@@ -186,7 +186,9 @@ Más una gráfica de dispersión **puntaje vs. costo** con la latencia como tama
 
 | Concepto | Estimación |
 |---|---|
-| Conversación típica | 3 a 8 llamadas al modelo, 10 a 30 mil tokens de entrada |
+| Límite de la llave | 20 USD para todo el proyecto, sin renovación |
+| Conversación típica | 5 llamadas al modelo y ~56 mil tokens de entrada, de los cuales ~43 mil se pueden leer de caché. Con 3 llamadas, ~31 mil; con 8, ~101 mil. Las definiciones de herramientas y el prompt de sistema (~9,400 tokens) se reenvían en cada llamada |
+| Medición real (prueba de compatibilidad, 11 herramientas de lectura y 3 a 4 llamadas) | 15 a 24 mil tokens de entrada; de 0.0006 a 0.024 USD por conversación según el modelo |
 | Corrida completa (36 casos × 3 repeticiones) | ~108 conversaciones por modelo |
 | Estrategia | Primero una corrida de humo (6 escenarios × 1) por modelo; la corrida completa solo con los modelos que pasen las puertas duras; modelos caros al final |
 
