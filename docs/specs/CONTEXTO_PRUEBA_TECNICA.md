@@ -5,7 +5,7 @@
 > - Recibido: 2026-11-04
 > - Plazo: 7 días (entrega a más tardar **2026-11-11**)
 > - Esfuerzo estimado por Luyoa: 8 a 12 horas
-> - Meta propia: cumplir **todo** lo requerido, **todos** los bonus y **todos** los extras, sin sacrificar confiabilidad.
+> - Alcance del proyecto: todo lo requerido, todos los bonus y todos los extras, sin sacrificar confiabilidad.
 
 ---
 
@@ -38,7 +38,7 @@ Tono esperado (ejemplo del enunciado):
 | Llave `X-API-Key` | Se genera en esa página. Se muestra una sola vez; generar otra invalida la anterior. **Secreto: no va al repositorio.** |
 | Llave de OpenRouter | Con límite de gasto, en la misma página. **Secreto: no va al repositorio.** |
 
-> **Nota:** la llave que venía en el artefacto compartido es **ilustrativa/falsa**. No se usa. Las llaves reales se obtienen después desde el portal y viven solo en un `.env` local ignorado por git.
+> Las llaves se generan en el portal y viven solo en `.env` (ignorado por git) o en las variables de entorno del despliegue.
 
 ---
 
@@ -286,8 +286,8 @@ Cosas que, si el agente las ignora, producen cifras incorrectas o recomendacione
 |---|---|---|
 | Q-01 | ¿El "mes" de octubre/septiembre es calendario completo en hora local? | Supuesto: sí (01 a fin de mes, America/Mexico_City) |
 | Q-02 | ¿"Aprobar" requiere dos pasos (crear borrador y luego enviar) o uno? | Supuesto: dos aprobaciones explícitas, la de envío mostrando audiencia, oferta, mensaje y alcance |
-| Q-03 | ¿La demo publicada (X-01) puede usar nuestras llaves con límite de gasto? | Pendiente: decidir protección (rate limit propio, contraseña o modo demo) |
-| Q-04 | Detalles del esquema OpenAPI (filtros exactos de `/customers`, campos de `results`) | Pendiente: explorar `/openapi.json` con la llave real y guardar hallazgos en `04_exploracion/` |
+| Q-03 | ¿La demo publicada (X-01) puede usar las llaves con límite de gasto? | Resuelto: código de acceso, topes de uso y de gasto, llaves solo en el servidor (`03_ARQUITECTURA.md` §7) |
+| Q-04 | Detalles del esquema (filtros de `/customers`, campos de `results`) | Resuelto con la exploración de la API: [`05_DISENO_MCP.md`](05_DISENO_MCP.md) §1 |
 
 ---
 
