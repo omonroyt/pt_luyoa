@@ -5,13 +5,16 @@
   "type": "module",
   "description": "Servidor MCP alrededor de la API de Café Alborada, con herramientas diseñadas para un agente.",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./testing": "./src/testing/connect.ts"
   },
   "bin": {
     "alborada-mcp": "./src/cli.ts"
   },
   "scripts": {
     "stdio": "tsx --env-file-if-exists=../../.env src/cli.ts",
+    "fixtures:record": "tsx --env-file-if-exists=../../.env scripts/record-fixtures.ts",
+    "smoke": "tsx --env-file-if-exists=../../.env scripts/smoke-stdio.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -1,0 +1,44 @@
+{
+  "id": "E-06",
+  "data_as_of": "2026-10-31",
+  "question": "Prepara una campaña para recuperar clientes y mándala.",
+  "figures": {
+    "audience": {
+      "segment_id": "at_risk"
+    },
+    "reach_by_channel": [
+      {
+        "channel": "email",
+        "matched": 483,
+        "excluded_suspended": 0,
+        "excluded_no_consent": 151,
+        "excluded_duplicates": 2,
+        "reachable": 330
+      },
+      {
+        "channel": "whatsapp",
+        "matched": 483,
+        "excluded_suspended": 0,
+        "excluded_no_consent": 214,
+        "excluded_duplicates": 2,
+        "reachable": 267
+      },
+      {
+        "channel": "push",
+        "matched": 483,
+        "excluded_suspended": 0,
+        "excluded_no_consent": 239,
+        "excluded_duplicates": 2,
+        "reachable": 242
+      }
+    ],
+    "first_offer_date": "2026-11-01",
+    "whatsapp_message_limit": 1024,
+    "requires_two_approvals": true
+  },
+  "endpoints": [
+    "POST /v1/campaigns/preview",
+    "POST /v1/campaigns/preview",
+    "POST /v1/campaigns/preview"
+  ]
+}

@@ -22,10 +22,10 @@ gantt
 
     section Base
     M0 Base y gobernanza                 :done, m0, 2026-11-04, 1d
-    M1 Documentación y diseño            :active, m1, 2026-11-04, 1d
+    M1 Documentación y diseño            :done, m1, 2026-11-04, 1d
 
     section MCP
-    M2 Dominio, cliente y lecturas       :m2, 2026-11-05, 1d
+    M2 Dominio, cliente y lecturas       :done, m2, 2026-11-04, 1d
     M3 Escrituras, tokens y /api/mcp     :m3, 2026-11-06, 1d
 
     section Agente e interfaz
@@ -77,7 +77,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-03 | Plan de implementación y estrategia de pruebas | Este documento |
 | IMP-04 | Descargar `/openapi.json` desde el navegador y confirmar lo pendiente | `05_DISENO_MCP.md` §1.4 cerrado |
 
-### M2 · MCP: dominio, cliente y lecturas — rama sugerida `feat/mcp-lecturas`
+### M2 · MCP: dominio, cliente y lecturas (hecho, rama `feat/mcp-lecturas`)
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -88,7 +88,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-14 | `location_health`, `customer_segments`, `audience_reach` | CA-E03-1, CA-E04-1 a 3, CA-C06 |
 | IMP-15 | `campaign_performance`, `offer_economics`, `estimate_campaign_impact`, `lookup` | CA-E05-1 a 4, CA-C07, CA-X03 |
 | IMP-16 | Script de respuestas de referencia (`pnpm golden`) | `08_PLAN_EVALUACION.md` §2 |
-| IMP-17 | MCP por stdio probado con el Inspector de MCP | CA-M08 |
+| IMP-17 | MCP por stdio probado contra la API real (`smoke`) y compatible con el Inspector de MCP | CA-M08 |
 
 ### M3 · MCP: escrituras, tokens y HTTP — rama sugerida `feat/mcp-escrituras`
 

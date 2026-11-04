@@ -1,0 +1,2410 @@
+{
+  "GET /v1/business": {
+    "status": 200,
+    "body": {
+      "id": "biz_alborada",
+      "name": "Café Alborada",
+      "timezone": "America/Mexico_City",
+      "currency": "MXN",
+      "data_from": "2025-11-01",
+      "data_as_of": "2026-10-31",
+      "points_rule": "1 punto por cada $10 MXN pagados",
+      "reward_rule": "150 puntos = una bebida gratis (hasta $68 MXN)"
+    }
+  },
+  "GET /v1/locations": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "loc_coyoacan",
+          "name": "Coyoacán",
+          "address": "Francisco Sosa 45, Coyoacán, CDMX",
+          "opened_at": "2022-02-10"
+        },
+        {
+          "id": "loc_polanco",
+          "name": "Polanco",
+          "address": "Masaryk 310, Polanco, CDMX",
+          "opened_at": "2023-06-01"
+        },
+        {
+          "id": "loc_roma",
+          "name": "Roma Norte",
+          "address": "Colima 120, Roma Norte, CDMX",
+          "opened_at": "2021-03-15"
+        }
+      ]
+    }
+  },
+  "GET /v1/segments": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "champions",
+          "description": "8 o más visitas en los últimos 60 días",
+          "customers": 216,
+          "avg_spend": 7998.77,
+          "total_spend": 1727735.2,
+          "push_consent_rate": 0.5,
+          "whatsapp_consent_rate": 0.5185,
+          "email_consent_rate": 0.7037
+        },
+        {
+          "id": "regulars",
+          "description": "3 a 7 visitas en los últimos 60 días",
+          "customers": 337,
+          "avg_spend": 1588.89,
+          "total_spend": 535456.8,
+          "push_consent_rate": 0.4985,
+          "whatsapp_consent_rate": 0.5252,
+          "email_consent_rate": 0.6617
+        },
+        {
+          "id": "occasional",
+          "description": "Clientes activos con menos de 3 visitas en los últimos 60 días",
+          "customers": 456,
+          "avg_spend": 994.79,
+          "total_spend": 453624.8,
+          "push_consent_rate": 0.4737,
+          "whatsapp_consent_rate": 0.5548,
+          "email_consent_rate": 0.6601
+        },
+        {
+          "id": "new",
+          "description": "Se inscribieron en los últimos 45 días",
+          "customers": 171,
+          "avg_spend": 237.11,
+          "total_spend": 40546,
+          "push_consent_rate": 0.4737,
+          "whatsapp_consent_rate": 0.5789,
+          "email_consent_rate": 0.7602
+        },
+        {
+          "id": "at_risk",
+          "description": "10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir",
+          "customers": 483,
+          "avg_spend": 3276.78,
+          "total_spend": 1582686.8,
+          "push_consent_rate": 0.5052,
+          "whatsapp_consent_rate": 0.5569,
+          "email_consent_rate": 0.6874
+        },
+        {
+          "id": "dormant",
+          "description": "Más de 90 días sin venir, o sin visitas registradas",
+          "customers": 367,
+          "avg_spend": 1279.79,
+          "total_spend": 469681.6,
+          "push_consent_rate": 0.5259,
+          "whatsapp_consent_rate": 0.515,
+          "email_consent_rate": 0.6812
+        }
+      ]
+    }
+  },
+  "GET /v1/products?limit=100": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "prd_americano",
+          "name": "Americano",
+          "category": "cafe_caliente",
+          "price": 52,
+          "unit_cost": 11
+        },
+        {
+          "id": "prd_bowl",
+          "name": "Bowl de yogurt",
+          "category": "comida",
+          "price": 104,
+          "unit_cost": 39
+        },
+        {
+          "id": "prd_capuccino",
+          "name": "Capuccino",
+          "category": "cafe_caliente",
+          "price": 68,
+          "unit_cost": 18
+        },
+        {
+          "id": "prd_chai",
+          "name": "Chai latte",
+          "category": "otras_bebidas",
+          "price": 76,
+          "unit_cost": 22
+        },
+        {
+          "id": "prd_chilaquiles",
+          "name": "Chilaquiles",
+          "category": "comida",
+          "price": 138,
+          "unit_cost": 49
+        },
+        {
+          "id": "prd_coldbrew",
+          "name": "Cold brew",
+          "category": "cafe_frio",
+          "price": 74,
+          "unit_cost": 16
+        },
+        {
+          "id": "prd_concha",
+          "name": "Concha",
+          "category": "panaderia",
+          "price": 34,
+          "unit_cost": 10
+        },
+        {
+          "id": "prd_croissant",
+          "name": "Croissant",
+          "category": "panaderia",
+          "price": 48,
+          "unit_cost": 17
+        },
+        {
+          "id": "prd_flat",
+          "name": "Flat white",
+          "category": "cafe_caliente",
+          "price": 72,
+          "unit_cost": 19
+        },
+        {
+          "id": "prd_iced_latte",
+          "name": "Iced latte",
+          "category": "cafe_frio",
+          "price": 74,
+          "unit_cost": 19
+        },
+        {
+          "id": "prd_jugo",
+          "name": "Jugo de naranja",
+          "category": "otras_bebidas",
+          "price": 58,
+          "unit_cost": 20
+        },
+        {
+          "id": "prd_latte",
+          "name": "Latte",
+          "category": "cafe_caliente",
+          "price": 68,
+          "unit_cost": 18
+        },
+        {
+          "id": "prd_matcha",
+          "name": "Matcha latte",
+          "category": "otras_bebidas",
+          "price": 82,
+          "unit_cost": 26
+        },
+        {
+          "id": "prd_mocha",
+          "name": "Mocha",
+          "category": "cafe_caliente",
+          "price": 76,
+          "unit_cost": 22
+        },
+        {
+          "id": "prd_muffin",
+          "name": "Muffin de arándano",
+          "category": "panaderia",
+          "price": 52,
+          "unit_cost": 18
+        },
+        {
+          "id": "prd_pan_muerto",
+          "name": "Pan de muerto",
+          "category": "panaderia",
+          "price": 62,
+          "unit_cost": 20
+        },
+        {
+          "id": "prd_rol",
+          "name": "Rol de canela",
+          "category": "panaderia",
+          "price": 56,
+          "unit_cost": 19
+        },
+        {
+          "id": "prd_sandwich",
+          "name": "Sándwich de pavo",
+          "category": "comida",
+          "price": 124,
+          "unit_cost": 48
+        },
+        {
+          "id": "prd_toast",
+          "name": "Toast de aguacate",
+          "category": "comida",
+          "price": 118,
+          "unit_cost": 44
+        }
+      ]
+    }
+  },
+  "GET /v1/campaigns?limit=100": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cmp_0004",
+          "name": "Te extrañamos",
+          "objective": "Recuperar clientes inactivos",
+          "status": "completed",
+          "channel": "whatsapp",
+          "audience_json": null,
+          "audience_description": "Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp",
+          "offer_type": "free_item",
+          "offer_value": null,
+          "offer_product_id": "prd_concha",
+          "valid_from": "2026-06-08",
+          "valid_to": "2026-06-21",
+          "message": "Hace rato que no te vemos. Tu próxima concha va por nuestra cuenta.",
+          "created_at": "2026-06-06T06:00:00Z",
+          "sent_at": "2026-06-08T15:00:00Z",
+          "audience_size": 272,
+          "simulated": false,
+          "audience": null,
+          "results": {
+            "targeted": 339,
+            "control_size": 67,
+            "delivered": 259,
+            "opened": 200,
+            "redeemed": 85,
+            "sent": 272,
+            "attributed_revenue": 5712,
+            "discount_cost": 2856,
+            "attributed_gross_profit": 3360,
+            "treatment_visit_rate": 0.5074,
+            "control_visit_rate": 0.2687
+          }
+        },
+        {
+          "id": "cmp_0003",
+          "name": "Puntos dobles Día de las Madres",
+          "objective": "Reconocer a clientes activos",
+          "status": "completed",
+          "channel": "push",
+          "audience_json": null,
+          "audience_description": "Clientes con consentimiento de push",
+          "offer_type": "points_multiplier",
+          "offer_value": 2,
+          "offer_product_id": null,
+          "valid_from": "2026-05-08",
+          "valid_to": "2026-05-10",
+          "message": "Del 8 al 10 de mayo tus compras acumulan puntos dobles.",
+          "created_at": "2026-05-06T06:00:00Z",
+          "sent_at": "2026-05-08T15:00:00Z",
+          "audience_size": 1004,
+          "simulated": false,
+          "audience": null,
+          "results": {
+            "targeted": 1004,
+            "control_size": 0,
+            "delivered": 969,
+            "opened": 325,
+            "redeemed": 98,
+            "sent": 1004,
+            "attributed_revenue": 8912,
+            "discount_cost": 0,
+            "attributed_gross_profit": 6420,
+            "treatment_visit_rate": 0.248,
+            "control_visit_rate": null
+          }
+        },
+        {
+          "id": "cmp_0002",
+          "name": "Martes de 2x1 en Americano",
+          "objective": "Piloto para mover tráfico de martes",
+          "status": "completed",
+          "channel": "push",
+          "audience_json": null,
+          "audience_description": "Clientes de Coyoacán con wallet y consentimiento de push",
+          "offer_type": "two_for_one",
+          "offer_value": null,
+          "offer_product_id": "prd_americano",
+          "valid_from": "2026-02-03",
+          "valid_to": "2026-02-24",
+          "message": "Hoy es martes de 2x1 en Americano en Coyoacán.",
+          "created_at": "2026-02-01T06:00:00Z",
+          "sent_at": "2026-02-03T15:00:00Z",
+          "audience_size": 383,
+          "simulated": false,
+          "audience": null,
+          "results": {
+            "targeted": 383,
+            "control_size": 0,
+            "delivered": 372,
+            "opened": 227,
+            "redeemed": 153,
+            "sent": 383,
+            "attributed_revenue": 13296,
+            "discount_cost": 9984,
+            "attributed_gross_profit": 7899,
+            "treatment_visit_rate": 0.7598,
+            "control_visit_rate": null
+          }
+        },
+        {
+          "id": "cmp_0001",
+          "name": "20% en todo por Buen Fin",
+          "objective": "Subir ventas en Buen Fin",
+          "status": "completed",
+          "channel": "email",
+          "audience_json": null,
+          "audience_description": "Todos los clientes con consentimiento de email",
+          "offer_type": "percent_off",
+          "offer_value": 20,
+          "offer_product_id": null,
+          "valid_from": "2025-11-14",
+          "valid_to": "2025-11-17",
+          "message": "Este Buen Fin tienes 20% en todo Café Alborada. Muestra tu tarjeta.",
+          "created_at": "2025-11-12T06:00:00Z",
+          "sent_at": "2025-11-14T15:00:00Z",
+          "audience_size": 1379,
+          "simulated": false,
+          "audience": null,
+          "results": {
+            "targeted": 1379,
+            "control_size": 0,
+            "delivered": 1312,
+            "opened": 402,
+            "redeemed": 201,
+            "sent": 1379,
+            "attributed_revenue": 17731.2,
+            "discount_cost": 4432.8,
+            "attributed_gross_profit": 11410.2,
+            "treatment_visit_rate": 0.2661,
+            "control_visit_rate": null
+          }
+        }
+      ],
+      "pagination": {
+        "total": 4,
+        "limit": 100,
+        "offset": 0,
+        "has_more": false
+      }
+    }
+  },
+  "GET /v1/campaigns/cmp_0004": {
+    "status": 200,
+    "body": {
+      "id": "cmp_0004",
+      "name": "Te extrañamos",
+      "objective": "Recuperar clientes inactivos",
+      "status": "completed",
+      "channel": "whatsapp",
+      "audience_json": null,
+      "audience_description": "Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp",
+      "offer_type": "free_item",
+      "offer_value": null,
+      "offer_product_id": "prd_concha",
+      "valid_from": "2026-06-08",
+      "valid_to": "2026-06-21",
+      "message": "Hace rato que no te vemos. Tu próxima concha va por nuestra cuenta.",
+      "created_at": "2026-06-06T06:00:00Z",
+      "sent_at": "2026-06-08T15:00:00Z",
+      "audience_size": 272,
+      "simulated": false,
+      "audience": null,
+      "results": {
+        "targeted": 339,
+        "control_size": 67,
+        "delivered": 259,
+        "opened": 200,
+        "redeemed": 85,
+        "sent": 272,
+        "attributed_revenue": 5712,
+        "discount_cost": 2856,
+        "attributed_gross_profit": 3360,
+        "treatment_visit_rate": 0.5074,
+        "control_visit_rate": 0.2687
+      }
+    }
+  },
+  "GET /v1/customers/cus_0001": {
+    "status": 200,
+    "body": {
+      "id": "cus_0001",
+      "signup_date": "2025-02-08",
+      "home_location_id": "loc_roma",
+      "card_status": "active",
+      "wallet_installed": true,
+      "consent_push": true,
+      "consent_whatsapp": true,
+      "consent_email": false,
+      "tier": "bronce",
+      "points_balance": 158,
+      "visits_count": 19,
+      "visits_60d": 4,
+      "last_visit_at": "2026-10-24T17:13:17Z",
+      "total_spend": 1672,
+      "avg_ticket": 92.89,
+      "favorite_product_id": "prd_latte",
+      "segment": "regulars"
+    }
+  },
+  "GET /v1/customers/cus_no_existe": {
+    "status": 404,
+    "body": {
+      "error": {
+        "code": "not_found",
+        "message": "Cliente no encontrado"
+      }
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-09-01&group_by=location&to=2026-09-30": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "label": "Coyoacán",
+          "transactions": 2319,
+          "net_sales": 218632,
+          "avg_ticket": 94.28,
+          "discounts": 3062,
+          "gross_profit": 154840,
+          "member_share": 0.5084,
+          "active_days": 30,
+          "transactions_per_day": 77.3
+        },
+        {
+          "key": "loc_polanco",
+          "label": "Polanco",
+          "transactions": 3853,
+          "net_sales": 364776,
+          "avg_ticket": 94.67,
+          "discounts": 1732,
+          "gross_profit": 259166,
+          "member_share": 0.1651,
+          "active_days": 30,
+          "transactions_per_day": 128.43
+        },
+        {
+          "key": "loc_roma",
+          "label": "Roma Norte",
+          "transactions": 2049,
+          "net_sales": 192396,
+          "avg_ticket": 93.9,
+          "discounts": 3492,
+          "gross_profit": 136124,
+          "member_share": 0.4919,
+          "active_days": 30,
+          "transactions_per_day": 68.3
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-09-01&group_by=category&to=2026-09-30": {
+    "status": 200,
+    "body": {
+      "group_by": "category",
+      "data": [
+        {
+          "key": "cafe_caliente",
+          "label": "cafe_caliente",
+          "units": 5958,
+          "transactions": 5612,
+          "gross_sales": 387312,
+          "gross_profit_before_discounts": 288148
+        },
+        {
+          "key": "comida",
+          "label": "comida",
+          "units": 905,
+          "transactions": 905,
+          "gross_sales": 111804,
+          "gross_profit_before_discounts": 70276
+        },
+        {
+          "key": "panaderia",
+          "label": "panaderia",
+          "units": 2360,
+          "transactions": 2360,
+          "gross_sales": 111098,
+          "gross_profit_before_discounts": 72892
+        },
+        {
+          "key": "cafe_frio",
+          "label": "cafe_frio",
+          "units": 1378,
+          "transactions": 1355,
+          "gross_sales": 101972,
+          "gross_profit_before_discounts": 77848
+        },
+        {
+          "key": "otras_bebidas",
+          "label": "otras_bebidas",
+          "units": 987,
+          "transactions": 982,
+          "gross_sales": 71904,
+          "gross_profit_before_discounts": 49252
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/visits?from=2026-09-01&group_by=location&to=2026-09-30": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "visits": 1270,
+          "unique_customers": 480,
+          "purchase_rate": 0.9354,
+          "active_days": 30,
+          "visits_per_day": 42.33
+        },
+        {
+          "key": "loc_polanco",
+          "visits": 697,
+          "unique_customers": 304,
+          "purchase_rate": 0.9154,
+          "active_days": 30,
+          "visits_per_day": 23.23
+        },
+        {
+          "key": "loc_roma",
+          "visits": 1107,
+          "unique_customers": 480,
+          "purchase_rate": 0.9169,
+          "active_days": 30,
+          "visits_per_day": 36.9
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-10-01&group_by=location&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "label": "Coyoacán",
+          "transactions": 2531,
+          "net_sales": 229158,
+          "avg_ticket": 90.54,
+          "discounts": 4158,
+          "gross_profit": 162873,
+          "member_share": 0.5101,
+          "active_days": 31,
+          "transactions_per_day": 81.65
+        },
+        {
+          "key": "loc_polanco",
+          "label": "Polanco",
+          "transactions": 4179,
+          "net_sales": 396598,
+          "avg_ticket": 94.9,
+          "discounts": 2108,
+          "gross_profit": 282880,
+          "member_share": 0.161,
+          "active_days": 31,
+          "transactions_per_day": 134.81
+        },
+        {
+          "key": "loc_roma",
+          "label": "Roma Norte",
+          "transactions": 1970,
+          "net_sales": 182498,
+          "avg_ticket": 92.64,
+          "discounts": 2080,
+          "gross_profit": 129893,
+          "member_share": 0.5046,
+          "active_days": 31,
+          "transactions_per_day": 63.55
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-10-01&group_by=category&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "category",
+      "data": [
+        {
+          "key": "cafe_caliente",
+          "label": "cafe_caliente",
+          "units": 6295,
+          "transactions": 5937,
+          "gross_sales": 408348,
+          "gross_profit_before_discounts": 303927
+        },
+        {
+          "key": "panaderia",
+          "label": "panaderia",
+          "units": 2682,
+          "transactions": 2682,
+          "gross_sales": 135690,
+          "gross_profit_before_discounts": 89851
+        },
+        {
+          "key": "cafe_frio",
+          "label": "cafe_frio",
+          "units": 1478,
+          "transactions": 1462,
+          "gross_sales": 109372,
+          "gross_profit_before_discounts": 83444
+        },
+        {
+          "key": "comida",
+          "label": "comida",
+          "units": 730,
+          "transactions": 730,
+          "gross_sales": 90084,
+          "gross_profit_before_discounts": 56636
+        },
+        {
+          "key": "otras_bebidas",
+          "label": "otras_bebidas",
+          "units": 1001,
+          "transactions": 993,
+          "gross_sales": 73106,
+          "gross_profit_before_discounts": 50134
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/visits?from=2026-10-01&group_by=location&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "visits": 1396,
+          "unique_customers": 510,
+          "purchase_rate": 0.9298,
+          "active_days": 31,
+          "visits_per_day": 45.03
+        },
+        {
+          "key": "loc_polanco",
+          "visits": 726,
+          "unique_customers": 317,
+          "purchase_rate": 0.938,
+          "active_days": 31,
+          "visits_per_day": 23.42
+        },
+        {
+          "key": "loc_roma",
+          "visits": 1086,
+          "unique_customers": 497,
+          "purchase_rate": 0.9236,
+          "active_days": 31,
+          "visits_per_day": 35.03
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-09&group_by=location&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "label": "Coyoacán",
+          "transactions": 6831,
+          "net_sales": 629976,
+          "avg_ticket": 92.22,
+          "discounts": 11510,
+          "gross_profit": 446539,
+          "member_share": 0.5206,
+          "active_days": 84,
+          "transactions_per_day": 81.32
+        },
+        {
+          "key": "loc_polanco",
+          "label": "Polanco",
+          "transactions": 11050,
+          "net_sales": 1046906,
+          "avg_ticket": 94.74,
+          "discounts": 5324,
+          "gross_profit": 745130,
+          "member_share": 0.1703,
+          "active_days": 84,
+          "transactions_per_day": 131.55
+        },
+        {
+          "key": "loc_roma",
+          "label": "Roma Norte",
+          "transactions": 5965,
+          "net_sales": 558080,
+          "avg_ticket": 93.56,
+          "discounts": 9024,
+          "gross_profit": 395252,
+          "member_share": 0.5147,
+          "active_days": 84,
+          "transactions_per_day": 71.01
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/visits?from=2026-08-09&group_by=location&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "visits": 3853,
+          "unique_customers": 845,
+          "purchase_rate": 0.9286,
+          "active_days": 84,
+          "visits_per_day": 45.87
+        },
+        {
+          "key": "loc_polanco",
+          "visits": 2034,
+          "unique_customers": 587,
+          "purchase_rate": 0.9322,
+          "active_days": 84,
+          "visits_per_day": 24.21
+        },
+        {
+          "key": "loc_roma",
+          "visits": 3363,
+          "unique_customers": 896,
+          "purchase_rate": 0.9209,
+          "active_days": 84,
+          "visits_per_day": 40.04
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-05-17&group_by=location&to=2026-08-08": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "label": "Coyoacán",
+          "transactions": 8092,
+          "net_sales": 754696,
+          "avg_ticket": 93.26,
+          "discounts": 16050,
+          "gross_profit": 534415,
+          "member_share": 0.5848,
+          "active_days": 84,
+          "transactions_per_day": 96.33
+        },
+        {
+          "key": "loc_polanco",
+          "label": "Polanco",
+          "transactions": 11524,
+          "net_sales": 1097714,
+          "avg_ticket": 95.25,
+          "discounts": 7554,
+          "gross_profit": 781508,
+          "member_share": 0.2116,
+          "active_days": 84,
+          "transactions_per_day": 137.19
+        },
+        {
+          "key": "loc_roma",
+          "label": "Roma Norte",
+          "transactions": 8643,
+          "net_sales": 809334,
+          "avg_ticket": 93.64,
+          "discounts": 16722,
+          "gross_profit": 573037,
+          "member_share": 0.5838,
+          "active_days": 84,
+          "transactions_per_day": 102.89
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/visits?from=2026-05-17&group_by=location&to=2026-08-08": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "visits": 5112,
+          "unique_customers": 910,
+          "purchase_rate": 0.9329,
+          "active_days": 84,
+          "visits_per_day": 60.86
+        },
+        {
+          "key": "loc_polanco",
+          "visits": 2647,
+          "unique_customers": 704,
+          "purchase_rate": 0.9294,
+          "active_days": 84,
+          "visits_per_day": 31.51
+        },
+        {
+          "key": "loc_roma",
+          "visits": 5462,
+          "unique_customers": 953,
+          "purchase_rate": 0.9308,
+          "active_days": 84,
+          "visits_per_day": 65.02
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-09&group_by=weekday&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "weekday",
+      "data": [
+        {
+          "key": 1,
+          "transactions": 3269,
+          "net_sales": 303830,
+          "avg_ticket": 92.94,
+          "discounts": 3802,
+          "gross_profit": 215572,
+          "member_share": 0.3732,
+          "active_days": 12,
+          "transactions_per_day": 272.42,
+          "label": "lunes"
+        },
+        {
+          "key": 2,
+          "transactions": 2180,
+          "net_sales": 205814,
+          "avg_ticket": 94.41,
+          "discounts": 2426,
+          "gross_profit": 146188,
+          "member_share": 0.3954,
+          "active_days": 12,
+          "transactions_per_day": 181.67,
+          "label": "martes"
+        },
+        {
+          "key": 3,
+          "transactions": 3315,
+          "net_sales": 313708,
+          "avg_ticket": 94.63,
+          "discounts": 3920,
+          "gross_profit": 222430,
+          "member_share": 0.3762,
+          "active_days": 12,
+          "transactions_per_day": 276.25,
+          "label": "miércoles"
+        },
+        {
+          "key": 4,
+          "transactions": 3476,
+          "net_sales": 326646,
+          "avg_ticket": 93.97,
+          "discounts": 4420,
+          "gross_profit": 231529,
+          "member_share": 0.3688,
+          "active_days": 12,
+          "transactions_per_day": 289.67,
+          "label": "jueves"
+        },
+        {
+          "key": 5,
+          "transactions": 3845,
+          "net_sales": 357660,
+          "avg_ticket": 93.02,
+          "discounts": 3872,
+          "gross_profit": 254049,
+          "member_share": 0.3555,
+          "active_days": 12,
+          "transactions_per_day": 320.42,
+          "label": "viernes"
+        },
+        {
+          "key": 6,
+          "transactions": 4204,
+          "net_sales": 395680,
+          "avg_ticket": 94.12,
+          "discounts": 4302,
+          "gross_profit": 281217,
+          "member_share": 0.3275,
+          "active_days": 12,
+          "transactions_per_day": 350.33,
+          "label": "sábado"
+        },
+        {
+          "key": 7,
+          "transactions": 3557,
+          "net_sales": 331624,
+          "avg_ticket": 93.23,
+          "discounts": 3116,
+          "gross_profit": 235936,
+          "member_share": 0.3241,
+          "active_days": 12,
+          "transactions_per_day": 296.42,
+          "label": "domingo"
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-09&group_by=hour&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "hour",
+      "data": [
+        {
+          "key": 7,
+          "transactions": 2682,
+          "net_sales": 247916,
+          "avg_ticket": 92.44,
+          "discounts": 4016,
+          "gross_profit": 175793,
+          "member_share": 0.3874,
+          "active_days": 84,
+          "transactions_per_day": 31.93
+        },
+        {
+          "key": 8,
+          "transactions": 2829,
+          "net_sales": 262884,
+          "avg_ticket": 92.92,
+          "discounts": 4260,
+          "gross_profit": 186480,
+          "member_share": 0.4327,
+          "active_days": 84,
+          "transactions_per_day": 33.68
+        },
+        {
+          "key": 9,
+          "transactions": 2916,
+          "net_sales": 273662,
+          "avg_ticket": 93.85,
+          "discounts": 3660,
+          "gross_profit": 194019,
+          "member_share": 0.43,
+          "active_days": 84,
+          "transactions_per_day": 34.71
+        },
+        {
+          "key": 10,
+          "transactions": 3135,
+          "net_sales": 291324,
+          "avg_ticket": 92.93,
+          "discounts": 5820,
+          "gross_profit": 205954,
+          "member_share": 0.482,
+          "active_days": 84,
+          "transactions_per_day": 37.32
+        },
+        {
+          "key": 11,
+          "transactions": 2019,
+          "net_sales": 190148,
+          "avg_ticket": 94.18,
+          "discounts": 1992,
+          "gross_profit": 135028,
+          "member_share": 0.3675,
+          "active_days": 84,
+          "transactions_per_day": 24.04
+        },
+        {
+          "key": 12,
+          "transactions": 1905,
+          "net_sales": 181096,
+          "avg_ticket": 95.06,
+          "discounts": 1716,
+          "gross_profit": 128723,
+          "member_share": 0.3087,
+          "active_days": 84,
+          "transactions_per_day": 22.68
+        },
+        {
+          "key": 13,
+          "transactions": 1900,
+          "net_sales": 180948,
+          "avg_ticket": 95.24,
+          "discounts": 1538,
+          "gross_profit": 128534,
+          "member_share": 0.3347,
+          "active_days": 84,
+          "transactions_per_day": 22.62
+        },
+        {
+          "key": 14,
+          "transactions": 1526,
+          "net_sales": 141982,
+          "avg_ticket": 93.04,
+          "discounts": 544,
+          "gross_profit": 101025,
+          "member_share": 0.1802,
+          "active_days": 84,
+          "transactions_per_day": 18.17
+        },
+        {
+          "key": 15,
+          "transactions": 899,
+          "net_sales": 84466,
+          "avg_ticket": 93.96,
+          "discounts": 680,
+          "gross_profit": 60065,
+          "member_share": 0.2747,
+          "active_days": 84,
+          "transactions_per_day": 10.7
+        },
+        {
+          "key": 16,
+          "transactions": 899,
+          "net_sales": 86060,
+          "avg_ticket": 95.73,
+          "discounts": 648,
+          "gross_profit": 61115,
+          "member_share": 0.2925,
+          "active_days": 84,
+          "transactions_per_day": 10.7
+        },
+        {
+          "key": 17,
+          "transactions": 868,
+          "net_sales": 81912,
+          "avg_ticket": 94.37,
+          "discounts": 544,
+          "gross_profit": 58236,
+          "member_share": 0.2984,
+          "active_days": 84,
+          "transactions_per_day": 10.33
+        },
+        {
+          "key": 18,
+          "transactions": 791,
+          "net_sales": 74404,
+          "avg_ticket": 94.06,
+          "discounts": 236,
+          "gross_profit": 53083,
+          "member_share": 0.2276,
+          "active_days": 84,
+          "transactions_per_day": 9.42
+        },
+        {
+          "key": 19,
+          "transactions": 771,
+          "net_sales": 70818,
+          "avg_ticket": 91.85,
+          "discounts": 68,
+          "gross_profit": 50712,
+          "member_share": 0.2088,
+          "active_days": 84,
+          "transactions_per_day": 9.18
+        },
+        {
+          "key": 20,
+          "transactions": 701,
+          "net_sales": 66848,
+          "avg_ticket": 95.36,
+          "discounts": 136,
+          "gross_profit": 47805,
+          "member_share": 0.1769,
+          "active_days": 84,
+          "transactions_per_day": 8.35
+        },
+        {
+          "key": 21,
+          "transactions": 5,
+          "net_sales": 494,
+          "avg_ticket": 98.8,
+          "discounts": 0,
+          "gross_profit": 349,
+          "member_share": 1,
+          "active_days": 5,
+          "transactions_per_day": 1
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/visits?from=2026-08-09&group_by=weekday&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "weekday",
+      "data": [
+        {
+          "key": 1,
+          "visits": 1316,
+          "unique_customers": 622,
+          "purchase_rate": 0.9309,
+          "active_days": 12,
+          "visits_per_day": 109.67,
+          "label": "lunes"
+        },
+        {
+          "key": 2,
+          "visits": 933,
+          "unique_customers": 497,
+          "purchase_rate": 0.9314,
+          "active_days": 12,
+          "visits_per_day": 77.75,
+          "label": "martes"
+        },
+        {
+          "key": 3,
+          "visits": 1370,
+          "unique_customers": 637,
+          "purchase_rate": 0.9168,
+          "active_days": 12,
+          "visits_per_day": 114.17,
+          "label": "miércoles"
+        },
+        {
+          "key": 4,
+          "visits": 1400,
+          "unique_customers": 681,
+          "purchase_rate": 0.9236,
+          "active_days": 12,
+          "visits_per_day": 116.67,
+          "label": "jueves"
+        },
+        {
+          "key": 5,
+          "visits": 1485,
+          "unique_customers": 769,
+          "purchase_rate": 0.9286,
+          "active_days": 12,
+          "visits_per_day": 123.75,
+          "label": "viernes"
+        },
+        {
+          "key": 6,
+          "visits": 1494,
+          "unique_customers": 937,
+          "purchase_rate": 0.9277,
+          "active_days": 12,
+          "visits_per_day": 124.5,
+          "label": "sábado"
+        },
+        {
+          "key": 7,
+          "visits": 1252,
+          "unique_customers": 815,
+          "purchase_rate": 0.9289,
+          "active_days": 12,
+          "visits_per_day": 104.33,
+          "label": "domingo"
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-09&group_by=weekday&location_id=loc_coyoacan&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "weekday",
+      "data": [
+        {
+          "key": 1,
+          "transactions": 957,
+          "net_sales": 85780,
+          "avg_ticket": 89.63,
+          "discounts": 1962,
+          "gross_profit": 60825,
+          "member_share": 0.5298,
+          "active_days": 12,
+          "transactions_per_day": 79.75,
+          "label": "lunes"
+        },
+        {
+          "key": 2,
+          "transactions": 635,
+          "net_sales": 58402,
+          "avg_ticket": 91.97,
+          "discounts": 852,
+          "gross_profit": 41454,
+          "member_share": 0.5528,
+          "active_days": 12,
+          "transactions_per_day": 52.92,
+          "label": "martes"
+        },
+        {
+          "key": 3,
+          "transactions": 987,
+          "net_sales": 92248,
+          "avg_ticket": 93.46,
+          "discounts": 1812,
+          "gross_profit": 65337,
+          "member_share": 0.5218,
+          "active_days": 12,
+          "transactions_per_day": 82.25,
+          "label": "miércoles"
+        },
+        {
+          "key": 4,
+          "transactions": 977,
+          "net_sales": 91312,
+          "avg_ticket": 93.46,
+          "discounts": 1670,
+          "gross_profit": 64544,
+          "member_share": 0.5281,
+          "active_days": 12,
+          "transactions_per_day": 81.42,
+          "label": "jueves"
+        },
+        {
+          "key": 5,
+          "transactions": 1109,
+          "net_sales": 102290,
+          "avg_ticket": 92.24,
+          "discounts": 1676,
+          "gross_profit": 72422,
+          "member_share": 0.5365,
+          "active_days": 12,
+          "transactions_per_day": 92.42,
+          "label": "viernes"
+        },
+        {
+          "key": 6,
+          "transactions": 1168,
+          "net_sales": 107160,
+          "avg_ticket": 91.75,
+          "discounts": 2242,
+          "gross_profit": 75932,
+          "member_share": 0.5043,
+          "active_days": 12,
+          "transactions_per_day": 97.33,
+          "label": "sábado"
+        },
+        {
+          "key": 7,
+          "transactions": 998,
+          "net_sales": 92784,
+          "avg_ticket": 92.97,
+          "discounts": 1296,
+          "gross_profit": 66025,
+          "member_share": 0.484,
+          "active_days": 12,
+          "transactions_per_day": 83.17,
+          "label": "domingo"
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-09&group_by=weekday&location_id=loc_polanco&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "weekday",
+      "data": [
+        {
+          "key": 1,
+          "transactions": 1440,
+          "net_sales": 135894,
+          "avg_ticket": 94.37,
+          "discounts": 580,
+          "gross_profit": 96593,
+          "member_share": 0.1715,
+          "active_days": 12,
+          "transactions_per_day": 120,
+          "label": "lunes"
+        },
+        {
+          "key": 2,
+          "transactions": 964,
+          "net_sales": 91888,
+          "avg_ticket": 95.32,
+          "discounts": 570,
+          "gross_profit": 65450,
+          "member_share": 0.1888,
+          "active_days": 12,
+          "transactions_per_day": 80.33,
+          "label": "martes"
+        },
+        {
+          "key": 3,
+          "transactions": 1500,
+          "net_sales": 143066,
+          "avg_ticket": 95.38,
+          "discounts": 822,
+          "gross_profit": 101683,
+          "member_share": 0.1887,
+          "active_days": 12,
+          "transactions_per_day": 125,
+          "label": "miércoles"
+        },
+        {
+          "key": 4,
+          "transactions": 1638,
+          "net_sales": 155390,
+          "avg_ticket": 94.87,
+          "discounts": 1120,
+          "gross_profit": 110483,
+          "member_share": 0.1856,
+          "active_days": 12,
+          "transactions_per_day": 136.5,
+          "label": "jueves"
+        },
+        {
+          "key": 5,
+          "transactions": 1798,
+          "net_sales": 169848,
+          "avg_ticket": 94.46,
+          "discounts": 680,
+          "gross_profit": 121001,
+          "member_share": 0.1713,
+          "active_days": 12,
+          "transactions_per_day": 149.83,
+          "label": "viernes"
+        },
+        {
+          "key": 6,
+          "transactions": 2027,
+          "net_sales": 192860,
+          "avg_ticket": 95.15,
+          "discounts": 1056,
+          "gross_profit": 137337,
+          "member_share": 0.1584,
+          "active_days": 12,
+          "transactions_per_day": 168.92,
+          "label": "sábado"
+        },
+        {
+          "key": 7,
+          "transactions": 1683,
+          "net_sales": 157960,
+          "avg_ticket": 93.86,
+          "discounts": 496,
+          "gross_profit": 112583,
+          "member_share": 0.1408,
+          "active_days": 12,
+          "transactions_per_day": 140.25,
+          "label": "domingo"
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-09&group_by=weekday&location_id=loc_roma&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "weekday",
+      "data": [
+        {
+          "key": 1,
+          "transactions": 872,
+          "net_sales": 82156,
+          "avg_ticket": 94.22,
+          "discounts": 1260,
+          "gross_profit": 58154,
+          "member_share": 0.5344,
+          "active_days": 12,
+          "transactions_per_day": 72.67,
+          "label": "lunes"
+        },
+        {
+          "key": 2,
+          "transactions": 581,
+          "net_sales": 55524,
+          "avg_ticket": 95.57,
+          "discounts": 1004,
+          "gross_profit": 39284,
+          "member_share": 0.5663,
+          "active_days": 12,
+          "transactions_per_day": 48.42,
+          "label": "martes"
+        },
+        {
+          "key": 3,
+          "transactions": 828,
+          "net_sales": 78394,
+          "avg_ticket": 94.68,
+          "discounts": 1286,
+          "gross_profit": 55410,
+          "member_share": 0.5423,
+          "active_days": 12,
+          "transactions_per_day": 69,
+          "label": "miércoles"
+        },
+        {
+          "key": 4,
+          "transactions": 861,
+          "net_sales": 79944,
+          "avg_ticket": 92.85,
+          "discounts": 1630,
+          "gross_profit": 56502,
+          "member_share": 0.5366,
+          "active_days": 12,
+          "transactions_per_day": 71.75,
+          "label": "jueves"
+        },
+        {
+          "key": 5,
+          "transactions": 938,
+          "net_sales": 85522,
+          "avg_ticket": 91.17,
+          "discounts": 1516,
+          "gross_profit": 60626,
+          "member_share": 0.4947,
+          "active_days": 12,
+          "transactions_per_day": 78.17,
+          "label": "viernes"
+        },
+        {
+          "key": 6,
+          "transactions": 1009,
+          "net_sales": 95660,
+          "avg_ticket": 94.81,
+          "discounts": 1004,
+          "gross_profit": 67948,
+          "member_share": 0.4628,
+          "active_days": 12,
+          "transactions_per_day": 84.08,
+          "label": "sábado"
+        },
+        {
+          "key": 7,
+          "transactions": 876,
+          "net_sales": 80880,
+          "avg_ticket": 92.33,
+          "discounts": 1324,
+          "gross_profit": 57328,
+          "member_share": 0.4943,
+          "active_days": 12,
+          "transactions_per_day": 73,
+          "label": "domingo"
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-01&group_by=category&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "category",
+      "data": [
+        {
+          "key": "cafe_caliente",
+          "label": "cafe_caliente",
+          "units": 19033,
+          "transactions": 17943,
+          "gross_sales": 1235476,
+          "gross_profit_before_discounts": 919417
+        },
+        {
+          "key": "panaderia",
+          "label": "panaderia",
+          "units": 7804,
+          "transactions": 7804,
+          "gross_sales": 376186,
+          "gross_profit_before_discounts": 247686
+        },
+        {
+          "key": "cafe_frio",
+          "label": "cafe_frio",
+          "units": 4533,
+          "transactions": 4471,
+          "gross_sales": 335442,
+          "gross_profit_before_discounts": 256080
+        },
+        {
+          "key": "comida",
+          "label": "comida",
+          "units": 2661,
+          "transactions": 2661,
+          "gross_sales": 328540,
+          "gross_profit_before_discounts": 206546
+        },
+        {
+          "key": "otras_bebidas",
+          "label": "otras_bebidas",
+          "units": 3145,
+          "transactions": 3120,
+          "gross_sales": 229198,
+          "gross_profit_before_discounts": 157006
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-01&group_by=product&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "product",
+      "data": [
+        {
+          "key": "prd_latte",
+          "label": "Latte",
+          "units": 6292,
+          "transactions": 6170,
+          "gross_sales": 427856,
+          "gross_profit_before_discounts": 314600
+        },
+        {
+          "key": "prd_americano",
+          "label": "Americano",
+          "units": 5057,
+          "transactions": 4982,
+          "gross_sales": 262964,
+          "gross_profit_before_discounts": 207337
+        },
+        {
+          "key": "prd_capuccino",
+          "label": "Capuccino",
+          "units": 3812,
+          "transactions": 3769,
+          "gross_sales": 259216,
+          "gross_profit_before_discounts": 190600
+        },
+        {
+          "key": "prd_croissant",
+          "label": "Croissant",
+          "units": 4523,
+          "transactions": 4523,
+          "gross_sales": 217104,
+          "gross_profit_before_discounts": 140213
+        },
+        {
+          "key": "prd_iced_latte",
+          "label": "Iced latte",
+          "units": 2278,
+          "transactions": 2260,
+          "gross_sales": 168572,
+          "gross_profit_before_discounts": 125290
+        },
+        {
+          "key": "prd_coldbrew",
+          "label": "Cold brew",
+          "units": 2255,
+          "transactions": 2241,
+          "gross_sales": 166870,
+          "gross_profit_before_discounts": 130790
+        },
+        {
+          "key": "prd_flat",
+          "label": "Flat white",
+          "units": 2208,
+          "transactions": 2196,
+          "gross_sales": 158976,
+          "gross_profit_before_discounts": 117024
+        },
+        {
+          "key": "prd_mocha",
+          "label": "Mocha",
+          "units": 1664,
+          "transactions": 1659,
+          "gross_sales": 126464,
+          "gross_profit_before_discounts": 89856
+        },
+        {
+          "key": "prd_chilaquiles",
+          "label": "Chilaquiles",
+          "units": 752,
+          "transactions": 752,
+          "gross_sales": 103776,
+          "gross_profit_before_discounts": 66928
+        },
+        {
+          "key": "prd_matcha",
+          "label": "Matcha latte",
+          "units": 1228,
+          "transactions": 1222,
+          "gross_sales": 100696,
+          "gross_profit_before_discounts": 68768
+        },
+        {
+          "key": "prd_toast",
+          "label": "Toast de aguacate",
+          "units": 852,
+          "transactions": 852,
+          "gross_sales": 100536,
+          "gross_profit_before_discounts": 63048
+        },
+        {
+          "key": "prd_sandwich",
+          "label": "Sándwich de pavo",
+          "units": 715,
+          "transactions": 715,
+          "gross_sales": 88660,
+          "gross_profit_before_discounts": 54340
+        },
+        {
+          "key": "prd_chai",
+          "label": "Chai latte",
+          "units": 962,
+          "transactions": 962,
+          "gross_sales": 73112,
+          "gross_profit_before_discounts": 51948
+        },
+        {
+          "key": "prd_jugo",
+          "label": "Jugo de naranja",
+          "units": 955,
+          "transactions": 955,
+          "gross_sales": 55390,
+          "gross_profit_before_discounts": 36290
+        },
+        {
+          "key": "prd_rol",
+          "label": "Rol de canela",
+          "units": 883,
+          "transactions": 883,
+          "gross_sales": 49448,
+          "gross_profit_before_discounts": 32671
+        },
+        {
+          "key": "prd_pan_muerto",
+          "label": "Pan de muerto",
+          "units": 670,
+          "transactions": 670,
+          "gross_sales": 41540,
+          "gross_profit_before_discounts": 28140
+        },
+        {
+          "key": "prd_concha",
+          "label": "Concha",
+          "units": 1209,
+          "transactions": 1209,
+          "gross_sales": 41106,
+          "gross_profit_before_discounts": 29016
+        },
+        {
+          "key": "prd_bowl",
+          "label": "Bowl de yogurt",
+          "units": 342,
+          "transactions": 342,
+          "gross_sales": 35568,
+          "gross_profit_before_discounts": 22230
+        },
+        {
+          "key": "prd_muffin",
+          "label": "Muffin de arándano",
+          "units": 519,
+          "transactions": 519,
+          "gross_sales": 26988,
+          "gross_profit_before_discounts": 17646
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "location",
+      "data": [
+        {
+          "key": "loc_coyoacan",
+          "label": "Coyoacán",
+          "transactions": 7561,
+          "net_sales": 697898,
+          "avg_ticket": 92.3,
+          "discounts": 12572,
+          "gross_profit": 494632,
+          "member_share": 0.527,
+          "active_days": 92,
+          "transactions_per_day": 82.18
+        },
+        {
+          "key": "loc_polanco",
+          "label": "Polanco",
+          "transactions": 12148,
+          "net_sales": 1150828,
+          "avg_ticket": 94.73,
+          "discounts": 5886,
+          "gross_profit": 818969,
+          "member_share": 0.1725,
+          "active_days": 92,
+          "transactions_per_day": 132.04
+        },
+        {
+          "key": "loc_roma",
+          "label": "Roma Norte",
+          "transactions": 6710,
+          "net_sales": 627374,
+          "avg_ticket": 93.5,
+          "discounts": 10284,
+          "gross_profit": 444392,
+          "member_share": 0.523,
+          "active_days": 92,
+          "transactions_per_day": 72.93
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2025-11-01&group_by=month&location_id=loc_coyoacan&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "month",
+      "data": [
+        {
+          "key": "2025-11",
+          "transactions": 3011,
+          "net_sales": 282873.6,
+          "avg_ticket": 93.95,
+          "discounts": 1710.4,
+          "gross_profit": 201105.6,
+          "member_share": 0.5888,
+          "active_days": 30,
+          "transactions_per_day": 100.37
+        },
+        {
+          "key": "2025-12",
+          "transactions": 3128,
+          "net_sales": 294974,
+          "avg_ticket": 94.3,
+          "discounts": 900,
+          "gross_profit": 209764,
+          "member_share": 0.6093,
+          "active_days": 31,
+          "transactions_per_day": 100.9
+        },
+        {
+          "key": "2026-01",
+          "transactions": 2848,
+          "net_sales": 267764,
+          "avg_ticket": 94.02,
+          "discounts": 3518,
+          "gross_profit": 189799,
+          "member_share": 0.6159,
+          "active_days": 31,
+          "transactions_per_day": 91.87
+        },
+        {
+          "key": "2026-02",
+          "transactions": 2926,
+          "net_sales": 270946,
+          "avg_ticket": 92.6,
+          "discounts": 13872,
+          "gross_profit": 190131,
+          "member_share": 0.6306,
+          "active_days": 28,
+          "transactions_per_day": 104.5
+        },
+        {
+          "key": "2026-03",
+          "transactions": 3079,
+          "net_sales": 287640,
+          "avg_ticket": 93.42,
+          "discounts": 5670,
+          "gross_profit": 204346,
+          "member_share": 0.6044,
+          "active_days": 31,
+          "transactions_per_day": 99.32
+        },
+        {
+          "key": "2026-04",
+          "transactions": 2999,
+          "net_sales": 283914,
+          "avg_ticket": 94.67,
+          "discounts": 4378,
+          "gross_profit": 201775,
+          "member_share": 0.6015,
+          "active_days": 30,
+          "transactions_per_day": 99.97
+        },
+        {
+          "key": "2026-05",
+          "transactions": 3208,
+          "net_sales": 304786,
+          "avg_ticket": 95.01,
+          "discounts": 5556,
+          "gross_profit": 216584,
+          "member_share": 0.5792,
+          "active_days": 31,
+          "transactions_per_day": 103.48
+        },
+        {
+          "key": "2026-06",
+          "transactions": 2841,
+          "net_sales": 266958,
+          "avg_ticket": 93.97,
+          "discounts": 5878,
+          "gross_profit": 189188,
+          "member_share": 0.5836,
+          "active_days": 30,
+          "transactions_per_day": 94.7
+        },
+        {
+          "key": "2026-07",
+          "transactions": 3003,
+          "net_sales": 276864,
+          "avg_ticket": 92.2,
+          "discounts": 6542,
+          "gross_profit": 195364,
+          "member_share": 0.5931,
+          "active_days": 31,
+          "transactions_per_day": 96.87
+        },
+        {
+          "key": "2026-08",
+          "transactions": 2711,
+          "net_sales": 250108,
+          "avg_ticket": 92.26,
+          "discounts": 5352,
+          "gross_profit": 176919,
+          "member_share": 0.5588,
+          "active_days": 31,
+          "transactions_per_day": 87.45
+        },
+        {
+          "key": "2026-09",
+          "transactions": 2319,
+          "net_sales": 218632,
+          "avg_ticket": 94.28,
+          "discounts": 3062,
+          "gross_profit": 154840,
+          "member_share": 0.5084,
+          "active_days": 30,
+          "transactions_per_day": 77.3
+        },
+        {
+          "key": "2026-10",
+          "transactions": 2531,
+          "net_sales": 229158,
+          "avg_ticket": 90.54,
+          "discounts": 4158,
+          "gross_profit": 162873,
+          "member_share": 0.5101,
+          "active_days": 31,
+          "transactions_per_day": 81.65
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2025-11-01&group_by=month&location_id=loc_polanco&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "month",
+      "data": [
+        {
+          "key": "2025-11",
+          "transactions": 4533,
+          "net_sales": 428812.8,
+          "avg_ticket": 94.6,
+          "discounts": 1107.2,
+          "gross_profit": 305332.8,
+          "member_share": 0.2367,
+          "active_days": 30,
+          "transactions_per_day": 151.1
+        },
+        {
+          "key": "2025-12",
+          "transactions": 4518,
+          "net_sales": 426608,
+          "avg_ticket": 94.42,
+          "discounts": 476,
+          "gross_profit": 303989,
+          "member_share": 0.2328,
+          "active_days": 31,
+          "transactions_per_day": 145.74
+        },
+        {
+          "key": "2026-01",
+          "transactions": 4068,
+          "net_sales": 386492,
+          "avg_ticket": 95.01,
+          "discounts": 2414,
+          "gross_profit": 274627,
+          "member_share": 0.235,
+          "active_days": 31,
+          "transactions_per_day": 131.23
+        },
+        {
+          "key": "2026-02",
+          "transactions": 3801,
+          "net_sales": 357108,
+          "avg_ticket": 93.95,
+          "discounts": 2070,
+          "gross_profit": 253834,
+          "member_share": 0.2273,
+          "active_days": 28,
+          "transactions_per_day": 135.75
+        },
+        {
+          "key": "2026-03",
+          "transactions": 4350,
+          "net_sales": 414238,
+          "avg_ticket": 95.23,
+          "discounts": 2760,
+          "gross_profit": 295628,
+          "member_share": 0.223,
+          "active_days": 31,
+          "transactions_per_day": 140.32
+        },
+        {
+          "key": "2026-04",
+          "transactions": 4334,
+          "net_sales": 418506,
+          "avg_ticket": 96.56,
+          "discounts": 3090,
+          "gross_profit": 298014,
+          "member_share": 0.2277,
+          "active_days": 30,
+          "transactions_per_day": 144.47
+        },
+        {
+          "key": "2026-05",
+          "transactions": 4667,
+          "net_sales": 441700,
+          "avg_ticket": 94.64,
+          "discounts": 2982,
+          "gross_profit": 315447,
+          "member_share": 0.2141,
+          "active_days": 31,
+          "transactions_per_day": 150.55
+        },
+        {
+          "key": "2026-06",
+          "transactions": 4060,
+          "net_sales": 387622,
+          "avg_ticket": 95.47,
+          "discounts": 3158,
+          "gross_profit": 276686,
+          "member_share": 0.2131,
+          "active_days": 30,
+          "transactions_per_day": 135.33
+        },
+        {
+          "key": "2026-07",
+          "transactions": 4187,
+          "net_sales": 398950,
+          "avg_ticket": 95.28,
+          "discounts": 2626,
+          "gross_profit": 282977,
+          "member_share": 0.2138,
+          "active_days": 31,
+          "transactions_per_day": 135.06
+        },
+        {
+          "key": "2026-08",
+          "transactions": 4116,
+          "net_sales": 389454,
+          "avg_ticket": 94.62,
+          "discounts": 2046,
+          "gross_profit": 276923,
+          "member_share": 0.191,
+          "active_days": 31,
+          "transactions_per_day": 132.77
+        },
+        {
+          "key": "2026-09",
+          "transactions": 3853,
+          "net_sales": 364776,
+          "avg_ticket": 94.67,
+          "discounts": 1732,
+          "gross_profit": 259166,
+          "member_share": 0.1651,
+          "active_days": 30,
+          "transactions_per_day": 128.43
+        },
+        {
+          "key": "2026-10",
+          "transactions": 4179,
+          "net_sales": 396598,
+          "avg_ticket": 94.9,
+          "discounts": 2108,
+          "gross_profit": 282880,
+          "member_share": 0.161,
+          "active_days": 31,
+          "transactions_per_day": 134.81
+        }
+      ]
+    }
+  },
+  "GET /v1/analytics/sales?from=2025-11-01&group_by=month&location_id=loc_roma&to=2026-10-31": {
+    "status": 200,
+    "body": {
+      "group_by": "month",
+      "data": [
+        {
+          "key": "2025-11",
+          "transactions": 3277,
+          "net_sales": 308496.8,
+          "avg_ticket": 94.14,
+          "discounts": 1615.2,
+          "gross_profit": 219803.8,
+          "member_share": 0.5926,
+          "active_days": 30,
+          "transactions_per_day": 109.23
+        },
+        {
+          "key": "2025-12",
+          "transactions": 3556,
+          "net_sales": 334344,
+          "avg_ticket": 94.02,
+          "discounts": 892,
+          "gross_profit": 237814,
+          "member_share": 0.6125,
+          "active_days": 31,
+          "transactions_per_day": 114.71
+        },
+        {
+          "key": "2026-01",
+          "transactions": 3176,
+          "net_sales": 298212,
+          "avg_ticket": 93.9,
+          "discounts": 4614,
+          "gross_profit": 211155,
+          "member_share": 0.6008,
+          "active_days": 31,
+          "transactions_per_day": 102.45
+        },
+        {
+          "key": "2026-02",
+          "transactions": 2962,
+          "net_sales": 276250,
+          "avg_ticket": 93.26,
+          "discounts": 4520,
+          "gross_profit": 195598,
+          "member_share": 0.6003,
+          "active_days": 28,
+          "transactions_per_day": 105.79
+        },
+        {
+          "key": "2026-03",
+          "transactions": 3307,
+          "net_sales": 315860,
+          "avg_ticket": 95.51,
+          "discounts": 5094,
+          "gross_profit": 224769,
+          "member_share": 0.5906,
+          "active_days": 31,
+          "transactions_per_day": 106.68
+        },
+        {
+          "key": "2026-04",
+          "transactions": 3209,
+          "net_sales": 300060,
+          "avg_ticket": 93.51,
+          "discounts": 4760,
+          "gross_profit": 213590,
+          "member_share": 0.5753,
+          "active_days": 30,
+          "transactions_per_day": 106.97
+        },
+        {
+          "key": "2026-05",
+          "transactions": 3529,
+          "net_sales": 329852,
+          "avg_ticket": 93.47,
+          "discounts": 6066,
+          "gross_profit": 234422,
+          "member_share": 0.5673,
+          "active_days": 31,
+          "transactions_per_day": 113.84
+        },
+        {
+          "key": "2026-06",
+          "transactions": 3139,
+          "net_sales": 293054,
+          "avg_ticket": 93.36,
+          "discounts": 7290,
+          "gross_profit": 207683,
+          "member_share": 0.5871,
+          "active_days": 30,
+          "transactions_per_day": 104.63
+        },
+        {
+          "key": "2026-07",
+          "transactions": 3058,
+          "net_sales": 288818,
+          "avg_ticket": 94.45,
+          "discounts": 4864,
+          "gross_profit": 203925,
+          "member_share": 0.5857,
+          "active_days": 31,
+          "transactions_per_day": 98.65
+        },
+        {
+          "key": "2026-08",
+          "transactions": 2691,
+          "net_sales": 252480,
+          "avg_ticket": 93.82,
+          "discounts": 4712,
+          "gross_profit": 178375,
+          "member_share": 0.56,
+          "active_days": 31,
+          "transactions_per_day": 86.81
+        },
+        {
+          "key": "2026-09",
+          "transactions": 2049,
+          "net_sales": 192396,
+          "avg_ticket": 93.9,
+          "discounts": 3492,
+          "gross_profit": 136124,
+          "member_share": 0.4919,
+          "active_days": 30,
+          "transactions_per_day": 68.3
+        },
+        {
+          "key": "2026-10",
+          "transactions": 1970,
+          "net_sales": 182498,
+          "avg_ticket": 92.64,
+          "discounts": 2080,
+          "gross_profit": 129893,
+          "member_share": 0.5046,
+          "active_days": 31,
+          "transactions_per_day": 63.55
+        }
+      ]
+    }
+  },
+  "GET /v1/customers?home_location_id=loc_coyoacan&limit=1&segment=at_risk": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cus_0015",
+          "signup_date": "2024-06-28",
+          "home_location_id": "loc_coyoacan",
+          "card_status": "active",
+          "wallet_installed": false,
+          "consent_push": false,
+          "consent_whatsapp": true,
+          "consent_email": true,
+          "tier": "bronce",
+          "points_balance": 100,
+          "visits_count": 13,
+          "visits_60d": 1,
+          "last_visit_at": "2026-09-12T18:35:26Z",
+          "total_spend": 1058,
+          "avg_ticket": 88.17,
+          "favorite_product_id": "prd_latte",
+          "segment": "at_risk"
+        }
+      ],
+      "pagination": {
+        "total": 183,
+        "limit": 1,
+        "offset": 0,
+        "has_more": true
+      }
+    }
+  },
+  "GET /v1/customers?home_location_id=loc_coyoacan&limit=1&segment=dormant": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cus_0030",
+          "signup_date": "2023-03-03",
+          "home_location_id": "loc_coyoacan",
+          "card_status": "active",
+          "wallet_installed": true,
+          "consent_push": false,
+          "consent_whatsapp": true,
+          "consent_email": false,
+          "tier": "plata",
+          "points_balance": 60,
+          "visits_count": 27,
+          "visits_60d": 0,
+          "last_visit_at": "2026-06-04T14:08:00Z",
+          "total_spend": 2226,
+          "avg_ticket": 89.04,
+          "favorite_product_id": "prd_latte",
+          "segment": "dormant"
+        }
+      ],
+      "pagination": {
+        "total": 126,
+        "limit": 1,
+        "offset": 0,
+        "has_more": true
+      }
+    }
+  },
+  "GET /v1/customers?home_location_id=loc_polanco&limit=1&segment=at_risk": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cus_0013",
+          "signup_date": "2025-12-27",
+          "home_location_id": "loc_polanco",
+          "card_status": "active",
+          "wallet_installed": true,
+          "consent_push": true,
+          "consent_whatsapp": false,
+          "consent_email": false,
+          "tier": "plata",
+          "points_balance": 110,
+          "visits_count": 52,
+          "visits_60d": 4,
+          "last_visit_at": "2026-09-09T17:42:54Z",
+          "total_spend": 4308,
+          "avg_ticket": 89.75,
+          "favorite_product_id": "prd_americano",
+          "segment": "at_risk"
+        }
+      ],
+      "pagination": {
+        "total": 81,
+        "limit": 1,
+        "offset": 0,
+        "has_more": true
+      }
+    }
+  },
+  "GET /v1/customers?home_location_id=loc_polanco&limit=1&segment=dormant": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cus_0036",
+          "signup_date": "2025-09-15",
+          "home_location_id": "loc_polanco",
+          "card_status": "active",
+          "wallet_installed": false,
+          "consent_push": false,
+          "consent_whatsapp": false,
+          "consent_email": true,
+          "tier": "plata",
+          "points_balance": 114,
+          "visits_count": 69,
+          "visits_60d": 0,
+          "last_visit_at": "2026-08-01T14:00:14Z",
+          "total_spend": 5932.4,
+          "avg_ticket": 97.25,
+          "favorite_product_id": "prd_latte",
+          "segment": "dormant"
+        }
+      ],
+      "pagination": {
+        "total": 69,
+        "limit": 1,
+        "offset": 0,
+        "has_more": true
+      }
+    }
+  },
+  "GET /v1/customers?home_location_id=loc_roma&limit=1&segment=at_risk": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cus_0003",
+          "signup_date": "2025-07-20",
+          "home_location_id": "loc_roma",
+          "card_status": "active",
+          "wallet_installed": true,
+          "consent_push": true,
+          "consent_whatsapp": true,
+          "consent_email": true,
+          "tier": "bronce",
+          "points_balance": 87,
+          "visits_count": 11,
+          "visits_60d": 2,
+          "last_visit_at": "2026-09-30T22:24:43Z",
+          "total_spend": 924,
+          "avg_ticket": 84,
+          "favorite_product_id": "prd_capuccino",
+          "segment": "at_risk"
+        }
+      ],
+      "pagination": {
+        "total": 219,
+        "limit": 1,
+        "offset": 0,
+        "has_more": true
+      }
+    }
+  },
+  "GET /v1/customers?home_location_id=loc_roma&limit=1&segment=dormant": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cus_0006",
+          "signup_date": "2023-11-07",
+          "home_location_id": "loc_roma",
+          "card_status": "active",
+          "wallet_installed": true,
+          "consent_push": true,
+          "consent_whatsapp": false,
+          "consent_email": true,
+          "tier": "bronce",
+          "points_balance": 21,
+          "visits_count": 4,
+          "visits_60d": 0,
+          "last_visit_at": "2026-06-16T14:38:27Z",
+          "total_spend": 232,
+          "avg_ticket": 77.33,
+          "favorite_product_id": "prd_croissant",
+          "segment": "dormant"
+        }
+      ],
+      "pagination": {
+        "total": 172,
+        "limit": 1,
+        "offset": 0,
+        "has_more": true
+      }
+    }
+  },
+  "POST /v1/campaigns/preview {\"channel\":\"push\",\"audience\":{\"segment_id\":\"at_risk\"}}": {
+    "status": 200,
+    "body": {
+      "channel": "push",
+      "matched": 483,
+      "excluded_suspended": 0,
+      "excluded_no_consent": 239,
+      "excluded_duplicates": 2,
+      "reachable": 242
+    }
+  },
+  "POST /v1/campaigns/preview {\"channel\":\"whatsapp\",\"audience\":{\"segment_id\":\"at_risk\"}}": {
+    "status": 200,
+    "body": {
+      "channel": "whatsapp",
+      "matched": 483,
+      "excluded_suspended": 0,
+      "excluded_no_consent": 214,
+      "excluded_duplicates": 2,
+      "reachable": 267
+    }
+  },
+  "POST /v1/campaigns/preview {\"channel\":\"email\",\"audience\":{\"segment_id\":\"at_risk\"}}": {
+    "status": 200,
+    "body": {
+      "channel": "email",
+      "matched": 483,
+      "excluded_suspended": 0,
+      "excluded_no_consent": 151,
+      "excluded_duplicates": 2,
+      "reachable": 330
+    }
+  },
+  "POST /v1/campaigns/preview {\"channel\":\"push\",\"audience\":{\"segment_id\":\"dormant\"}}": {
+    "status": 200,
+    "body": {
+      "channel": "push",
+      "matched": 367,
+      "excluded_suspended": 4,
+      "excluded_no_consent": 172,
+      "excluded_duplicates": 0,
+      "reachable": 191
+    }
+  },
+  "POST /v1/campaigns/preview {\"channel\":\"whatsapp\",\"audience\":{\"segment_id\":\"dormant\"}}": {
+    "status": 200,
+    "body": {
+      "channel": "whatsapp",
+      "matched": 367,
+      "excluded_suspended": 4,
+      "excluded_no_consent": 176,
+      "excluded_duplicates": 0,
+      "reachable": 187
+    }
+  },
+  "POST /v1/campaigns/preview {\"channel\":\"email\",\"audience\":{\"segment_id\":\"dormant\"}}": {
+    "status": 200,
+    "body": {
+      "channel": "email",
+      "matched": 367,
+      "excluded_suspended": 4,
+      "excluded_no_consent": 116,
+      "excluded_duplicates": 0,
+      "reachable": 247
+    }
+  },
+  "GET /v1/customers?limit=1&tier=gold": {
+    "status": 422,
+    "body": {
+      "error": {
+        "code": "invalid_request",
+        "message": "query.tier: Input should be 'bronce', 'plata' or 'oro'"
+      }
+    }
+  }
+}

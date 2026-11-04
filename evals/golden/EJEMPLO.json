@@ -1,0 +1,47 @@
+{
+  "id": "EJEMPLO",
+  "data_as_of": "2026-10-31",
+  "question": "¿Qué categoría de productos me deja más utilidad y cómo la empujo?",
+  "period": {
+    "from": "2026-08-01",
+    "to": "2026-10-31"
+  },
+  "figures": {
+    "by_category": [
+      {
+        "category": "cafe_caliente",
+        "gross_profit_before_discounts": 919417,
+        "share_percent": 51.5
+      },
+      {
+        "category": "cafe_frio",
+        "gross_profit_before_discounts": 256080,
+        "share_percent": 14.3
+      },
+      {
+        "category": "panaderia",
+        "gross_profit_before_discounts": 247686,
+        "share_percent": 13.9
+      },
+      {
+        "category": "comida",
+        "gross_profit_before_discounts": 206546,
+        "share_percent": 11.6
+      },
+      {
+        "category": "otras_bebidas",
+        "gross_profit_before_discounts": 157006,
+        "share_percent": 8.8
+      }
+    ],
+    "top": {
+      "category": "cafe_caliente",
+      "gross_profit_before_discounts": 919417,
+      "share_percent": 51.5
+    },
+    "total_before_discounts": 1786735
+  },
+  "endpoints": [
+    "GET /v1/analytics/sales?group_by=category&from=2026-08-01&to=2026-10-31"
+  ]
+}

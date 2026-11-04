@@ -278,8 +278,8 @@ type Offer =
 
 - **Propósito:** decidir qué sucursal preocupa, por tendencia y no por tamaño.
 - **Entrada:** `{ recent?: PeriodInput; baseline?: PeriodInput }`. Por defecto, últimas 12 semanas contra las 12 anteriores, más la serie mensual de 12 meses.
-- **Cálculo por sucursal:** variación de ventas netas, tickets, ticket promedio y visitas por día entre `recent` y `baseline`; pendiente de la serie mensual; clientes `at_risk` y `dormant` con esa sucursal de origen (conteos con `/customers?segment=…&home_location_id=…&limit=1`); bandera `concern_level` (`alta`, `media`, `baja`) con reglas explícitas y documentadas en código.
-- **Salida:** `{ locations: [{ id, name, metrics, deltas, monthly_series, risk_customers, concern_level, reasons }], ranking }`.
+- **Cálculo por sucursal:** variación de ventas netas, tickets, ticket promedio y visitas por día entre `recent` y `baseline`; pendiente de la serie mensual; clientes `at_risk` y `dormant` con esa sucursal de origen (conteos con `/customers?segment=…&home_location_id=…&limit=1`); nivel de preocupación con reglas explícitas (`domain/location-health.ts`): ventas netas ≤ −10% suma 1 punto (≤ −20% suma 2); tickets ≤ −10%, visitas por día ≤ −10% y promedio mensual de los últimos 3 meses ≤ −10% contra los 3 anteriores suman 1 punto cada uno. `alta` ≥ 3 puntos, `media` 1-2, `baja` 0; cada regla activada agrega su razón en texto.
+- **Salida:** `{ recent_period, baseline_period, locations: [{ id, name, recent, baseline, change, quarter_trend, monthly_series, risk_customers, concern: { level, score, reasons } }], most_concerning }`, ordenada por puntaje.
 - **Avisos:** "Una sucursal más pequeña no es preocupante por sí misma; se compara cada una contra su propio historial".
 
 #### 6. `customer_segments`
@@ -301,7 +301,7 @@ type Offer =
 
 - **Propósito:** qué campañas funcionaron y qué se puede aprender.
 - **Entrada:** `{ channel?: Channel; offer_type?: Offer["type"]; similar_to?: { audience?: Audience; channel?: Channel; offer_type?: Offer["type"] } }`.
-- **Cálculo por campaña:** tasa de canje (`redeemed / delivered`), apertura, **lift** (`treatment_visit_rate − control_visit_rate`, solo con control), utilidad atribuida menos costo del descuento, costo por canje, y `reliability`: `alta` (con control y muestras ≥ 100), `media` (con control, muestra pequeña), `baja` (sin control). Con `similar_to`, puntaje de similitud por canal, oferta y audiencia.
+- **Cálculo por campaña:** tasa de canje (`redeemed / sent`), apertura (`opened / delivered`), **lift** (`treatment_visit_rate − control_visit_rate`, solo con control) con **intervalo de confianza del 95%** (diferencia de proporciones), costo por canje (`discount_cost / redeemed`) y `reliability`: `alta` (con control de 100 clientes o más), `media` (con control menor a 100), `baja` (sin control). Las campañas con lift medido se ordenan primero; las demás, por tasa de canje, que no mide efecto. Con `similar_to`, puntaje de similitud por canal, oferta y audiencia.
 - **Salida:** `{ campaigns: [...], ranking_by: "lift" | "redemption_rate", learnings: string[] }`.
 - **Avisos:** "Solo N de M campañas tienen grupo de control"; "Sin grupo de control no se puede atribuir la visita a la campaña".
 
@@ -309,7 +309,7 @@ type Offer =
 
 - **Propósito:** cuánto cuesta una oferta y qué hace con el margen.
 - **Entrada:** `{ offer: Offer; expected_redemptions?: number }`.
-- **Cálculo:** `free_item` → costo = `unit_cost` del producto; `two_for_one` → costo = `unit_cost` del segundo producto; `percent_off` → costo = `value`% del ticket promedio de los últimos 3 meses; `points_multiplier` → costo diferido de puntos (valor de la recompensa de $68 por cada 150 puntos, prorrateado). Utilidad promedio de una visita (ticket promedio × margen bruto). Escenarios de costo total con redención baja, media y alta tomadas del rango histórico.
+- **Cálculo:** `free_item` → costo = `unit_cost` del producto; `two_for_one` → costo = `unit_cost` del segundo producto; `percent_off` → costo = `value`% del ticket promedio de los últimos 3 meses; `points_multiplier` → puntos extra por ticket promedio valuados hasta $0.45 por punto (bebida de $68 por 150 puntos), costo diferido hasta el canje. Utilidad promedio de una visita = ticket promedio × margen bruto (últimos 3 meses). Con `expected_redemptions`, costo total.
 - **Salida:** `{ cost_per_redemption, visit_gross_profit, margin_after_offer, total_cost_scenarios, assumptions }`.
 - **Avisos:** "Supuesto: …" por cada supuesto del cálculo.
 
@@ -317,15 +317,15 @@ type Offer =
 
 - **Propósito:** impacto esperado antes de enviar.
 - **Entrada:** `{ audience: Audience; channel: Channel; offer: Offer }`.
-- **Cálculo:** `reachable` del canal × tasa de visita incremental tomada de campañas similares (lift si hay control; si no, rango conservador y aviso) × ticket promedio del segmento; resta el costo de la oferta. Devuelve **rango** (bajo, central, alto), nunca un número único.
+- **Cálculo:** campaña de referencia = la más parecida (mismo canal y/o tipo de oferta) que tuvo grupo de control. Visitas extra = `reachable` × intervalo de confianza del 95% de su lift; ventas extra = visitas × ticket promedio; canjes = `reachable` × tasa de canje de las campañas parecidas (mín., promedio, máx.); costo de oferta = canjes × costo por canje; utilidad neta **conservadora** (escenario bajo = menor utilidad extra con mayor costo). Sin referencia con control devuelve solo canjes (`kind: redemptions_only`) y lo advierte; con una sola campaña parecida advierte que los canjes no tienen rango. Siempre **rango** (bajo, central, alto).
 - **Salida:** `{ extra_visits: [low, mid, high], extra_net_sales: [...], offer_cost: [...], net_gross_profit: [...], basis, confidence }`.
 - **Avisos:** la campaña de referencia y su confiabilidad.
 
 #### 11. `lookup`
 
 - **Propósito:** detalle puntual sin datos personales.
-- **Entrada:** `{ kind: "product" | "customer" | "transaction" | "campaign"; id: string }`.
-- **Salida:** producto completo; cliente **solo** con id, segmento, tier, sucursal, visitas, gasto, último día de visita y consentimientos (sin nombre, teléfono, correo ni fecha de nacimiento); ticket con líneas; campaña con resultados.
+- **Entrada:** `{ kind: "product" | "customer" | "campaign"; id: string }`. El detalle de ticket queda fuera hasta verificar su esquema contra la API.
+- **Salida:** producto completo; cliente **solo** con id, segmento, tier, sucursal, visitas, gasto, último día de visita y consentimientos (sin nombre, teléfono, correo ni fecha de nacimiento); campaña con resultados y métricas.
 
 #### 12. `create_campaign_draft`
 

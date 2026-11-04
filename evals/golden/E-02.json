@@ -1,0 +1,52 @@
+{
+  "id": "E-02",
+  "data_as_of": "2026-10-31",
+  "question": "¿Cuál es mi peor día de la semana y qué harías al respecto?",
+  "period": {
+    "from": "2026-08-09",
+    "to": "2026-10-31"
+  },
+  "figures": {
+    "by_weekday": [
+      {
+        "weekday": "lunes",
+        "transactions_per_day": 272.42
+      },
+      {
+        "weekday": "martes",
+        "transactions_per_day": 181.67
+      },
+      {
+        "weekday": "miércoles",
+        "transactions_per_day": 276.25
+      },
+      {
+        "weekday": "jueves",
+        "transactions_per_day": 289.67
+      },
+      {
+        "weekday": "viernes",
+        "transactions_per_day": 320.42
+      },
+      {
+        "weekday": "sábado",
+        "transactions_per_day": 350.33
+      },
+      {
+        "weekday": "domingo",
+        "transactions_per_day": 296.42
+      }
+    ],
+    "worst": {
+      "weekday": "martes",
+      "transactions_per_day": 181.67
+    },
+    "best": {
+      "weekday": "sábado",
+      "transactions_per_day": 350.33
+    }
+  },
+  "endpoints": [
+    "GET /v1/analytics/sales?group_by=weekday&from=2026-08-09&to=2026-10-31"
+  ]
+}
