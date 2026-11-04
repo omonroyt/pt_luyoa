@@ -102,7 +102,7 @@ export default defineConfig(
   {
     // ES: Herramientas de línea de comandos: su salida es la consola.
     // EN: Command-line tools: their output is the console.
-    files: ["evals/**", "scripts/**", ".claude/hooks/**"],
+    files: ["evals/**", "scripts/**", "**/scripts/**", ".claude/hooks/**"],
     rules: { "no-console": "off" },
   },
   prettierConfig,
