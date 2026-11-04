@@ -11,6 +11,7 @@
 import {
   convertToModelMessages,
   createUIMessageStreamResponse,
+  InvalidToolInputError,
   isStepCount,
   streamText,
   toUIMessageStream,
@@ -20,6 +21,7 @@ import {
 } from "ai";
 import { loadBusinessContext } from "./business-context";
 import { connectMcpClient, type McpConnection } from "./mcp-tools";
+import { createPresentationTools } from "./presentation-tools";
 import { buildSystemPrompt, type AgentCapabilities } from "./system-prompt";
 
 export const MAX_STEPS = 12;
@@ -30,7 +32,7 @@ export const MAX_STEPS = 12;
 //     MCP would reject them without a signed token (ADR-08).
 const WRITE_TOOLS = new Set(["create_campaign_draft", "send_campaign"]);
 
-const CAPABILITIES: AgentCapabilities = { presentation: false, approvals: false, memory: false };
+const CAPABILITIES: AgentCapabilities = { presentation: true, approvals: false, memory: false };
 
 export const STEP_LIMIT_NOTE = [
   "LÍMITE DE PASOS",
@@ -40,6 +42,29 @@ export const STEP_LIMIT_NOTE = [
 
 const STREAM_ERROR_MESSAGE =
   "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?";
+export const INVALID_BLOCK_MESSAGE =
+  "El agente armó un bloque con datos inválidos y lo está corrigiendo.";
+
+/**
+ * ES: Mensaje para la interfaz. Un argumento inválido es un error que el modelo corrige
+ *     en el paso siguiente (recibe el detalle de la validación), no una falla del servicio.
+ *     Los detalles internos nunca llegan al navegador.
+ * EN: Message for the UI. An invalid argument is an error the model fixes in the next step
+ *     (it receives the validation details), not a service failure. Internal details never
+ *     reach the browser.
+ */
+export function uiErrorMessage(error: unknown): string {
+  // ES: El AI SDK reporta el mismo argumento inválido dos veces: como InvalidToolInputError
+  //     (parte tool-input-error) y como texto (parte tool-output-error). La prueba de
+  //     run-turn detecta si una versión futura cambia ese texto.
+  // EN: The AI SDK reports the same invalid argument twice: as InvalidToolInputError
+  //     (tool-input-error part) and as text (tool-output-error part). The run-turn test
+  //     detects if a future version changes that text.
+  const invalidInput =
+    InvalidToolInputError.isInstance(error) ||
+    (typeof error === "string" && error.startsWith("AI_InvalidToolInputError"));
+  return invalidInput ? INVALID_BLOCK_MESSAGE : STREAM_ERROR_MESSAGE;
+}
 
 export type TurnDependencies = {
   model: LanguageModel;
@@ -75,8 +100,9 @@ export async function streamAgentTurn(
     await client.close();
   };
   try {
-    const tools = readOnlyTools(await client.tools());
-    const context = await loadBusinessContext(tools);
+    const businessTools = readOnlyTools(await client.tools());
+    const context = await loadBusinessContext(businessTools);
+    const tools = { ...businessTools, ...createPresentationTools() };
     const instructions = buildSystemPrompt({ context, capabilities: CAPABILITIES });
     const result = streamText({
       model: dependencies.model,
@@ -90,7 +116,7 @@ export async function streamAgentTurn(
       onError: close,
     });
     return createUIMessageStreamResponse({
-      stream: toUIMessageStream({ stream: result.stream, onError: () => STREAM_ERROR_MESSAGE }),
+      stream: toUIMessageStream({ stream: result.stream, onError: uiErrorMessage }),
     });
   } catch (error) {
     await close();
