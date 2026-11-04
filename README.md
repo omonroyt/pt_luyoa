@@ -4,7 +4,7 @@ Copiloto de negocio para la dueña de Café Alborada. Responde cómo va el negoc
 
 Prueba técnica de AI Engineer para Luyoa · Oscar Monroy.
 
-> **Estado:** base del monorepo, arneses de calidad, gobernanza de IA y documentación de diseño completas. En construcción: servidor MCP, agente e interfaz (ver el [plan de implementación](docs/specs/09_PLAN_IMPLEMENTACION.md)).
+> **Estado:** servidor MCP de lectura completo (11 herramientas) sobre la base del monorepo, arneses de calidad y gobernanza de IA. En construcción: escrituras con aprobación, agente e interfaz (ver el [plan de implementación](docs/specs/09_PLAN_IMPLEMENTACION.md)).
 
 ## Arquitectura
 
@@ -66,6 +66,36 @@ Detalle y diagramas: [`docs/specs/03_ARQUITECTURA.md`](docs/specs/03_ARQUITECTUR
 | `pnpm golden` | Respuestas de referencia generadas desde la API |
 | `pnpm eval` | Evaluación del agente |
 | `pnpm compare` | Comparación de modelos en calidad, costo y latencia |
+
+## Servidor MCP
+
+Herramientas de nivel de tarea sobre la API de Café Alborada. Toda cifra se calcula en código y llega con su procedencia (`source`: endpoints, periodo y `data_as_of`). Diseño completo: [`docs/specs/05_DISENO_MCP.md`](docs/specs/05_DISENO_MCP.md).
+
+| Herramienta | Resuelve |
+|---|---|
+| `get_business_context` | Fecha de corte, sucursales, segmentos y calendario de periodos resuelto |
+| `compare_periods` | Dos periodos con variación, promedio por día y principal motor del cambio |
+| `sales_breakdown` / `visits_breakdown` | Agrupaciones con la métrica correcta (transacciones por día, utilidad antes de descuentos) |
+| `location_health` | Tendencia de cada sucursal contra su historial, con nivel de preocupación y razones |
+| `customer_segments` | Tamaño y definición de segmentos, también por sucursal |
+| `audience_reach` | Alcance real por canal con exclusiones |
+| `campaign_performance` | Campañas pasadas con lift contra control, intervalo de confianza y confiabilidad |
+| `offer_economics` | Costo por canje y efecto en margen de una oferta |
+| `estimate_campaign_impact` | Rango de visitas, ventas y utilidad esperadas de una campaña |
+| `lookup` | Detalle de un producto, cliente (sin datos personales) o campaña |
+
+Uso fuera de la aplicación:
+
+| Comando | Descripción |
+|---|---|
+| `pnpm mcp:stdio` | Servidor por stdio |
+| `npx @modelcontextprotocol/inspector node --env-file=.env --import tsx packages/mcp-server/src/cli.ts` | Inspector de MCP (desde la raíz del repositorio) |
+| `pnpm --filter @alborada/mcp-server smoke` | Prueba de humo por stdio contra la API real |
+| `pnpm --filter @alborada/mcp-server fixtures:record` | Regrabación de fixtures de prueba, sin datos personales |
+
+## Respuestas de referencia
+
+`pnpm golden` calcula las cifras correctas de cada escenario directamente desde la API, con un cliente independiente del servidor MCP, y las guarda en `evals/golden/`. Una prueba de consistencia compara esas cifras con las de las herramientas del MCP: si divergen, alguno de los dos cálculos es incorrecto.
 
 ## Proceso de desarrollo
 
