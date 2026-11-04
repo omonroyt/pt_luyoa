@@ -402,6 +402,15 @@ sequenceDiagram
 | `h` | Hash SHA-256 del contenido canónico (JSON con llaves ordenadas) |
 | `exp` | Expiración (10 minutos) |
 
+**Contenido firmado** (`approvals/campaign-content.ts`, compartido con la aplicación para que el hash coincida):
+
+| Acción | Contenido | Origen al verificar |
+|---|---|---|
+| `create` | `name`, `objective`, `channel`, `audience`, `offer` (con vigencia), `message` | Lo que recibe la herramienta |
+| `send` | `campaign_id`, `name`, `channel`, `message`, `offer` | El borrador **guardado en la API**, no lo que diga el modelo |
+
+**Orden en las herramientas de escritura:** (1) validar el borrador (mensaje, vigencia, oferta) sin consumir el token; (2) verificar y consumir el token; (3) escribir en la API; (4) vaciar la caché del cliente para que las lecturas siguientes vean el estado nuevo. Sin `APPROVAL_SECRET` y almacén inyectados (caso del CLI stdio), las escrituras responden `approval_required`.
+
 ---
 
 ## 7. Errores que ve el agente
