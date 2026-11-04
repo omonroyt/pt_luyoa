@@ -1,0 +1,37 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Build
+.next/
+out/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secretos: nunca se suben (R-09)
+.env
+.env.*
+!.env.example
+
+# Base de datos local
+data/*.db
+data/*.db-*
+
+# Evaluaciones: reportes temporales
+evals/reports/tmp/
+
+# Herramientas
+.vercel/
+.turbo/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# Claude Code: solo se versiona la configuración compartida del proyecto
+.claude/settings.local.json
+.claude/launch.json
+CLAUDE.local.md

@@ -1,0 +1,16 @@
+{
+  "name": "@alborada/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Contratos compartidos (zod): fuentes, periodos, errores y bloques visuales.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
+  }
+}

@@ -1,0 +1,36 @@
+#!/bin/sh
+# ES: Verificaciones antes de cada commit: secretos, formato, lint y comentarios
+#     bilingües de los archivos en stage. Ver docs/standards/git-workflow.md §5.
+# EN: Checks before every commit: secrets, formatting, lint and bilingual
+#     comments of the staged files. See docs/standards/git-workflow.md §5.
+set -e
+
+staged_files=$(git diff --cached --name-only --diff-filter=ACMR)
+
+# ES: Ningún archivo .env entra al repositorio, salvo la plantilla.
+# EN: No .env file enters the repository, except the template.
+secret_files=$(echo "$staged_files" | grep -E '(^|/)\.env(\..+)?$' | grep -v '\.env\.example$' || true)
+if [ -n "$secret_files" ]; then
+  echo "ES: archivos de secretos en stage, quítalos con git restore --staged: $secret_files"
+  echo "EN: secret files staged, remove them with git restore --staged: $secret_files"
+  exit 1
+fi
+
+# ES: gitleaks es opcional en local; la CI siempre lo ejecuta sobre todo el historial.
+# EN: gitleaks is optional locally; CI always runs it over the whole history.
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks git --pre-commit --staged --redact --no-banner
+else
+  echo "ES: gitleaks no está instalado; la CI revisará los secretos."
+  echo "EN: gitleaks is not installed; CI will check for secrets."
+fi
+
+code_files=$(echo "$staged_files" | grep -E '\.(ts|tsx|mts|js|mjs|cjs)$' || true)
+if [ -n "$code_files" ]; then
+  # shellcheck disable=SC2086
+  node_modules/.bin/prettier --check $code_files
+  # shellcheck disable=SC2086
+  node_modules/.bin/eslint $code_files
+  # shellcheck disable=SC2086
+  node_modules/.bin/tsx scripts/quality/check-bilingual-comments.ts $code_files
+fi

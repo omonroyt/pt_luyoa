@@ -1,0 +1,11 @@
+node_modules
+.next
+dist
+coverage
+pnpm-lock.yaml
+next-env.d.ts
+evals/golden
+evals/reports
+
+# La documentación conserva su formato manual (tablas y diagramas)
+*.md
