@@ -10,6 +10,27 @@ import { runTool } from "./tool-kit";
 
 export const SEND_CAMPAIGN = "send_campaign";
 
+/**
+ * ES: Confirma el envío releyendo la campaña: la API es la fuente de verdad y la forma de
+ *     la respuesta de /send no se interpreta (verificado contra la API real: difiere de la
+ *     campaña y antes producía un falso error).
+ * EN: Confirms the send by re-reading the campaign: the API is the source of truth and the
+ *     /send response shape is not interpreted (verified against the real API: it differs
+ *     from the campaign and used to produce a false error).
+ */
+async function confirmSent(ctx: ToolContext, campaignId: string) {
+  const confirmed = await fetchCampaign(ctx.api, campaignId);
+  if (confirmed.data.status !== "sent") {
+    throw new ToolFailure({
+      code: "upstream_error",
+      message: `La API aceptó el envío, pero la campaña ${campaignId} aparece en estado ${confirmed.data.status}.`,
+      retryable: false,
+      suggestion: "Consultar la campaña con lookup antes de intentar otra acción.",
+    });
+  }
+  return confirmed;
+}
+
 const DESCRIPTION = [
   "Envía una campaña en borrador (envío simulado por la API). Exige approval_token de la",
   "segunda aprobación de la persona, emitido para este borrador exacto. Un borrador solo",
@@ -54,18 +75,19 @@ export function registerSendCampaign(server: McpServer, ctx: ToolContext): void 
           { ...approvals, now: ctx.now },
         );
         const sent = await sendCampaign(ctx.api, args.campaign_id);
+        const confirmed = await confirmSent(ctx, args.campaign_id);
         return {
           data: {
-            campaign_id: sent.data.id,
-            status: sent.data.status,
-            sent_at: sent.data.sent_at ?? null,
-            audience_size: sent.data.audience_size ?? null,
+            campaign_id: confirmed.data.id,
+            status: confirmed.data.status,
+            sent_at: confirmed.data.sent_at,
+            audience_size: confirmed.data.audience_size,
           },
           notes: ["El envío es simulado por la API: nadie recibe mensajes reales."],
           warnings: [],
           source: createSource({
             tool: SEND_CAMPAIGN,
-            endpoints: [draft.endpoint, sent.endpoint],
+            endpoints: [draft.endpoint, sent.endpoint, confirmed.endpoint],
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,
           }),

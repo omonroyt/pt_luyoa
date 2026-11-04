@@ -9,7 +9,8 @@ import {
 import type { Campaign } from "../api/schemas";
 import type { CampaignDraft } from "../domain/campaign-rules";
 import { connectTestClient, TEST_NOW } from "../testing/connect";
-import { fixtureKey, type FixtureFile } from "../testing/fixture-key";
+import type { FixtureOverrides } from "../testing/fake-api";
+import { fixtureKey } from "../testing/fixture-key";
 
 const SECRET = "secreto-de-prueba";
 const BUSINESS_ID = "biz_alborada";
@@ -56,17 +57,38 @@ const CREATE_KEY = fixtureKey(
   JSON.stringify(createApprovalContent(DRAFT)),
 );
 
-const OVERRIDES: FixtureFile = {
+const SENT = {
+  ...STORED_DRAFT,
+  status: "sent",
+  sent_at: "2026-11-04T12:01:00Z",
+  audience_size: 267,
+};
+
+const OVERRIDES: FixtureOverrides = {
   [CREATE_KEY]: { status: 201, body: { id: "cmp_test01", status: "draft" } },
-  [fixtureKey("GET", url("/v1/campaigns/cmp_test01"))]: { status: 200, body: STORED_DRAFT },
+  // ES: Antes del envío la campaña es borrador; después, enviada.
+  // EN: Before sending the campaign is a draft; afterwards, sent.
+  [fixtureKey("GET", url("/v1/campaigns/cmp_test01"))]: [
+    { status: 200, body: STORED_DRAFT },
+    { status: 200, body: SENT },
+  ],
   [fixtureKey("GET", url("/v1/campaigns/cmp_sent"))]: {
     status: 200,
-    body: { ...STORED_DRAFT, id: "cmp_sent", status: "sent" },
+    body: { ...SENT, id: "cmp_sent" },
   },
+  // ES: Respuesta con una forma distinta a la campaña, como la de la API real.
+  // EN: Response shaped differently from the campaign, like the real API's.
   [fixtureKey("POST", url("/v1/campaigns/cmp_test01/send"), "{}")]: {
     status: 200,
-    body: { id: "cmp_test01", status: "sent", sent_at: "2026-11-04T12:01:00Z", audience_size: 267 },
+    body: { campaign: { id: "cmp_test01" }, message: "Campaña enviada" },
   },
+  // ES: Campaña cuyo envío la API acepta pero que sigue como borrador.
+  // EN: Campaign whose send the API accepts but which stays a draft.
+  [fixtureKey("GET", url("/v1/campaigns/cmp_stuck"))]: {
+    status: 200,
+    body: { ...STORED_DRAFT, id: "cmp_stuck" },
+  },
+  [fixtureKey("POST", url("/v1/campaigns/cmp_stuck/send"), "{}")]: { status: 200, body: {} },
 };
 
 type ErrorOutput = { error: { code: string; message: string; suggestion?: string } };
@@ -178,7 +200,7 @@ describe("create_campaign_draft", () => {
 });
 
 describe("send_campaign", () => {
-  it("envía el borrador con un token de envío válido", async () => {
+  it("envía el borrador y confirma el estado releyendo la campaña, sin depender de la respuesta de /send", async () => {
     await connect();
     const token = await approve(
       "send",
@@ -207,14 +229,20 @@ describe("send_campaign", () => {
     expect(payload.error.code).toBe("conflict");
   });
 
-  it("no permite reutilizar el token de envío", async () => {
+  it("reporta si la API acepta el envío pero la campaña no queda enviada, y no permite reutilizar el token", async () => {
     await connect();
-    const token = await approve("send", sendApprovalContent(STORED_DRAFT), "cmp_test01");
-    await session.call("send_campaign", { campaign_id: "cmp_test01", approval_token: token });
-    const { payload } = await session.call<ErrorOutput>("send_campaign", {
-      campaign_id: "cmp_test01",
+    const stuck = { ...STORED_DRAFT, id: "cmp_stuck" };
+    const token = await approve("send", sendApprovalContent(stuck), "cmp_stuck");
+    const first = await session.call<ErrorOutput>("send_campaign", {
+      campaign_id: "cmp_stuck",
       approval_token: token,
     });
-    expect(payload.error.code).toBe("approval_invalid");
+    expect(first.payload.error.code).toBe("upstream_error");
+    expect(first.payload.error.message).toContain("aparece en estado draft");
+    const second = await session.call<ErrorOutput>("send_campaign", {
+      campaign_id: "cmp_stuck",
+      approval_token: token,
+    });
+    expect(second.payload.error.code).toBe("approval_invalid");
   });
 });

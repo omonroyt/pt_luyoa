@@ -8,12 +8,14 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type { ApprovalSettings } from "../context";
 import { createServer } from "../server";
-import { createFakeFetch } from "./fake-api";
-import type { FixtureFile } from "./fixture-key";
+import { createFakeFetch, type FixtureOverrides } from "./fake-api";
 
 export const TEST_NOW = new Date("2026-11-04T12:00:00Z");
 
-export async function connectTestClient(overrides: FixtureFile = {}, approvals?: ApprovalSettings) {
+export async function connectTestClient(
+  overrides: FixtureOverrides = {},
+  approvals?: ApprovalSettings,
+) {
   const fetchImpl = createFakeFetch(overrides);
   const server = createServer(
     { apiKey: "test-key", apiBaseUrl: "https://api.test" },
