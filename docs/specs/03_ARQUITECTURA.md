@@ -248,6 +248,10 @@ flowchart TB
 
 **Cómo elige el formato el agente (R-05):** los bloques visuales son **herramientas de presentación**. Cuando el modelo decide que una comparación se entiende mejor en gráfica, llama `show_chart` con datos y los `source.id` que la respaldan. La interfaz dibuja la parte de herramienta como un componente. Si no llama ninguna, la respuesta es solo texto. La decisión es del modelo, guiada por reglas en el prompt (gráfica para comparar, tabla para listar, tarjeta para campañas).
 
+**Cliente MCP dentro del proceso:** el orquestador habla el protocolo MCP real, con Streamable HTTP y el token de servicio, contra el mismo manejador que atiende `/api/mcp`. Lo hace dentro del proceso: el `fetch` del cliente del AI SDK entrega cada solicitud al manejador sin pasar por la red. Así se evita un salto HTTP y no hace falta conocer la URL pública del despliegue. Los clientes externos, como el Inspector de MCP o Claude Desktop, usan el endpoint HTTP o stdio.
+
+**Contexto y tope de pasos:** al inicio de cada turno el orquestador llama `get_business_context` por el MCP. Con su resultado arma el prompt de sistema: fecha de corte, calendario resuelto y sucursales. El bucle tiene un tope de 12 pasos; en el último se retiran las herramientas y se pide cerrar con lo obtenido. Hasta que existan las herramientas de aprobación (IMP-34), el agente solo ve las herramientas de lectura.
+
 **Verificador de cifras (veracidad):** antes de emitir un bloque, el orquestador comprueba que cada número del bloque aparece en el resultado de alguna de las fuentes citadas (con tolerancia de redondeo). Si no, devuelve un error a la herramienta de presentación para que el modelo corrija. Lo mismo corre en las evaluaciones sobre el texto final (M-02).
 
 ### 4.3 Interfaz
