@@ -40,8 +40,10 @@ const SAFETY_RULES = {
   ],
 };
 
-// ES: Formatos de nombre. Las propiedades quedan libres porque la API usa snake_case.
-// EN: Naming formats. Properties are free because the API uses snake_case.
+// ES: Formatos de nombre. Las propiedades y métodos de objetos y tipos quedan libres
+//     porque la API y los contratos del MCP usan snake_case (group_by, last_12_weeks).
+// EN: Naming formats. Object and type properties and methods are free because the API
+//     and the MCP contracts use snake_case (group_by, last_12_weeks).
 const NAMING_RULES = {
   "@typescript-eslint/naming-convention": [
     "error",
@@ -51,7 +53,16 @@ const NAMING_RULES = {
     { selector: "parameter", format: ["camelCase"], leadingUnderscore: "allow" },
     { selector: "typeLike", format: ["PascalCase"] },
     { selector: "enumMember", format: ["PascalCase", "UPPER_CASE"] },
-    { selector: ["objectLiteralProperty", "typeProperty", "import"], format: null },
+    {
+      selector: [
+        "objectLiteralProperty",
+        "objectLiteralMethod",
+        "typeProperty",
+        "typeMethod",
+        "import",
+      ],
+      format: null,
+    },
   ],
 };
 
