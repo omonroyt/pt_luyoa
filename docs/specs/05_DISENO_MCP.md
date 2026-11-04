@@ -63,7 +63,7 @@
 ### 1.4 Por confirmar con `/openapi.json`
 
 - Filtros de `/v1/visits` y `/v1/transactions` (no se usan en las herramientas iniciales).
-- Respuesta exacta de `POST /v1/campaigns` y `POST /v1/campaigns/{id}/send` (códigos y campos).
+- ~~Respuesta exacta de `POST /v1/campaigns` y `POST /v1/campaigns/{id}/send`~~ **Verificado el 2026-11-04 con una campaña de prueba autorizada** (`cmp_297f6b6a1b0d`): crear devuelve al menos `id` y `status`; la respuesta de `/send` tiene una forma distinta a la campaña, así que `send_campaign` no la interpreta y confirma el estado releyendo la campaña. Las campañas propias incluyen además `audience` con los filtros usados.
 - Si `/v1/campaigns` acepta filtros por estado o canal.
 
 ---
@@ -338,8 +338,9 @@ type Offer =
 
 - **Entrada:** `{ campaign_id: string; approval_token: string }`.
 - **Token:** acción `send`, mismo `campaign_id` y hash del borrador.
-- **Errores:** `409` → "Este borrador ya se envió" con su estado actual.
-- **Salida:** `{ campaign_id, status: "sent", sent_at, audience_size }`.
+- **Errores:** si el borrador ya no está en `draft` responde `conflict` sin llamar a `/send` (verificado contra la API real); un `409` de la API también se traduce a `conflict`. Si la API acepta el envío pero la campaña no queda `sent`, responde `upstream_error` explicándolo.
+- **Confirmación:** el cuerpo de la respuesta de `/send` no se interpreta; tras enviar se relee la campaña (fuente de verdad).
+- **Salida:** `{ campaign_id, status: "sent", sent_at, audience_size }`, tomados de la campaña releída.
 
 ---
 
