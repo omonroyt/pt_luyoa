@@ -1,0 +1,45 @@
+{
+  "id": "E-03",
+  "data_as_of": "2026-10-31",
+  "question": "¿Qué sucursal me debería preocupar?",
+  "period": {
+    "recent": {
+      "from": "2026-08-09",
+      "to": "2026-10-31"
+    },
+    "baseline": {
+      "from": "2026-05-17",
+      "to": "2026-08-08"
+    }
+  },
+  "figures": {
+    "by_location": [
+      {
+        "location_id": "loc_coyoacan",
+        "name": "Coyoacán",
+        "recent_net_sales": 629976,
+        "baseline_net_sales": 754696,
+        "net_sales_change_percent": -16.5
+      },
+      {
+        "location_id": "loc_polanco",
+        "name": "Polanco",
+        "recent_net_sales": 1046906,
+        "baseline_net_sales": 1097714,
+        "net_sales_change_percent": -4.6
+      },
+      {
+        "location_id": "loc_roma",
+        "name": "Roma Norte",
+        "recent_net_sales": 558080,
+        "baseline_net_sales": 809334,
+        "net_sales_change_percent": -31
+      }
+    ],
+    "most_concerning": "loc_roma"
+  },
+  "endpoints": [
+    "GET /v1/analytics/sales?group_by=location&from=2026-08-09&to=2026-10-31",
+    "GET /v1/analytics/sales?group_by=location&from=2026-05-17&to=2026-08-08"
+  ]
+}

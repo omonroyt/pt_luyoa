@@ -1,0 +1,74 @@
+{
+  "id": "E-04",
+  "data_as_of": "2026-10-31",
+  "question": "¿Qué clientes estoy perdiendo y a cuántos puedo contactar?",
+  "figures": {
+    "at_risk": {
+      "customers": 483,
+      "reach_by_channel": [
+        {
+          "channel": "email",
+          "matched": 483,
+          "excluded_suspended": 0,
+          "excluded_no_consent": 151,
+          "excluded_duplicates": 2,
+          "reachable": 330
+        },
+        {
+          "channel": "whatsapp",
+          "matched": 483,
+          "excluded_suspended": 0,
+          "excluded_no_consent": 214,
+          "excluded_duplicates": 2,
+          "reachable": 267
+        },
+        {
+          "channel": "push",
+          "matched": 483,
+          "excluded_suspended": 0,
+          "excluded_no_consent": 239,
+          "excluded_duplicates": 2,
+          "reachable": 242
+        }
+      ]
+    },
+    "dormant": {
+      "customers": 367,
+      "reach_by_channel": [
+        {
+          "channel": "email",
+          "matched": 367,
+          "excluded_suspended": 4,
+          "excluded_no_consent": 116,
+          "excluded_duplicates": 0,
+          "reachable": 247
+        },
+        {
+          "channel": "push",
+          "matched": 367,
+          "excluded_suspended": 4,
+          "excluded_no_consent": 172,
+          "excluded_duplicates": 0,
+          "reachable": 191
+        },
+        {
+          "channel": "whatsapp",
+          "matched": 367,
+          "excluded_suspended": 4,
+          "excluded_no_consent": 176,
+          "excluded_duplicates": 0,
+          "reachable": 187
+        }
+      ]
+    }
+  },
+  "endpoints": [
+    "GET /v1/segments",
+    "POST /v1/campaigns/preview",
+    "POST /v1/campaigns/preview",
+    "POST /v1/campaigns/preview",
+    "POST /v1/campaigns/preview",
+    "POST /v1/campaigns/preview",
+    "POST /v1/campaigns/preview"
+  ]
+}

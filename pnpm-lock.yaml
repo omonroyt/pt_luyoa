@@ -242,6 +242,9 @@ importers:
 
   evals:
     dependencies:
+      '@alborada/mcp-server':
+        specifier: workspace:*
+        version: link:../packages/mcp-server
       '@alborada/shared':
         specifier: workspace:*
         version: link:../packages/shared

@@ -1,0 +1,54 @@
+{
+  "id": "E-05",
+  "data_as_of": "2026-10-31",
+  "question": "¿Qué campañas me han funcionado mejor? ¿Repetirías alguna?",
+  "figures": {
+    "campaigns": [
+      {
+        "id": "cmp_0004",
+        "name": "Te extrañamos",
+        "channel": "whatsapp",
+        "offer_type": "free_item",
+        "has_control": true,
+        "lift_points": 23.9,
+        "redemption_rate_percent": 31.3,
+        "control_size": 67
+      },
+      {
+        "id": "cmp_0003",
+        "name": "Puntos dobles Día de las Madres",
+        "channel": "push",
+        "offer_type": "points_multiplier",
+        "has_control": false,
+        "lift_points": null,
+        "redemption_rate_percent": 9.8,
+        "control_size": 0
+      },
+      {
+        "id": "cmp_0002",
+        "name": "Martes de 2x1 en Americano",
+        "channel": "push",
+        "offer_type": "two_for_one",
+        "has_control": false,
+        "lift_points": null,
+        "redemption_rate_percent": 39.9,
+        "control_size": 0
+      },
+      {
+        "id": "cmp_0001",
+        "name": "20% en todo por Buen Fin",
+        "channel": "email",
+        "offer_type": "percent_off",
+        "has_control": false,
+        "lift_points": null,
+        "redemption_rate_percent": 14.6,
+        "control_size": 0
+      }
+    ],
+    "with_control": 1,
+    "best_measured": "cmp_0004"
+  },
+  "endpoints": [
+    "GET /v1/campaigns?limit=100"
+  ]
+}
