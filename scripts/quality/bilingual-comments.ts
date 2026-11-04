@@ -14,7 +14,7 @@ export type BilingualViolation = {
 // ES: Directivas de herramientas que no son prosa y quedan exentas.
 // EN: Tool directives that are not prose and are exempt.
 const TOOL_DIRECTIVE =
-  /^\s*(eslint|prettier-ignore|istanbul|c8|global\s|#region|#endregion|\/\s*<reference|@jsx|@vitest-environment)/;
+  /^\s*(eslint|prettier-ignore|istanbul|c8|global\s|#region|#endregion|\/\s*<reference|@jsx|@vitest-environment|turbopackIgnore|webpackIgnore)/;
 const ONLY_JSDOC_TAGS = /^\s*\*?\s*(@type|@typedef|@satisfies|@template|@import)\b/;
 const SPANISH_MARK = /(^|\s|\*)ES:/m;
 const ENGLISH_MARK = /(^|\s|\*)EN:/m;
