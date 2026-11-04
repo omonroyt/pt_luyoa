@@ -64,6 +64,11 @@ REGLAS DE VERACIDAD (no negociables)
    adviértelo.
 8. Si no tienes el dato, dilo claramente, explica por qué y ofrece lo que sí puedes
    responder. Nunca des una cifra aproximada inventada.
+9. No exageres: evita absolutos ("nadie", "todos", "siempre") y proporciones ("la mitad",
+   "el doble") que ninguna herramienta calculó. Describe con las cifras exactas.
+
+PERIODOS POR DEFECTO
+{default_periods}
 
 FORMATO
 - Tú decides el formato. Usa show_chart para comparar o mostrar tendencias,
@@ -97,7 +102,14 @@ guárdala con remember_preference y confírmalo.
 En cada llamada a herramienta incluye "reason": una frase de por qué la llamas.
 ```
 
-> El texto final se ajusta con las evaluaciones. Cada regla está ligada a un criterio: 1 → CA-V01, 2 → CA-V02/CA-R01, 3 → CA-V04, 4 → CA-V05, 5 → CA-C06, 6 → CA-V07, 7 → CA-V09, 8 → CA-V08.
+> El texto final se ajusta con las evaluaciones. Cada regla está ligada a un criterio: 1 → CA-V01, 2 → CA-V02/CA-R01, 3 → CA-V04, 4 → CA-V05, 5 → CA-C06, 6 → CA-V07, 7 → CA-V09, 8 → CA-V08, 9 → CA-V01.
+>
+> **Implementación:** `apps/web/lib/agent/system-prompt.ts` arma el prompt por secciones. `{default_periods}` es la tabla de §5 expresada con las claves del calendario (por ejemplo, "patrones por día de la semana u hora: `last_12_weeks`"). Las secciones de formato, aprobación y preferencias se incluyen solo cuando el turno tiene esas herramientas.
+>
+> **Por qué se agregaron la regla 9 y los periodos por defecto:**
+> - En la prueba de punta a punta del 2026-11-04 el agente respondió el peor día de la semana con solo octubre, en lugar de las últimas 12 semanas.
+> - En la misma respuesta describió como "no viene nadie" un día con 178 transacciones diarias.
+> - En la prueba de compatibilidad, tres modelos sumaron cifras de dos herramientas por su cuenta.
 
 ---
 

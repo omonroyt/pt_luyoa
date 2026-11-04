@@ -28,6 +28,12 @@ Toda respuesta con cifras termina con fuentes: cada bloque trae sus `sources` y 
 
 ## 2. Tipos base
 
+> **Implementación:**
+> - Los esquemas zod de §2 y §3 viven en `packages/shared/src/blocks/`, un archivo por bloque.
+> - Las herramientas `show_*` y `cite_sources` del agente los usan como esquema de entrada (`apps/web/lib/agent/presentation-tools.ts`).
+> - `SourceRef` exige el formato exacto de `Source.id` (`src_` seguido de 10 caracteres hexadecimales), para que el modelo no cite fuentes inventadas.
+> - Si un argumento no cumple el esquema, el modelo recibe el detalle y corrige en el paso siguiente. La interfaz recibe solo un aviso de corrección.
+
 ```ts
 // Referencia a un resultado de herramienta (ver 03_ARQUITECTURA.md §4.1)
 type SourceRef = string; // p. ej. "src_7f3a"
