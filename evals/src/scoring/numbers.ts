@@ -22,7 +22,7 @@ const NUMBER = /\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?/g;
 //     written without a thousands separator; "2,026" still counts as a figure.
 const NOT_FIGURES = [
   /\b\d{4}-\d{2}-\d{2}(?:T[\d:.]+Z?)?\b/g,
-  /(?<![\d,.])20[23]\d(?![\d,]|\.\d)/g,
+  /(?<![\d,.])20[23]\d(?!\d|[,.]\d)/g,
   /\b\d{1,2}:\d{2}\b/g,
   /\b(?:src|cmp|cus|prd|loc|biz|apr|msg)_[A-Za-z0-9_]+/g,
 ];

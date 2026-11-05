@@ -85,7 +85,7 @@ describe("cifras", () => {
   it("lee números con separador de miles, decimales y signo", () => {
     expect(
       extractNumbers(
-        "Vendiste $808,254 (+4.2%), el ticket bajó −1.3% al 2026-10-31 de 2026 y hay 2,026 clientes",
+        "En octubre de 2026, vendiste $808,254 (+4.2%); el ticket bajó −1.3% al 2026-10-31 y hay 2,026 clientes",
       ).map((n) => n.value),
     ).toEqual([808254, 4.2, 1.3, 2026]);
   });
