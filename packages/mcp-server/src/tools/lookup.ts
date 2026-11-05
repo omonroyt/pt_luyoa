@@ -65,6 +65,7 @@ export function registerLookup(server: McpServer, ctx: ToolContext): void {
           warnings: [],
           source: createSource({
             tool: LOOKUP,
+            params: args,
             endpoints: [result.endpoint],
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,

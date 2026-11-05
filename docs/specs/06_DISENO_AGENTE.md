@@ -64,6 +64,11 @@ REGLAS DE VERACIDAD (no negociables)
    adviértelo.
 8. Si no tienes el dato, dilo claramente, explica por qué y ofrece lo que sí puedes
    responder. Nunca des una cifra aproximada inventada.
+9. No exageres: evita absolutos ("nadie", "todos", "siempre") y proporciones ("la mitad",
+   "el doble") que ninguna herramienta calculó. Describe con las cifras exactas.
+
+PERIODOS POR DEFECTO
+{default_periods}
 
 FORMATO
 - Tú decides el formato. Usa show_chart para comparar o mostrar tendencias,
@@ -97,7 +102,14 @@ guárdala con remember_preference y confírmalo.
 En cada llamada a herramienta incluye "reason": una frase de por qué la llamas.
 ```
 
-> El texto final se ajusta con las evaluaciones. Cada regla está ligada a un criterio: 1 → CA-V01, 2 → CA-V02/CA-R01, 3 → CA-V04, 4 → CA-V05, 5 → CA-C06, 6 → CA-V07, 7 → CA-V09, 8 → CA-V08.
+> El texto final se ajusta con las evaluaciones. Cada regla está ligada a un criterio: 1 → CA-V01, 2 → CA-V02/CA-R01, 3 → CA-V04, 4 → CA-V05, 5 → CA-C06, 6 → CA-V07, 7 → CA-V09, 8 → CA-V08, 9 → CA-V01.
+>
+> **Implementación:** `apps/web/lib/agent/system-prompt.ts` arma el prompt por secciones. `{default_periods}` es la tabla de §5 expresada con las claves del calendario (por ejemplo, "patrones por día de la semana u hora: `last_12_weeks`"). Las secciones de formato, aprobación y preferencias se incluyen solo cuando el turno tiene esas herramientas.
+>
+> **Por qué se agregaron la regla 9 y los periodos por defecto:**
+> - En la prueba de punta a punta del 2026-11-04 el agente respondió el peor día de la semana con solo octubre, en lugar de las últimas 12 semanas.
+> - En la misma respuesta describió como "no viene nadie" un día con 178 transacciones diarias.
+> - En la prueba de compatibilidad, tres modelos sumaron cifras de dos herramientas por su cuenta.
 
 ---
 
@@ -199,7 +211,7 @@ stateDiagram-v2
 
 | Situación | Comportamiento |
 |---|---|
-| "Prepárala y mándala" | Arma la propuesta y pide la primera aprobación. Tras crear, pide la segunda. Nunca se salta pasos |
+| "Prepárala y mándala" | Arma la propuesta y, en el mismo turno, muestra la tarjeta y llama `request_draft_approval` (no pregunta por escrito). Tras crear, pide la segunda. Nunca se salta pasos. Regla agregada al prompt el 2026-11-04: en la prueba de punta a punta el modelo pedía la aprobación en el texto y costaba un turno extra |
 | "Sí" escrito en el chat en lugar del botón | Se trata como aprobación solo si hay una aprobación pendiente y la tarjeta está visible; la interfaz convierte el "sí" en la acción del botón para que el token se emita igual |
 | La persona cambia el mensaje o la oferta | Nueva tarjeta, alcance recalculado si cambió audiencia o canal, nueva aprobación. El token anterior queda inválido (hash distinto) |
 | Token vencido o ya usado | El MCP rechaza; el agente explica y vuelve a pedir aprobación |
@@ -239,7 +251,7 @@ stateDiagram-v2
 - Resultados de herramientas compactos (decenas de filas como máximo); listados largos se resumen en el MCP.
 - Resultados de turnos anteriores se reemplazan por su `source.id` y un resumen; si el agente los necesita, vuelve a llamar (la caché del MCP lo hace barato).
 - Temperatura baja (0 a 0.3) para consistencia en cifras y formato.
-- Meta: menos de 30 mil tokens de entrada por turno típico; se mide en la comparación de modelos.
+- El prefijo fijo (prompt de sistema, contexto del negocio y definiciones de herramientas) ronda los 9,400 tokens y se reenvía en cada llamada; un turno típico de 5 llamadas suma ~56 mil tokens de entrada, de los que ~43 mil se pueden leer de caché. Por eso el orden del prefijo se mantiene estable. Se mide en la comparación de modelos.
 
 ---
 

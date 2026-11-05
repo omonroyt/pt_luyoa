@@ -10,6 +10,7 @@ type Output<TData> = {
 type SegmentsData = {
   home_location: string | null;
   segments: Array<{ id: string; customers: number }>;
+  total_customers: number;
 };
 type ReachData = {
   matched: number;
@@ -44,6 +45,21 @@ describe("customer_segments", () => {
       expect.objectContaining({ id: "dormant", customers: 367 }),
     ]);
     expect(payload.notes.join(" ")).toContain("audience_reach");
+  });
+
+  it("entrega el total de los segmentos pedidos para que el agente no sume (ADR-09)", async () => {
+    session = await connectTestClient();
+    const { payload } = await session.call<Output<SegmentsData>>("customer_segments", {
+      segment_ids: ["at_risk", "dormant"],
+    });
+    expect(payload.data.total_customers).toBe(850);
+  });
+
+  it("los seis segmentos son excluyentes: su total es el de todos los clientes", async () => {
+    session = await connectTestClient();
+    const { payload } = await session.call<Output<SegmentsData>>("customer_segments");
+    expect(payload.data.segments).toHaveLength(6);
+    expect(payload.data.total_customers).toBe(2030);
   });
 
   it("cuenta por sucursal desde /customers y lo advierte", async () => {

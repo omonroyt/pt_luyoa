@@ -146,7 +146,10 @@ erDiagram
 1. **Nivel de tarea, no de endpoint.** Una herramienta responde una pregunta de negocio completa; combina endpoints y calcula.
 2. **Cifras calculadas en código** (ADR-09): variaciones, porcentajes, normalización por día, lift, costos y rangos de impacto.
 3. **Salida compacta**: decenas de filas como máximo, sin datos personales, con `notes` y `warnings` en español.
-4. **Procedencia siempre**: cada salida con cifras lleva `source` (tipo `Source` de `@alborada/shared`).
+4. **Procedencia siempre**: cada salida con cifras lleva `source` (tipo `Source` de `@alborada/shared`). El `source.id` se calcula como un hash de la herramienta, los endpoints y los argumentos, estos últimos serializados con las claves ordenadas.
+   - La misma consulta da el mismo id, aunque los argumentos lleguen en otro orden.
+   - Dos consultas distintas nunca comparten id. Incluir los argumentos evita la colisión de dos `audience_reach` con distinta audiencia, que comparten `POST /v1/campaigns/preview`.
+   - El token de aprobación no entra en el hash de las herramientas de escritura.
 5. **Periodos por nombre o por fecha**: las herramientas aceptan `period` como preset (`last_full_month`, `previous_full_month`, `last_12_weeks`, `last_3_months`, `last_week`) o como `{ from, to }`. Los presets se resuelven desde `data_as_of`.
 6. **Validación estricta** con zod y listas blancas de filtros; los errores dicen qué valor sí es válido.
 7. **Descripciones para el agente**: qué responde, cuándo usarla, cuándo no, y un ejemplo.
@@ -287,7 +290,8 @@ type Offer =
 - **Propósito:** tamaño y definición de los segmentos, opcionalmente por sucursal.
 - **Entrada:** `{ segment_ids?: SegmentId[]; home_location_id?: LocationId }`.
 - **Cálculo:** sin sucursal usa `/segments`; con sucursal cuenta con `/customers?segment=…&home_location_id=…&limit=1` porque `/segments` ignora ese filtro.
-- **Salida:** `{ segments: [{ id, definition, customers, avg_spend?, consent_rates? }] }`.
+- **Salida:** `{ segments: [{ id, definition, customers, avg_spend?, consent_rates? }], total_customers }`.
+- **Total:** `total_customers` suma los segmentos pedidos, para que el agente no sume (ADR-09). La suma es válida porque los segmentos son excluyentes: los seis suman 2,030, el total de clientes de la API.
 
 #### 7. `audience_reach`
 

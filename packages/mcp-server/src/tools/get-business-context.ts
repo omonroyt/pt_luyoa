@@ -53,6 +53,7 @@ export function registerGetBusinessContext(server: McpServer, ctx: ToolContext):
           warnings: [],
           source: createSource({
             tool: GET_BUSINESS_CONTEXT,
+            params: {},
             endpoints: snapshot.endpoints,
             dataAsOf: window.dataAsOf,
             now: ctx.now,

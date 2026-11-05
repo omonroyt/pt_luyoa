@@ -73,10 +73,22 @@ export function registerCustomerSegments(server: McpServer, ctx: ToolContext): v
         const result = location
           ? await countByLocation(ctx, snapshot, segmentIds, location.id)
           : { segments: fromSegmentsEndpoint(snapshot, segmentIds), endpoints: snapshot.endpoints };
+        // ES: Los segmentos son excluyentes (cada cliente pertenece a uno solo; los seis suman
+        //     el total de clientes), así que el total de los pedidos es una suma válida. Se
+        //     entrega calculado para que el agente no sume (ADR-09).
+        // EN: Segments are mutually exclusive (each customer belongs to exactly one; the six
+        //     add up to the customer total), so the total of the requested ones is a valid
+        //     sum. It is returned precomputed so the agent does not add (ADR-09).
+        const totalCustomers = result.segments.reduce((sum, segment) => sum + segment.customers, 0);
         return {
-          data: { home_location: location?.name ?? null, segments: result.segments },
+          data: {
+            home_location: location?.name ?? null,
+            segments: result.segments,
+            total_customers: totalCustomers,
+          },
           notes: [
             `Segmentos calculados a la fecha de corte (${snapshot.window.dataAsOf}).`,
+            "total_customers suma los segmentos pedidos; los segmentos son excluyentes.",
             "El tamaño del segmento no es el alcance: para saber a cuántos se puede contactar usar audience_reach.",
           ],
           warnings: location
@@ -86,6 +98,7 @@ export function registerCustomerSegments(server: McpServer, ctx: ToolContext): v
             : [],
           source: createSource({
             tool: CUSTOMER_SEGMENTS,
+            params: args,
             endpoints: result.endpoints,
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,

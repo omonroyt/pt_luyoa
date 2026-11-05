@@ -75,6 +75,7 @@ export function registerSalesBreakdown(server: McpServer, ctx: ToolContext): voi
             : [],
           source: createSource({
             tool: SALES_BREAKDOWN,
+            params: args,
             endpoints: [response.endpoint],
             dataAsOf: snapshot.window.dataAsOf,
             period,

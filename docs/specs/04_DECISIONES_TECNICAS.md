@@ -26,7 +26,7 @@
 | ADR-10 | Drizzle + libSQL (SQLite local, Turso en la nube) | Aceptada |
 | ADR-11 | Trazas propias en BD, OpenTelemetry opcional | Aceptada |
 | ADR-12 | Evaluaciones: verificaciones deterministas + juez con rúbrica | Aceptada |
-| ADR-13 | Elección de modelo por medición | Propuesta |
+| ADR-13 | Elección de modelo por medición | Aceptada para desarrollo; se cierra en M6 |
 | ADR-14 | Vercel + Turso para la demo publicada | Propuesta |
 | ADR-15 | Recharts para gráficas | Aceptada |
 | ADR-16 | Multi-negocio por configuración aislada | Aceptada |
@@ -103,6 +103,17 @@
 - **Alternativas:** confiar solo en el prompt; quitar al agente las escrituras y que solo la interfaz llame la API.
 - **Por qué:** el prompt no es una garantía. Quitarle las escrituras al agente cumple el control, pero rompe "el agente crea el borrador". Con dos candados, el agente conduce el flujo y la garantía es criptográfica.
 - **Consecuencias:** hay que probar ambos candados (CA-C02, CA-C03, CA-M07) y el caso "mándala" (CA-C04, CA-N04).
+- **Implementación (IMP-34):**
+  - `request_draft_approval` y `request_send_approval` no tienen `execute`. Al llamarlas, el turno se detiene; la interfaz pide el token a `/api/approvals` solo si la persona pulsa el botón y lo devuelve como resultado de la herramienta.
+  - `/api/chat` valida ese resultado contra su esquema antes de dárselo al modelo.
+  - Las escrituras del MCP solo se exponen junto con estas herramientas.
+  - Las pruebas recorren el flujo completo con el MCP real y fixtures: el turno se detiene, el token emitido crea el borrador, un token inventado no llega a la API y un contenido alterado invalida el token.
+- **Requisito para la interfaz (M5):** la tarjeta con los botones de aprobación se dibuja con el `campaign` de `request_draft_approval` (o de `request_send_approval`), que es exactamente el contenido que se firma. Así lo que la persona ve es lo que aprueba, aunque el modelo hubiera mostrado antes una tarjeta distinta.
+- **Alternativa evaluada en IMP-34: aprobación nativa del AI SDK 7** (`toolApproval` con `experimental_toolApprovalSecret`).
+  - Firma con HMAC la solicitud de aprobación y la liga a la herramienta, al id de la llamada y a sus argumentos.
+  - Se descartó porque duplica lo que ya garantiza el token propio, que además es de un solo uso, vence a los 10 minutos y lo verifica el MCP.
+  - Además obligaría a emitir el token dentro de `/api/chat`, lo que borra la separación entre quien aprueba (la interfaz y `/api/approvals`) y quien ejecuta (el agente).
+  - La propia documentación del AI SDK advierte que el historial lo controla el cliente; este diseño no confía en él para autorizar escrituras.
 
 ## ADR-09 · Las cifras las calcula el MCP; el agente las verifica
 
@@ -125,6 +136,23 @@
 - **Alternativas:** solo Langfuse o LangSmith; solo registros en consola.
 - **Por qué:** el evaluador ve las trazas dentro de la misma interfaz sin cuentas externas (B-03). La salida opcional a Langfuse da una vista profesional sin depender de ella.
 - **Consecuencias:** la "razón" de cada herramienta se obtiene pidiéndole al modelo un campo `reason` breve en las llamadas, lo que cuesta unos pocos tokens.
+- **Implementación (IMP-35):**
+  - **El campo `reason`** (`apps/web/lib/agent/with-reason.ts`) se agrega del lado del agente a las 20 herramientas, como campo opcional.
+    - No cambia los contratos del MCP ni de los bloques.
+    - El esquema original sigue validando el resto de la entrada.
+    - El campo se quita antes de ejecutar.
+  - **El trazador** (`turn-tracer.ts`) registra cada llamada al modelo con tokens, el costo que informa OpenRouter en `providerMetadata` y la latencia de respuesta.
+    - También registra cada herramienta con su tipo (`tool`, `presentation` o `approval`), razón, entrada, resumen del resultado (fuente y número de advertencias, nunca los datos completos), duración y código de error.
+    - Los códigos de error son el del MCP, `figure_verification` o `invalid_input`.
+  - **Al terminar el turno** (`trace-store.ts`) se guardan la conversación, los mensajes y los pasos, y se acumula el costo de la conversación (CA-Q06).
+    - Los tokens de aprobación se enmascaran en los mensajes guardados.
+    - Un id de conversación de otro negocio se rechaza (ADR-16).
+  - **Metadatos para el panel:** los totales del turno (modelo, llamadas, tokens, costo y latencia) viajan como metadatos del mensaje del asistente, para el panel de trazas de la interfaz.
+  - **Si falla al guardar**, el chat continúa y el error se registra sin datos.
+  - **Primera medición real (2026-11-04)**, con GLM-5.3-Flash y la pregunta "octubre contra septiembre":
+    - 4 llamadas al modelo, 3 herramientas y 52,130 tokens de entrada.
+    - 0.00198 USD y 37.7 s de latencia.
+    - Cada llamada al modelo tardó entre 8 y 10 s, contra 1.1 s de la consulta al MCP: la latencia la domina el modelo.
 
 ## ADR-12 · Evaluaciones: verificaciones deterministas + juez con rúbrica
 
@@ -137,14 +165,23 @@
 
 ## ADR-13 · Elección de modelo por medición
 
-- **Estado:** Propuesta. Se cierra con la comparación de modelos.
-- **Decisión:** comparar al menos 3 o 4 modelos de OpenRouter con el set de evaluación completo, midiendo calidad (puntaje del corredor), costo por conversación (desde el `usage` de OpenRouter) y latencia (primer token y total).
-- **Candidatos iniciales** (los ids exactos se confirman en OpenRouter al medir):
-  - Un modelo de gama alta de Anthropic (familia Sonnet): referencia de calidad en uso de herramientas.
-  - Un modelo rápido y barato de Anthropic (familia Haiku).
-  - Un modelo de la familia Gemini Flash: costo bajo y latencia baja.
-  - Un modelo de la familia GPT (gama media).
-  - Un modelo de pesos abiertos con buen uso de herramientas (familias Qwen, DeepSeek, Kimi o GLM).
+- **Estado:** Aceptada para desarrollo; la elección final se cierra con la comparación de modelos (M6).
+- **Decisión:** comparar al menos 4 modelos de OpenRouter con el set de evaluación completo, midiendo calidad (puntaje del corredor), costo por conversación (desde el `usage` de OpenRouter) y latencia (primer token y total).
+- **Estudio previo (2026-11-04):** se revisaron los 454 modelos del catálogo de OpenRouter (389 con herramientas) y se puntuaron 16 con criterios fijados de antemano: uso de herramientas (AutomationBench de Artificial Analysis, 30%), veracidad (alucinación en AA-Omniscience, 25%), costo por conversación con el perfil de tokens medido (20%), latencia (10%) y disponibilidad (5%). La calidad del español no tiene medición comparable entre fabricantes y se mide en M6.
+- **Modelo de desarrollo:** `z-ai/glm-5.3-flash`, con el proveedor original primero y sin versiones de precisión reducida (fp4). Es el único candidato que queda entre los tres primeros con cualquier combinación de pesos probada. Respaldo: `deepseek/deepseek-v4.1-flash-1017`.
+- **Candidatos de M6:**
+
+  | Modelo | Familia | Papel |
+  |---|---|---|
+  | `z-ai/glm-5.3-flash` | Z.ai, pesos abiertos | Modelo de desarrollo |
+  | `deepseek/deepseek-v4.1-flash-1017` | DeepSeek, pesos abiertos | Mayor puntaje base; vigilar veracidad |
+  | `anthropic/claude-haiku-5.5` | Anthropic | Cerrado de bajo costo |
+  | `openai/gpt-6.1-terra` | OpenAI | Cerrado de gama media |
+  | `google/gemini-4-argon` | Google | Referencia de calidad (corrida reducida) |
+
+- **Cambio respecto de los candidatos iniciales:** Gemini 4 Argon sustituye a la familia Sonnet como referencia de gama alta (mejor en herramientas y en alucinación, a menor costo). Dos modelos de pesos abiertos sustituyen a la familia Gemini Flash (alucinación de 55%, errores conocidos de llamadas a herramientas con streaming y aumento de precio anunciado).
+- **Presupuesto:** la llave de OpenRouter tiene un límite de 20 USD para todo el proyecto. Una conversación típica consume ~56 mil tokens de entrada (las definiciones de herramientas y el prompt se reenvían en cada paso), lo que descarta un modelo de gama alta para el desarrollo.
+- **Prueba de compatibilidad (2026-11-04):** los cinco candidatos completaron una pregunta de dos herramientas por el stack real (AI SDK 7, `@openrouter/ai-sdk-provider` y cliente MCP), sin argumentos inválidos y citando fuentes reales; costo total 0.037 USD. Reporte: `evals/reports/2026-11-04-compat.json`. Tres modelos sumaron cifras en el texto en lugar de citar las de la herramienta, lo que confirma la necesidad del verificador de cifras (ADR-09).
 - **Criterios de desempate:** confiabilidad al llamar herramientas, calidad del español, respeto de la aprobación y costo.
 - **Opción de dos modelos:** si los números lo justifican, uno principal para el agente y uno barato para el juez o para el resumen semanal.
 

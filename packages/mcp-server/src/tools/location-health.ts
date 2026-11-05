@@ -119,6 +119,7 @@ export function registerLocationHealth(server: McpServer, ctx: ToolContext): voi
           warnings: [],
           source: createSource({
             tool: LOCATION_HEALTH,
+            params: args,
             endpoints: result.endpoints,
             dataAsOf: snapshot.window.dataAsOf,
             period: { from: result.baseline.from, to: result.recent.to },

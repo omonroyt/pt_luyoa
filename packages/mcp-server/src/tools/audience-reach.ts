@@ -73,6 +73,7 @@ export function registerAudienceReach(server: McpServer, ctx: ToolContext): void
           warnings: matched === 0 ? ["Ningún cliente coincide con estos filtros."] : [],
           source: createSource({
             tool: AUDIENCE_REACH,
+            params: args,
             endpoints,
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,

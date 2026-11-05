@@ -87,6 +87,7 @@ export function registerSendCampaign(server: McpServer, ctx: ToolContext): void 
           warnings: [],
           source: createSource({
             tool: SEND_CAMPAIGN,
+            params: { campaign_id: args.campaign_id },
             endpoints: [draft.endpoint, sent.endpoint, confirmed.endpoint],
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,

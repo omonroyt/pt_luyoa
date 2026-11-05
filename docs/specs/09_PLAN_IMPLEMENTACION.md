@@ -29,7 +29,7 @@ gantt
     M3 Escrituras, tokens y /api/mcp     :done, m3, 2026-11-04, 1d
 
     section Agente e interfaz
-    M4 Orquestador del agente            :m4, 2026-11-06, 2d
+    M4 Orquestador del agente            :done, m4, 2026-11-04, 1d
     M5 Interfaz y aprobación             :m5, 2026-11-07, 1d
 
     section Calidad
@@ -99,7 +99,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-22 | `create_campaign_draft` y `send_campaign` con validaciones previas | CA-C08, CA-C09, CA-C10 |
 | IMP-23 | Endpoint `/api/mcp` (Streamable HTTP) con token de servicio por negocio | ADR-04, CA-X05 |
 
-### M4 · Orquestador del agente — rama sugerida `feat/agente`
+### M4 · Orquestador del agente (hecho, rama `feat/agente`)
 
 | ID | Tarea | Criterio |
 |---|---|---|

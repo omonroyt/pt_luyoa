@@ -98,6 +98,7 @@ export function registerCampaignPerformance(server: McpServer, ctx: ToolContext)
               : [],
           source: createSource({
             tool: CAMPAIGN_PERFORMANCE,
+            params: args,
             endpoints,
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,

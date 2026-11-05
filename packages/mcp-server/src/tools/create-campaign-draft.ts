@@ -70,6 +70,7 @@ export function registerCreateCampaignDraft(server: McpServer, ctx: ToolContext)
           warnings: [],
           source: createSource({
             tool: CREATE_CAMPAIGN_DRAFT,
+            params: { campaign: args.campaign },
             endpoints: [created.endpoint, reach.endpoint],
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,

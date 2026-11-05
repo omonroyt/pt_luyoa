@@ -66,6 +66,7 @@ export function registerVisitsBreakdown(server: McpServer, ctx: ToolContext): vo
           warnings: [],
           source: createSource({
             tool: VISITS_BREAKDOWN,
+            params: args,
             endpoints: [response.endpoint],
             dataAsOf: snapshot.window.dataAsOf,
             period,
