@@ -8,6 +8,9 @@ const ConfigSchema = z.object({
 export type McpConfig = {
   apiKey: string;
   apiBaseUrl: string;
+  // ES: Negocio que debe responder la llave (X-05); sin él, el servidor atiende al de la llave.
+  // EN: Business the key must answer for (X-05); without it, the server serves the key's own.
+  businessId?: string;
 };
 
 /**

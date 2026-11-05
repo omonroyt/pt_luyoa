@@ -22,14 +22,37 @@ export type ToolContext = {
   getSnapshot(): Promise<BusinessSnapshot>;
 };
 
-export type ToolContextOptions = { now?: () => Date; approvals?: ApprovalSettings };
+export type ToolContextOptions = {
+  now?: () => Date;
+  approvals?: ApprovalSettings;
+  expectedBusinessId?: string;
+};
 
-async function loadSnapshot(api: ApiClient): Promise<BusinessSnapshot> {
+/**
+ * ES: Candado de identidad (X-05, ADR-16): si el servidor atiende a un negocio concreto y la
+ *     llave de la API responde con otro, ninguna herramienta entrega datos.
+ * EN: Identity lock (X-05, ADR-16): if the server serves a specific business and the API
+ *     key answers with another one, no tool returns data.
+ */
+function assertExpectedBusiness(business: Business, expectedBusinessId: string | undefined) {
+  if (expectedBusinessId === undefined || business.id === expectedBusinessId) return;
+  throw new ToolFailure({
+    code: "unauthorized",
+    message: "La llave de la API configurada pertenece a otro negocio.",
+    suggestion: "Revisar qué llave tiene asignada este negocio en la configuración del servidor.",
+  });
+}
+
+async function loadSnapshot(
+  api: ApiClient,
+  expectedBusinessId: string | undefined,
+): Promise<BusinessSnapshot> {
   const [business, locations, segments] = await Promise.all([
     fetchBusiness(api),
     fetchLocations(api),
     fetchSegments(api),
   ]);
+  assertExpectedBusiness(business.data, expectedBusinessId);
   return {
     business: business.data,
     locations: locations.data.data,
@@ -52,7 +75,7 @@ export function createToolContext(api: ApiClient, options: ToolContextOptions = 
     now: options.now ?? (() => new Date()),
     approvals: options.approvals,
     getSnapshot() {
-      pending ??= loadSnapshot(api).catch((error: unknown) => {
+      pending ??= loadSnapshot(api, options.expectedBusinessId).catch((error: unknown) => {
         pending = undefined;
         throw error;
       });

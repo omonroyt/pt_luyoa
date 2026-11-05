@@ -441,6 +441,11 @@ sequenceDiagram
 | stdio (`pnpm mcp:stdio`) | Claude Desktop, Inspector de MCP | Proceso local con el `.env` del desarrollador |
 | Streamable HTTP (`/api/mcp`) | El agente de la app | `Authorization: Bearer <MCP_SERVICE_TOKEN>`; el token identifica al negocio (X-05) |
 
+**Varios negocios (X-05, ADR-16).**
+- **Un servidor por negocio.** Cada negocio tiene su propia fábrica de servidores con su propio cliente de la API, es decir, su llave, su caché y su límite de solicitudes. La caché se indexa por dirección y no incluye la llave, así que compartir un cliente entre negocios entregaría a uno las respuestas del otro.
+- **Negocio esperado.** La configuración del servidor acepta `businessId`. Cuando se fija, `get_business_context` y cualquier herramienta que cargue la foto del negocio fallan con `unauthorized` si `GET /v1/business` responde con otro id ("La llave de la API configurada pertenece a otro negocio"). Por stdio no se fija, y el servidor atiende al negocio de la llave.
+- **Escrituras.** El token de aprobación lleva el negocio firmado (`biz`), y la escritura se rechaza si no coincide con el negocio de la llave.
+
 ---
 
 ## 9. Pruebas
