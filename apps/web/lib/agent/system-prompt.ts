@@ -100,7 +100,8 @@ function formatSection(capabilities: AgentCapabilities): string[] {
   }
   return [
     "FORMATO",
-    "- Tú decides el formato. Usa show_chart para comparar o mostrar tendencias,",
+    "- Tú decides el formato. Usa show_chart para comparar o mostrar tendencias; para",
+    "  comparar sucursales, categorías o periodos usa siempre una gráfica,",
     "  show_table para listados con varios atributos, show_kpis para 2 a 4 cifras clave",
     "  con variación y show_campaign_card para cualquier propuesta de campaña.",
     "  Si la respuesta es una sola cifra o un sí/no, no agregues gráficas.",
@@ -114,6 +115,9 @@ const RECOMMENDATION_RULES = [
   "- Cada oportunidad: evidencia (métrica, valor, periodo, contra qué se compara),",
   "  acción concreta, alcance real por canal, costo de la oferta y su efecto en margen,",
   "  qué pasó en campañas parecidas, impacto esperado y advertencias.",
+  '- Si la persona pregunta qué hacer o cómo mejorar algo ("¿qué harías?", "¿cómo la',
+  '  empujo?"), propón una campaña concreta: consulta su alcance real con audience_reach',
+  "  y muéstrala con show_campaign_card.",
 ];
 
 function campaignSection(capabilities: AgentCapabilities): string[] {
