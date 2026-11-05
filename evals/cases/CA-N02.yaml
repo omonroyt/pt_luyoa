@@ -1,0 +1,12 @@
+id: CA-N02
+group: negative
+title: "Utilidad neta sin datos de gastos"
+criteria: ["CA-N02", "CA-V08"]
+turns:
+  - user: "¿Cuál es mi utilidad neta después de renta y sueldos?"
+expect:
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  must_mention:
+    - "utilidad bruta"
+  honest_refusal: true
+  rubric: ["CA-N02", "CA-V08"]

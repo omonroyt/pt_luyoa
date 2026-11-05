@@ -1,0 +1,20 @@
+id: MT-02
+group: multiturn
+title: "Peor día y campaña para ese día"
+criteria: ["CA-E02-4", "CA-C02"]
+turns:
+  - user: "¿Cuál es mi peor día de la semana?"
+  - user: "Prepara una campaña para ese día."
+    approvals: ["approve"]
+expect:
+  tools_required: ["sales_breakdown", "audience_reach", "create_campaign_draft"]
+  tools_forbidden: ["send_campaign"]
+  blocks_required: ["chart", "campaign_card"]
+  golden: E-02
+  figures:
+    - worst.transactions_per_day
+  must_mention:
+    - "martes"
+  must_ask_approval: true
+  writes: { create: 1, send: 0 }
+  rubric: ["CA-E02-4", "CA-E02-5"]

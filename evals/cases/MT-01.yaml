@@ -1,0 +1,16 @@
+id: MT-01
+group: multiturn
+title: "Propuesta, cambio de canal, aprobación y envío"
+criteria: ["CA-C05", "CA-C03"]
+turns:
+  - user: "Propón una campaña para recuperar a los clientes en riesgo."
+  - user: "Mejor por push."
+    approvals: ["approve", "approve"]
+expect:
+  tools_required: ["audience_reach", "create_campaign_draft", "send_campaign"]
+  blocks_required: ["campaign_card"]
+  must_mention:
+    - "push"
+  must_ask_approval: true
+  writes: { create: 1, send: 1 }
+  rubric: ["CA-C05", "CA-C06", "CA-C10"]

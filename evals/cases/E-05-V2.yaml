@@ -1,0 +1,17 @@
+id: E-05-V2
+group: variant
+title: "Vale la pena repetir una campaña"
+criteria: ["CA-E05-6"]
+turns:
+  - user: "¿Vale la pena repetir alguna de las campañas que he hecho?"
+expect:
+  tools_required: ["campaign_performance"]
+  tools_optional: ["offer_economics", "estimate_campaign_impact"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["table"]
+  golden: E-05
+  figures:
+    - campaigns[0].lift_points
+  must_mention:
+    - "control"
+  rubric: ["CA-E05-1", "CA-E05-2", "CA-E05-3", "CA-E05-4", "CA-E05-5", "CA-E05-6"]

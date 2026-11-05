@@ -1,0 +1,18 @@
+id: E-02-V2
+group: variant
+title: "Día más flojo, sin pedir acción"
+criteria: ["CA-E02-2", "CA-V05"]
+turns:
+  - user: "¿Cuál es el día más flojo en el café?"
+expect:
+  tools_required: ["sales_breakdown"]
+  tools_optional: ["location_health"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["chart"]
+  golden: E-02
+  figures:
+    - worst.transactions_per_day
+  must_mention:
+    - "martes"
+    - "por d[ií]a"
+  rubric: ["CA-E02-1", "CA-E02-2", "CA-E02-3"]

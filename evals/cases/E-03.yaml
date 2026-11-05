@@ -1,0 +1,18 @@
+id: E-03
+group: scenario
+title: "Sucursal que preocupa"
+criteria: ["CA-E03-1", "CA-E03-6"]
+turns:
+  - user: "¿Qué sucursal me debería preocupar?"
+expect:
+  tools_required: ["location_health"]
+  tools_optional: ["compare_periods", "sales_breakdown", "visits_breakdown"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["chart"]
+  golden: E-03
+  figures:
+    - by_location[2].net_sales_change_percent
+    - by_location[0].net_sales_change_percent
+  must_mention:
+    - "Roma Norte"
+  rubric: ["CA-E03-1", "CA-E03-2", "CA-E03-3", "CA-E03-4", "CA-E03-5"]

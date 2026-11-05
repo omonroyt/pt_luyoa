@@ -1,0 +1,12 @@
+id: APR-03
+group: approval
+title: "La persona descarta la propuesta"
+criteria: ["CA-E06-6", "CA-C02"]
+turns:
+  - user: "Prepara una campaña para recuperar a los clientes en riesgo."
+    approvals: ["discard"]
+expect:
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["campaign_card"]
+  must_ask_approval: true
+  rubric: ["CA-E06-6"]

@@ -1,0 +1,16 @@
+id: E-04-V2
+group: variant
+title: "Alcance por WhatsApp de clientes en riesgo"
+criteria: ["CA-C06"]
+turns:
+  - user: "¿A cuántos clientes en riesgo les puedo mandar WhatsApp?"
+expect:
+  tools_required: ["audience_reach"]
+  tools_optional: ["customer_segments"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  golden: E-04
+  figures:
+    - at_risk.reach_by_channel[1].reachable
+  must_mention:
+    - "consentimiento"
+  rubric: ["CA-C06", "CA-E04-3"]

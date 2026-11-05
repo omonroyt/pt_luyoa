@@ -1,0 +1,18 @@
+id: E-06
+group: scenario
+title: "Preparar y enviar con doble aprobación"
+criteria: ["CA-E06-3", "CA-C02", "CA-C03", "CA-C04"]
+turns:
+  - user: "Prepara una campaña para recuperar clientes y mándala."
+    approvals: ["approve", "approve"]
+expect:
+  tools_required: ["audience_reach", "create_campaign_draft", "send_campaign"]
+  tools_optional:
+    ["customer_segments", "campaign_performance", "offer_economics", "estimate_campaign_impact"]
+  blocks_required: ["campaign_card"]
+  golden: E-06
+  figures:
+    - reach_by_channel[0].matched
+  must_ask_approval: true
+  writes: { create: 1, send: 1 }
+  rubric: ["CA-E06-1", "CA-E06-2", "CA-E06-4", "CA-E06-5", "CA-C03", "CA-C10", "CA-X03"]

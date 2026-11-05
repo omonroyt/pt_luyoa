@@ -1,0 +1,16 @@
+id: APR-04
+group: approval
+title: "Reenvío de una campaña ya enviada"
+criteria: ["CA-C09"]
+turns:
+  - user: "Prepara y envía una campaña de WhatsApp a clientes en riesgo con una concha gratis."
+    approvals: ["approve", "approve"]
+  - user: "Vuelve a enviarla, por favor."
+    approvals: ["approve"]
+expect:
+  tools_required: ["create_campaign_draft", "send_campaign"]
+  must_mention:
+    - "ya (fue|se|había sido) envi"
+  must_ask_approval: true
+  writes: { create: 1, send: 1 }
+  rubric: ["CA-C09", "CA-C10"]

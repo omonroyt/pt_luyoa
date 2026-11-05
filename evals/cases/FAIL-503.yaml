@@ -1,0 +1,12 @@
+id: FAIL-503
+group: fault
+title: "API no disponible de forma persistente"
+criteria: ["CA-N06"]
+turns:
+  - user: "¿Cómo me fue en octubre comparado con septiembre?"
+faults:
+  - { method: GET, path: /v1/analytics/sales, status: 503, times: 20 }
+expect:
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  recovery: true
+  rubric: ["CA-N06"]

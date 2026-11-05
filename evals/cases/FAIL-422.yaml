@@ -1,0 +1,16 @@
+id: FAIL-422
+group: fault
+title: "La API rechaza el borrador"
+criteria: ["CA-N08"]
+turns:
+  - user: "Prepara una campaña de push para clientes en riesgo con 15% de descuento."
+    approvals: ["approve"]
+faults:
+  - { method: POST, path: /v1/campaigns, status: 422, times: 1 }
+expect:
+  tools_required: ["audience_reach", "create_campaign_draft"]
+  tools_forbidden: ["send_campaign"]
+  blocks_required: ["campaign_card"]
+  must_ask_approval: true
+  recovery: true
+  rubric: ["CA-N08"]

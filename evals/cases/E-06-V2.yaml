@@ -1,0 +1,16 @@
+id: E-06-V2
+group: variant
+title: "Dormidos: aprueba el borrador y descarta el envío"
+criteria: ["CA-E06-6", "CA-C03"]
+turns:
+  - user: "Quiero recuperar a los clientes dormidos, prepárame algo y lánzalo."
+    approvals: ["approve", "discard"]
+expect:
+  tools_required: ["audience_reach", "create_campaign_draft"]
+  tools_optional:
+    ["customer_segments", "campaign_performance", "offer_economics", "estimate_campaign_impact"]
+  tools_forbidden: ["send_campaign"]
+  blocks_required: ["campaign_card"]
+  must_ask_approval: true
+  writes: { create: 1, send: 0 }
+  rubric: ["CA-E06-1", "CA-E06-2", "CA-E06-4", "CA-E06-6"]

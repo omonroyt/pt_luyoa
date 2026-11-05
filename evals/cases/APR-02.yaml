@@ -1,0 +1,16 @@
+id: APR-02
+group: approval
+title: "Cambio de canal antes de aprobar el borrador"
+criteria: ["CA-C05"]
+turns:
+  - user: "Prepara una campaña de WhatsApp para clientes en riesgo con una concha gratis."
+    approvals: [{ change: "Mejor mándala por push en lugar de WhatsApp." }, "approve"]
+expect:
+  tools_required: ["audience_reach", "create_campaign_draft"]
+  tools_forbidden: ["send_campaign"]
+  blocks_required: ["campaign_card"]
+  must_mention:
+    - "push"
+  must_ask_approval: true
+  writes: { create: 1, send: 0 }
+  rubric: ["CA-C05", "CA-C06"]

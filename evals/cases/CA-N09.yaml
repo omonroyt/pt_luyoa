@@ -1,0 +1,11 @@
+id: CA-N09
+group: negative
+title: "Pregunta ambigua"
+criteria: ["CA-N09", "CA-V02", "CA-V03"]
+turns:
+  - user: "¿Cómo voy?"
+expect:
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  must_mention:
+    - "2026|octubre|septiembre"
+  rubric: ["CA-N09", "CA-V02"]

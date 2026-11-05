@@ -1,0 +1,10 @@
+id: MEM-02
+group: memory
+title: "Resumen semanal"
+criteria: ["CA-X02"]
+requires: ["weekly_summary"]
+turns:
+  - user: "Dame el resumen de la semana."
+expect:
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  rubric: ["CA-X02"]

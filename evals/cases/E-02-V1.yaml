@@ -1,0 +1,19 @@
+id: E-02-V1
+group: variant
+title: "Día con menos ventas y cómo mejorarlo"
+criteria: ["CA-E02-7", "CA-V05"]
+turns:
+  - user: "¿Qué día de la semana vendo menos y cómo lo arreglo?"
+expect:
+  tools_required: ["sales_breakdown", "audience_reach"]
+  tools_optional:
+    ["campaign_performance", "offer_economics", "estimate_campaign_impact", "customer_segments"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["chart"]
+  golden: E-02
+  figures:
+    - worst.transactions_per_day
+  must_mention:
+    - "martes"
+    - "por d[ií]a"
+  rubric: ["CA-E02-1", "CA-E02-2", "CA-E02-3", "CA-E02-4", "CA-E02-5", "CA-E02-6"]

@@ -1,0 +1,11 @@
+id: FAIL-404
+group: fault
+title: "Cliente inexistente"
+criteria: ["CA-N05"]
+turns:
+  - user: "¿Qué tanto ha comprado el cliente cus_999999?"
+expect:
+  tools_required: ["lookup"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  honest_refusal: true
+  rubric: ["CA-N05"]
