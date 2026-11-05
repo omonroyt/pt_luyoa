@@ -36,6 +36,12 @@ describe("buildSystemPrompt", () => {
     expect(prompt).toContain("ni sumas, ni restas, ni porcentajes");
     expect(prompt).toContain("utilidad antes de descuentos");
     expect(prompt).toContain('evita absolutos ("nadie", "todos", "siempre")');
+    expect(prompt).toContain('sin agregar "+" ("18,000+")');
+  });
+
+  it("al comparar dos meses pide la utilidad bruta de ambos (CA-E01-1)", () => {
+    const prompt = buildSystemPrompt({ context, capabilities: NONE });
+    expect(prompt).toContain("ticket promedio y utilidad bruta");
   });
 
   it("declara la política de periodos por defecto con las claves del calendario", () => {
@@ -61,6 +67,8 @@ describe("buildSystemPrompt", () => {
     expect(prompt).toContain("show_chart");
     expect(prompt).toContain("request_draft_approval");
     expect(prompt).toContain("en el mismo turno muestra la tarjeta");
+    expect(prompt).toContain("campañas pasadas usa show_table");
+    expect(prompt).toContain("No cuentes caracteres");
     expect(prompt).toContain("- Tope de descuento: 20%");
   });
 });
