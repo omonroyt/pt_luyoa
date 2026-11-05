@@ -204,6 +204,11 @@ La puerta de cifras sin fuente aplica a los grupos `scenario` y `variant`; en lo
 
 Ver ADR-13. Mínimo 4 modelos de familias distintas: uno de gama alta, uno rápido y barato de la misma familia, uno de otra familia de bajo costo y uno de pesos abiertos. Los ids exactos se fijan en `evals/models.json` el día de la medición.
 
+**Medición del 2026-11-04** (`evals/models.json`): `z-ai/glm-5.3-flash`, `anthropic/claude-haiku-5.5`, `openai/gpt-6.1-terra` y `google/gemini-4-argon`, con el juez `minimax/minimax-m3.1-flash`.
+- **DeepSeek V4.1 Flash quedó fuera.** La cuenta de OpenRouter bloquea a los proveedores que entrenan con datos de pago, y el endpoint original de DeepSeek es uno de ellos ("Filter by Guardrails … Paid model training violation"). Medirlo con proveedores de terceros contradice la política de proveedor original de ADR-13. Cambiar la configuración de privacidad de la cuenta es decisión del responsable y no se hizo.
+- **Comandos:** `pnpm compare -- --smoke` corre los escenarios y el ejemplo una vez por modelo. `pnpm compare -- --full` corre todos los casos con las repeticiones de `models.json`. `--model id` limita los modelos. Cada modelo escribe su reporte y la comparación escribe `AAAA-MM-DD-compare-<humo|completa>.md` y `.json`, con la tabla de §5.3 y la regla de §5.4.
+- **Alcance de la corrida completa:** el humo dejó a GLM-5.3-Flash y Claude Haiku 5.5 como punteros. Por decisión del responsable, la completa (34 casos ejecutables × 3) se corre solo con esos dos. Terra y Gemini quedan medidos con el humo.
+
 ### 5.3 Reporte
 
 `evals/reports/AAAA-MM-DD-compare.md` y `.json`:
