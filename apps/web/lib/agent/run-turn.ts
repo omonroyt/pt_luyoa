@@ -21,6 +21,7 @@ import {
   type UIMessage,
 } from "ai";
 import type { MCPClient } from "@ai-sdk/mcp";
+import { approvalStepPolicy, type StepLike } from "./approval-policy";
 import { createApprovalTools } from "./approval-tools";
 import { loadBusinessContext } from "./business-context";
 import { connectMcpClient, type McpConnection } from "./mcp-tools";
@@ -136,6 +137,20 @@ export function finalStepPolicy(instructions: string) {
       : undefined;
 }
 
+/**
+ * ES: Política de cada paso: primero el control de aprobación (una tarjeta mostrada sin
+ *     pedir aprobación obliga a pedirla, incluso en el último paso) y luego el cierre
+ *     del último paso.
+ * EN: Per-step policy: first the approval control (a card shown without asking for
+ *     approval forces the request, even on the last step) and then the last-step closing.
+ */
+export function turnStepPolicy(instructions: string) {
+  const approval = approvalStepPolicy();
+  const final = finalStepPolicy(instructions);
+  return (options: { stepNumber: number; steps: ReadonlyArray<StepLike> }) =>
+    approval(options) ?? final(options);
+}
+
 export async function streamAgentTurn(
   messages: UIMessage[],
   dependencies: TurnDependencies,
@@ -159,7 +174,7 @@ export async function streamAgentTurn(
       messages: await convertToModelMessages(messages),
       tools,
       stopWhen: isStepCount(MAX_STEPS),
-      prepareStep: finalStepPolicy(instructions),
+      prepareStep: turnStepPolicy(instructions),
       ...tracer.callbacks,
       onEnd: close,
       onAbort: close,

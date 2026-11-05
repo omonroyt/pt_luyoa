@@ -135,6 +135,9 @@ function campaignSection(capabilities: AgentCapabilities): string[] {
     "  con show_campaign_card y llama request_draft_approval. La aprobación se da con los",
     "  botones de la interfaz, no en el texto: no preguntes por escrito si la preparas.",
     "- Si la persona pide cambios, recalcula el alcance y vuelve a pedir aprobación.",
+    "- Toda tarjeta de campaña va seguida de su aprobación: request_draft_approval para una",
+    "  propuesta y request_send_approval para un borrador. Escribe tu explicación antes de",
+    "  mostrar la tarjeta, porque al pedir la aprobación el turno espera a la persona.",
   ];
 }
 
