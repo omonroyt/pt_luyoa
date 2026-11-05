@@ -26,7 +26,7 @@
 | ADR-10 | Drizzle + libSQL (SQLite local, Turso en la nube) | Aceptada |
 | ADR-11 | Trazas propias en BD, OpenTelemetry opcional | Aceptada |
 | ADR-12 | Evaluaciones: verificaciones deterministas + juez con rúbrica | Aceptada |
-| ADR-13 | Elección de modelo por medición | Aceptada para desarrollo; se cierra en M6 |
+| ADR-13 | Elección de modelo por medición | Aceptada; cerrada en M6 con `anthropic/claude-haiku-5.5` |
 | ADR-14 | Vercel + Turso para la demo publicada | Propuesta |
 | ADR-15 | Recharts para gráficas | Aceptada |
 | ADR-16 | Multi-negocio por configuración aislada | Aceptada |
@@ -166,15 +166,15 @@
 
 ## ADR-13 · Elección de modelo por medición
 
-- **Estado:** Aceptada para desarrollo; la elección final se cierra con la comparación de modelos (M6).
+- **Estado:** Aceptada. Se cerró en M6: el modelo del agente es `anthropic/claude-haiku-5.5` (ver "Decisión final" al final de este ADR).
 - **Decisión:** comparar al menos 4 modelos de OpenRouter con el set de evaluación completo, midiendo calidad (puntaje del corredor), costo por conversación (desde el `usage` de OpenRouter) y latencia (primer token y total).
 - **Estudio previo (2026-11-04):** se revisaron los 454 modelos del catálogo de OpenRouter (389 con herramientas) y se puntuaron 16 con criterios fijados de antemano: uso de herramientas (AutomationBench de Artificial Analysis, 30%), veracidad (alucinación en AA-Omniscience, 25%), costo por conversación con el perfil de tokens medido (20%), latencia (10%) y disponibilidad (5%). La calidad del español no tiene medición comparable entre fabricantes y se mide en M6.
-- **Modelo de desarrollo:** `z-ai/glm-5.3-flash`, solo con el proveedor original y sin versiones de precisión reducida (fp4). Desde M6, cuando se conoce el proveedor original, OpenRouter no recurre a otros (`allow_fallbacks: false`): en la corrida de humo, un proveedor de respaldo devolvió una llamada a herramienta incompleta y el turno falló. La contrapartida es que, si el proveedor original falla, el turno falla y la interfaz ofrece reintentar. **Hallazgo de M6:** Z.AI rechazaba todas las solicitudes del agente, porque la tarjeta de campaña tenía un esquema con tupla (`z.tuple`), y el respaldo las mandaba en silencio a otros proveedores. Las mediciones de GLM anteriores al tercer humo de M6 (prueba de compatibilidad, M4, M5 y primer humo) probablemente no fueron de Z.AI. Los rangos ahora son listas de dos números y una prueba impide volver a usar tuplas en los bloques. Es el único candidato que queda entre los tres primeros con cualquier combinación de pesos probada. Respaldo: `deepseek/deepseek-v4.1-flash-1017`.
+- **Modelo de desarrollo (M4 y M5):** `z-ai/glm-5.3-flash`, solo con el proveedor original y sin versiones de precisión reducida (fp4). Desde M6, cuando se conoce el proveedor original, OpenRouter no recurre a otros (`allow_fallbacks: false`): en la corrida de humo, un proveedor de respaldo devolvió una llamada a herramienta incompleta y el turno falló. La contrapartida es que, si el proveedor original falla, el turno falla y la interfaz ofrece reintentar. **Hallazgo de M6:** Z.AI rechazaba todas las solicitudes del agente, porque la tarjeta de campaña tenía un esquema con tupla (`z.tuple`), y el respaldo las mandaba en silencio a otros proveedores. Las mediciones de GLM anteriores al tercer humo de M6 (prueba de compatibilidad, M4, M5 y primer humo) probablemente no fueron de Z.AI. Los rangos ahora son listas de dos números y una prueba impide volver a usar tuplas en los bloques. Es el único candidato que queda entre los tres primeros con cualquier combinación de pesos probada. Respaldo: `deepseek/deepseek-v4.1-flash-1017`.
 - **Candidatos de M6:**
 
   | Modelo | Familia | Papel |
   |---|---|---|
-  | `z-ai/glm-5.3-flash` | Z.ai, pesos abiertos | Modelo de desarrollo |
+  | `z-ai/glm-5.3-flash` | Z.ai, pesos abiertos | Modelo de desarrollo (M4 y M5) |
   | `deepseek/deepseek-v4.1-flash-1017` | DeepSeek, pesos abiertos | Mayor puntaje base; vigilar veracidad |
   | `anthropic/claude-haiku-5.5` | Anthropic | Cerrado de bajo costo |
   | `openai/gpt-6.1-terra` | OpenAI | Cerrado de gama media |
@@ -185,6 +185,26 @@
 - **Prueba de compatibilidad (2026-11-04):** los cinco candidatos completaron una pregunta de dos herramientas por el stack real (AI SDK 7, `@openrouter/ai-sdk-provider` y cliente MCP), sin argumentos inválidos y citando fuentes reales; costo total 0.037 USD. Reporte: `evals/reports/2026-11-04-compat.json`. Tres modelos sumaron cifras en el texto en lugar de citar las de la herramienta, lo que confirma la necesidad del verificador de cifras (ADR-09).
 - **Criterios de desempate:** confiabilidad al llamar herramientas, calidad del español, respeto de la aprobación y costo.
 - **Opción de dos modelos:** si los números lo justifican, uno principal para el agente y uno barato para el juez o para el resumen semanal.
+
+- **Decisión final (M6, 2026-11-04): `anthropic/claude-haiku-5.5`.**
+  - **Medición:** corrida completa de 36 casos × 2 repeticiones, con el mismo prompt, herramientas, API real, verificador de cifras y juez (`evals/reports/2026-11-04-compare-completa-recalificada.md`):
+
+    | Modelo | Puntaje | Casos con cifras sin fuente | USD / conversación | Total p50 / p95 | Llamadas al modelo |
+    |---|---|---|---|---|---|
+    | `z-ai/glm-5.3-flash` | 0.94 ± 0.08 | 5 | 0.0050 | 20.2 / 83.3 s | 6.0 |
+    | `anthropic/claude-haiku-5.5` | 0.92 ± 0.08 | 0 | 0.0107 | 10.1 / 34.8 s | 4.2 |
+
+  - **Por qué:** GLM-5.3-Flash dio cifras sin fuente en 5 casos de escenarios y variantes: sumas ("391" = 219 + 172; "577" = 330 + 247), una proporción ("2.5 veces"), una diferencia que no coincide con los datos y la longitud del mensaje contada por el modelo. Con eso se cumplen dos condiciones de la regla de cambio del estudio: cifra inventada en los escenarios, y un candidato que lo iguala sin puertas duras. Haiku no dio cifras sin fuente en esos grupos, responde en la mitad del tiempo y su costo cabe en el presupuesto.
+  - **Controles de la medición:**
+    - cada cifra marcada se revisó a mano y se corrigieron los falsos positivos del verificador (años, truncamiento, miles abreviados y aproximaciones marcadas);
+    - las transcripciones guardadas se recalificaron con `pnpm rescore`; GLM pasó de 7 a 5 casos con puerta dura y Haiku siguió en 0;
+    - una corrida anterior se descartó por el límite de solicitudes de la API.
+  - **Contraste con el estudio previo:** Haiku tenía el menor puntaje del grupo en uso de herramientas (AutomationBench 35.4%), pero en esta carga no inventó cifras y completó el flujo de doble aprobación. Además, las mediciones previas de GLM probablemente no fueron de su proveedor original (ver arriba). La medición propia sustituye a las métricas generales para esta decisión.
+  - **Límites:**
+    - 2 repeticiones de las 3 previstas, por el tope de gasto;
+    - Terra (0.81) y Gemini Argon (0.93, 14 veces el costo de GLM) solo se midieron en la corrida de humo;
+    - DeepSeek quedó fuera por la configuración de privacidad de la cuenta.
+  - **Consecuencia:** `OPENROUTER_MODEL=anthropic/claude-haiku-5.5` en el entorno de la app (configuración del responsable). La política de proveedor original aplica: Anthropic sin respaldo de otros proveedores.
 
 ## ADR-14 · Vercel + Turso para la demo publicada
 
