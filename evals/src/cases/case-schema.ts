@@ -63,6 +63,9 @@ export type ApprovalReply = z.infer<typeof ApprovalReply>;
 const Turn = z.object({
   user: z.string().min(1),
   approvals: z.array(ApprovalReply).default([]),
+  // ES: El turno abre una conversación nueva del mismo negocio (memoria entre conversaciones).
+  // EN: The turn opens a new conversation of the same business (memory across conversations).
+  new_conversation: z.boolean().default(false),
 });
 
 // ES: Falla que la API responde en lugar del dato real, las primeras `times` veces.
@@ -96,13 +99,18 @@ const Expect = z.object({
 });
 export type Expect = z.infer<typeof Expect>;
 
+// ES: Funciones de M7 que un caso puede necesitar, y las que el corredor ya soporta.
+// EN: M7 features a case may need, and the ones the runner already supports.
+const REQUIREMENTS = ["memory", "weekly_summary"] as const;
+const SUPPORTED: ReadonlyArray<string> = ["memory", "weekly_summary"];
+
 export const EvalCase = z
   .object({
     id: z.string().regex(/^[A-Z0-9-]+$/),
     group: z.enum(GROUPS),
     title: z.string().min(1),
     criteria: z.array(z.string()).min(1),
-    requires: z.array(z.enum(["memory", "weekly_summary"])).default([]),
+    requires: z.array(z.enum(REQUIREMENTS)).default([]),
     turns: z.array(Turn).min(1),
     faults: z.array(Fault).default([]),
     expect: Expect,
@@ -124,3 +132,6 @@ export const EvalCase = z
     }
   });
 export type EvalCase = z.infer<typeof EvalCase>;
+
+export const missingRequirements = (evalCase: Pick<EvalCase, "requires">): string[] =>
+  evalCase.requires.filter((requirement) => !SUPPORTED.includes(requirement));

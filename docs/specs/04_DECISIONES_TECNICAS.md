@@ -219,6 +219,7 @@
 - **Alternativas:** Render, Fly.io o Railway con un contenedor; Cloudflare.
 - **Por qué:** despliegue directo desde GitHub, variables de entorno cifradas y niveles gratuitos suficientes.
 - **Consecuencias:** límite de duración por función; protección de la demo con código de acceso, límite de mensajes y tope de gasto.
+- **Cron (M7):** `apps/web/vercel.json` programa `/api/cron/weekly` los lunes a las 13:00 UTC. La ruta exige `Authorization: Bearer CRON_SECRET`, que Vercel envía cuando la variable está configurada.
 
 ## ADR-15 · Recharts para gráficas
 
@@ -229,9 +230,31 @@
 ## ADR-16 · Multi-negocio por configuración aislada
 
 - **Contexto:** X-05 pide un diseño para varios negocios con datos y permisos separados.
-- **Decisión:** cada negocio es un registro `BUSINESS` con referencia a su llave de API (nombre de variable de entorno), modelo, memoria, conversaciones, aprobaciones y resúmenes. La sesión de la interfaz y el token de servicio del MCP están ligados a un negocio; toda consulta a BD y toda llamada a la API se filtra por ese negocio.
-- **Alternativas:** una base de datos por negocio; solo documentar el diseño.
-- **Por qué:** aislamiento suficiente con un solo despliegue; la demo usa un negocio, pero las pruebas verifican el aislamiento con dos (CA-X05).
+- **Decisión:** aislamiento lógico en un solo despliegue y una sola base de datos.
+  - **Registro.** La variable opcional `BUSINESSES` lista cada negocio con su id, su nombre y el *nombre* de las variables que guardan su llave de la API y su token del MCP (`lib/tenancy/business-registry.ts`). Sin `BUSINESSES` se arma un solo negocio con `BUSINESS_ID`, `LUYOA_API_KEY` y `MCP_SERVICE_TOKEN`.
+  - **Validación al arrancar.** Se rechazan ids, llaves o tokens repetidos entre negocios y las variables faltantes. Los errores nombran variables, nunca valores.
+  - **Un servidor MCP por negocio** (`lib/mcp/runtime.ts`), con su propio cliente de la API: su llave, su caché y su límite de solicitudes.
+  - **Candado de identidad.** El servidor MCP recibe el `businessId` esperado y no entrega datos si la llave responde con otro negocio.
+  - **El negocio de una solicitud sale siempre de una credencial del servidor** (`lib/tenancy/current-business.ts`), nunca de un dato que manda el navegador:
+    - en `/api/mcp`, del token de servicio, comparado en tiempo constante contra todos los negocios;
+    - en las rutas de la interfaz, del negocio por defecto hasta que el código de acceso del despliegue (IMP-63) lo ligue a la sesión.
+  - **Datos por fila.** Conversaciones, trazas, aprobaciones, preferencias y resúmenes guardan `business_id`, y cada almacén recibe el negocio al crearse.
+  - **Cron.** Genera un resumen por cada negocio registrado, por separado.
+- **Alternativas:**
+  - **Un despliegue por negocio.** El aislamiento más fuerte, pero N despliegues, N bases y N crons, y no se puede demostrar con pruebas.
+  - **Una base de datos por negocio.** Separación física, pero migraciones repetidas y una conexión por negocio.
+  - **Negocios y llaves cifradas en una tabla.** Exige llave maestra y rotación, y la base pasa a guardar secretos.
+  - **Todo el registro con sus secretos en un solo JSON.** Mezcla todos los secretos y el escaneo no los reconoce.
+  - **Registro en un archivo versionado.** La lista de clientes de un despliegue es un dato de operación, no código.
+  - **Elegir el negocio con un encabezado o parámetro.** El navegador podría suplantar a otro negocio.
+  - **Un servidor MCP que cambia de llave por solicitud.** La caché compartida filtraría datos entre negocios.
+  - **Solo documentar el diseño.**
+- **Por qué:** es aislamiento suficiente con un solo despliegue y se demuestra con pruebas. La demo usa un negocio, y las pruebas verifican el aislamiento con dos (CA-X05).
+- **Consecuencias:**
+  - El aislamiento depende de que el código filtre por negocio. Por eso el negocio se fija al crear cada almacén y cada servidor, y hay pruebas con dos negocios configurados a la vez (`two-businesses.test.ts`, `business-registry.test.ts`, y las pruebas de los almacenes de preferencias, resúmenes y trazas).
+  - Todos los negocios comparten `APPROVAL_SECRET`. El negocio va dentro del token firmado y se compara con el de la llave, así que una llave por negocio no cerraría ningún hueco adicional.
+  - Todos los negocios usan el mismo modelo. Un modelo por negocio queda como trabajo futuro.
+  - Si un cliente exigiera separación física, el paso siguiente es una base por negocio, sin cambiar el registro ni el candado.
 
 ## ADR-17 · Manejo de secretos y escaneo
 

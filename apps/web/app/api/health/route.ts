@@ -14,6 +14,7 @@ export function GET(): NextResponse {
       OPENROUTER_API_KEY: configured("OPENROUTER_API_KEY"),
       APPROVAL_SECRET: configured("APPROVAL_SECRET"),
       MCP_SERVICE_TOKEN: configured("MCP_SERVICE_TOKEN"),
+      BUSINESSES: configured("BUSINESSES"),
     },
   });
 }

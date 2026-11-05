@@ -159,12 +159,15 @@ function readOnly(tools: ToolSet): ToolSet {
 
 async function main(): Promise<void> {
   const config = serverConfig();
+  const [business] = config.businesses;
+  if (!business) throw new Error("No hay negocios registrados.");
   const { openRouterApiKey } = agentConfig();
   const createServer = createServerFactory({
-    apiKey: config.apiKey,
+    apiKey: business.apiKey,
     apiBaseUrl: config.apiBaseUrl,
+    businessId: business.id,
   });
-  const client = await connectMcpClient({ serviceToken: config.mcpServiceToken, createServer });
+  const client = await connectMcpClient({ serviceToken: business.mcpServiceToken, createServer });
   const results: CompatResult[] = [];
   try {
     const tools = readOnly(await client.tools());

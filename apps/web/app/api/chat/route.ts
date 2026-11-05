@@ -14,7 +14,8 @@ import { saveTurn } from "@/lib/agent/trace-store";
 import { isSameOrigin } from "@/lib/auth/service-token";
 import { getDatabase } from "@/lib/db/client";
 import { mcpServerFactory } from "@/lib/mcp/runtime";
-import { serverConfig } from "@/lib/server-config";
+import { createDbPreferenceStore, deferredPreferenceStore } from "@/lib/memory/preference-store";
+import { currentBusiness } from "@/lib/tenancy/current-business";
 
 // ES: Un turno con varias herramientas puede tardar decenas de segundos.
 // EN: A turn with several tools can take tens of seconds.
@@ -29,16 +30,19 @@ export async function POST(request: Request): Promise<Response> {
   if (!parsed.ok) {
     return errorResponse(400, "validation_error", "Mensajes del chat inválidos.");
   }
-  const config = serverConfig();
+  const business = currentBusiness();
   const agent = agentConfig();
   return streamAgentTurn(parsed.messages, {
     model: createAgentModel({ apiKey: agent.openRouterApiKey, modelId: agent.modelId }),
-    mcp: { serviceToken: config.mcpServiceToken, createServer: mcpServerFactory() },
+    mcp: { serviceToken: business.mcpServiceToken, createServer: mcpServerFactory(business) },
+    memory: deferredPreferenceStore(async () =>
+      createDbPreferenceStore(await getDatabase(), business.id),
+    ),
     persist: async (turn) =>
       saveTurn(await getDatabase(), {
         ...turn,
         conversationId: parsed.conversationId,
-        businessId: config.businessId,
+        businessId: business.id,
       }),
   });
 }

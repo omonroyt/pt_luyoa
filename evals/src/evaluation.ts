@@ -12,7 +12,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { MESSAGE_LIMITS } from "@alborada/shared";
 import type { Budget } from "./budget";
 import { agentConfig, createAgentModel } from "@alborada/web/agent";
-import type { EvalCase } from "./cases/case-schema";
+import { missingRequirements, type EvalCase } from "./cases/case-schema";
 import { loadCriteria } from "./cases/criteria";
 import { evaluateCase, type CaseResult } from "./evaluate-case";
 import type { CaseTranscript } from "./runner/run-case";
@@ -116,7 +116,7 @@ export async function runEvaluation(request: RunRequest): Promise<RunReport & { 
       raw.transcripts.push({ caseId, repeat, transcript }),
     budget: request.budget,
   };
-  const runnable = request.cases.filter((item) => item.requires.length === 0).length;
+  const runnable = request.cases.filter((item) => missingRequirements(item).length === 0).length;
   console.log(
     `Modelo ${request.model} · juez ${request.judge ?? "ninguno"} · ${runnable} casos × ${request.repeats} = ${runnable * request.repeats} conversaciones`,
   );

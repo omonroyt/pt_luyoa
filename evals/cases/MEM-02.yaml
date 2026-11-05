@@ -6,5 +6,10 @@ requires: ["weekly_summary"]
 turns:
   - user: "Dame el resumen de la semana."
 expect:
+  tools_required: ["compare_periods"]
+  tools_optional: ["location_health", "customer_segments", "campaign_performance", "audience_reach"]
   tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["kpis"]
+  must_mention:
+    - "semana"
   rubric: ["CA-X02"]

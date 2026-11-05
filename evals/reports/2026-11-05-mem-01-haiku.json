@@ -1,0 +1,1538 @@
+{
+  "meta": {
+    "date": "2026-11-05",
+    "label": "mem-01-haiku",
+    "model": "anthropic/claude-haiku-5.5",
+    "judgeModel": "minimax/minimax-m3.1-flash",
+    "commit": "6b21672",
+    "promptVersion": "6f75d74cb7eb",
+    "dataAsOf": "2026-10-31",
+    "repeats": 1
+  },
+  "summary": {
+    "cases": 1,
+    "ran": 1,
+    "skipped": 0,
+    "errors": 0,
+    "meanScore": 1,
+    "scoreDeviation": null,
+    "hardGateFailures": 0,
+    "scenarioFigureAccuracy": null,
+    "unsourcedFigures": 0,
+    "controlViolations": 0,
+    "honestNegatives": null,
+    "agentCostUsd": 0.0133775,
+    "judgeCostUsd": 0.000814155,
+    "costPerConversationUsd": 0.0133775,
+    "firstTextP50Ms": 4527.9548,
+    "firstTextP95Ms": 4527.9548,
+    "totalP50Ms": 22693.13,
+    "totalP95Ms": 22693.13,
+    "llmCallsMean": 6
+  },
+  "results": [
+    {
+      "caseId": "MEM-01",
+      "group": "memory",
+      "title": "Preferencia guardada y aplicada después",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 1,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 1
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 1,
+        "items": [
+          {
+            "id": "CA-X04",
+            "verdict": "cumple",
+            "reason": "Confirma haber guardado WhatsApp como canal preferido y efectivamente propone la campaña por ese canal, con email y push solo como alternativas mencionadas."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "cumple",
+            "reason": "Define audiencia (483 clientes en riesgo, 10+ visitas y 30-90 días sin venir), canal (WhatsApp), oferta (Concha gratis), vigencia (2026-11-01 a 2026-11-14) y alcance real (267 alcanzables)."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "cumple",
+            "reason": "Las afirmaciones clave traen métrica y valor: lift 23.9 pts con IC 11.7-36, alcance 267 vs 330 por email, costo $10 por canje, margen $56.54 por visita, ticket $93.72 y utilidades de los últimos 3 meses, con comparación contra el grupo de control."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Evalúa costo por canje ($10), margen tras la oferta ($56.54) y costo total del canje, y la oferta de bebida gratis resulta razonable frente al margen por visita."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Señala el grupo de control pequeño (67 clientes), confiabilidad media, que la audiencia de referencia era distinta y que el lift no es directo, además de que el alcance por email es mayor."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde de inmediato con la campaña propuesta y luego las advertencias, sin relleno técnico innecesario y con montos y cifras legibles."
+          }
+        ],
+        "costUsd": 0.000814155
+      },
+      "usage": {
+        "agentCostUsd": 0.0133775,
+        "judgeCostUsd": 0.000814155,
+        "tokensIn": 116945,
+        "tokensOut": 3366,
+        "llmCalls": 6,
+        "requests": 2,
+        "firstTextMs": 4527.9548,
+        "totalMs": 22693.13,
+        "streamErrors": []
+      },
+      "pendingApproval": true,
+      "excerpt": {
+        "text": "Listo, guardé WhatsApp como tu canal preferido para tus campañas. Al proponer una, la armaré por ese canal salvo que me pidas otro.\nPropongo una campaña de WhatsApp para los 483 clientes en riesgo (10 o más visitas, entre 30 y 90 días sin venir). Con WhatsApp, que es tu canal preferido, puedo contactar a 267. La oferta es una Concha gratis, igual que en \"Te extrañamos\", la campaña de recuperación con mejor resultado medido.\n\nTres advertencias antes de que decidas:\n- La referencia tuvo grupo de control, pero es pequeño (67 clientes) y su confiabilidad es media. Su audiencia era distinta (4 o más visitas y 21 o más días sin venir), así que el lift no es directo.\n- El alcance por email es mayor (330), pero no es tu canal preferido. Si prefieres email, lo ajusto.\n- La Concha cuesta $10 por canje y deja un margen de $56.54 por visita, según la utilidad bruta de los últimos 3 meses.",
+        "steps": [
+          "remember_preference",
+          "customer_segments",
+          "campaign_performance",
+          "audience_reach",
+          "estimate_campaign_impact",
+          "offer_economics",
+          "show_campaign_card",
+          "request_draft_approval"
+        ],
+        "blocks": [
+          "campaign_card"
+        ],
+        "replies": [],
+        "toolResults": [
+          "{\"data\":{\"home_location\":null,\"segments\":[{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483,\"avg_spend\":3276.78,\"consent_rates\":{\"push\":0.5052,\"whatsapp\":0.5569,\"email\":0.6874}}],\"total_customers\":483},\"notes\":[\"Segmentos calculados a la fecha de corte (2026-10-31).\",\"total_customers suma los segmentos pedidos; los segmentos son excluyentes.\",\"El tamaño del segmento no es el alcance: para saber a cuántos se puede contactar usar audience_reach.\"],\"warnings\":[],\"source\":{\"id\":\"src_4ddcf335f8\",\"tool\":\"customer_segments\",\"endpoints\":[\"GET /v1/business\",\"GET /v1/locations\",\"GET /v1/segments\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:01.130Z\"}}",
+          "{\"data\":{\"campaigns\":[{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"objective\":\"Recuperar clientes inactivos\",\"status\":\"completed\",\"channel\":\"whatsapp\",\"audience_description\":\"Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp\",\"offer\":{\"type\":\"free_item\",\"value\":null,\"product_id\":\"prd_concha\",\"product_name\":\"Concha\"},\"valid_from\":\"2026-06-08\",\"valid_to\":\"2026-06-21\",\"results\":{\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"}},{\"id\":\"cmp_0002\",\"name\":\"Martes de 2x1 en Americano\",\"objective\":\"Piloto para mover tráfico de martes\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes de Coyoacán con wallet y consentimiento de push\",\"offer\":{\"type\":\"two_for_one\",\"value\":null,\"product_id\":\"prd_americano\",\"product_name\":\"Americano\"},\"valid_from\":\"2026-02-03\",\"valid_to\":\"2026-02-24\",\"results\":{\"sent\":383,\"delivered\":372,\"redeemed\":153,\"control_size\":0,\"open_rate_percent\":61,\"redemption_rate_percent\":39.9,\"treatment_visit_rate_percent\":76,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":13296,\"discount_cost\":9984,\"attributed_gross_profit\":7899,\"cost_per_redemption\":65.25,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0001\",\"name\":\"20% en todo por Buen Fin\",\"objective\":\"Subir ventas en Buen Fin\",\"status\":\"completed\",\"channel\":\"email\",\"audience_description\":\"Todos los clientes con consentimiento de email\",\"offer\":{\"type\":\"percent_off\",\"value\":20,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2025-11-14\",\"valid_to\":\"2025-",
+          "{\"data\":{\"audience\":{\"segment_id\":\"at_risk\"},\"matched\":483,\"by_channel\":[{\"channel\":\"email\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":151,\"excluded_duplicates\":2,\"reachable\":330},{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},{\"channel\":\"push\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":239,\"excluded_duplicates\":2,\"reachable\":242}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_4d3176cf45\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:05.548Z\"}}",
+          "{\"data\":{\"reach\":{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},\"offer_economics\":{\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"]},\"reference_campaign\":{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"},\"similar_campaigns\":[\"cmp_0004\"],\"impact\":{\"kind\":\"incremental\",\"extra_visits\":[31,64,96],\"extra_net_sales\":[2905.32,5998.08,8997.12],\"expected_redemptions\":[84,84,84],\"offer_cost\":[840,840,840],\"net_gross_profit\":[1222.74,3418.56,5547.84],\"confidence\":\"media\"}},\"notes\":[\"Rangos en orden [bajo, central, alto]; la utilidad neta es conservadora (bajo = menor utilidad con mayor costo).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Supuesto: las visitas adicionales tienen el ticket promedio del negocio.\"],\"warnings\":[\"Una sola campaña de referencia: los canjes esperados no tienen rango de variación.\"],\"source\":{\"id\":\"src_4dbc58f1e6\",\"tool\":\"estimate_campaign_impact\",\"endpoints\":[\"POST /v1/campaigns/preview\",\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:06.096Z\"}}",
+          "{\"data\":{\"offer\":{\"type\":\"free_item\",\"product_id\":\"prd_concha\"},\"product_name\":\"Concha\",\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"total_cost\":null},\"notes\":[\"Costo unitario de Concha regalado ($10).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"warnings\":[],\"source\":{\"id\":\"src_d8bd7a9096\",\"tool\":\"offer_economics\",\"endpoints\":[\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:06.545Z\"}}",
+          "{\"id\":\"biz_alborada\",\"name\":\"Café Alborada\",\"timezone\":\"America/Mexico_City\",\"currency\":\"MXN\",\"data_from\":\"2025-11-01\",\"data_as_of\":\"2026-10-31\",\"points_rule\":\"1 punto por cada $10 MXN pagados\",\"reward_rule\":\"150 puntos = una bebida gratis (hasta $68 MXN)\"}",
+          "{\"data\":[{\"id\":\"champions\",\"description\":\"8 o más visitas en los últimos 60 días\",\"customers\":216,\"avg_spend\":7998.77,\"total_spend\":1727735.2,\"push_consent_rate\":0.5,\"whatsapp_consent_rate\":0.5185,\"email_consent_rate\":0.7037},{\"id\":\"regulars\",\"description\":\"3 a 7 visitas en los últimos 60 días\",\"customers\":337,\"avg_spend\":1588.89,\"total_spend\":535456.8,\"push_consent_rate\":0.4985,\"whatsapp_consent_rate\":0.5252,\"email_consent_rate\":0.6617},{\"id\":\"occasional\",\"description\":\"Clientes activos con menos de 3 visitas en los últimos 60 días\",\"customers\":456,\"avg_spend\":994.79,\"total_spend\":453624.8,\"push_consent_rate\":0.4737,\"whatsapp_consent_rate\":0.5548,\"email_consent_rate\":0.6601},{\"id\":\"new\",\"description\":\"Se inscribieron en los últimos 45 días\",\"customers\":171,\"avg_spend\":237.11,\"total_spend\":40546,\"push_consent_rate\":0.4737,\"whatsapp_consent_rate\":0.5789,\"email_consent_rate\":0.7602},{\"id\":\"at_risk\",\"description\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483,\"avg_spend\":3276.78,\"total_spend\":1582686.8,\"push_consent_rate\":0.5052,\"whatsapp_consent_rate\":0.5569,\"email_consent_rate\":0.6874},{\"id\":\"dormant\",\"description\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367,\"avg_spend\":1279.79,\"total_spend\":469681.6,\"push_consent_rate\":0.5259,\"whatsapp_consent_rate\":0.515,\"email_consent_rate\":0.6812}]}",
+          "{\"message_limits\":{\"push\":140,\"whatsapp\":1024,\"email\":5000}}"
+        ]
+      }
+    }
+  ],
+  "raw": {
+    "context": [
+      {
+        "id": "biz_alborada",
+        "name": "Café Alborada",
+        "timezone": "America/Mexico_City",
+        "currency": "MXN",
+        "data_from": "2025-11-01",
+        "data_as_of": "2026-10-31",
+        "points_rule": "1 punto por cada $10 MXN pagados",
+        "reward_rule": "150 puntos = una bebida gratis (hasta $68 MXN)"
+      },
+      {
+        "data": [
+          {
+            "id": "champions",
+            "description": "8 o más visitas en los últimos 60 días",
+            "customers": 216,
+            "avg_spend": 7998.77,
+            "total_spend": 1727735.2,
+            "push_consent_rate": 0.5,
+            "whatsapp_consent_rate": 0.5185,
+            "email_consent_rate": 0.7037
+          },
+          {
+            "id": "regulars",
+            "description": "3 a 7 visitas en los últimos 60 días",
+            "customers": 337,
+            "avg_spend": 1588.89,
+            "total_spend": 535456.8,
+            "push_consent_rate": 0.4985,
+            "whatsapp_consent_rate": 0.5252,
+            "email_consent_rate": 0.6617
+          },
+          {
+            "id": "occasional",
+            "description": "Clientes activos con menos de 3 visitas en los últimos 60 días",
+            "customers": 456,
+            "avg_spend": 994.79,
+            "total_spend": 453624.8,
+            "push_consent_rate": 0.4737,
+            "whatsapp_consent_rate": 0.5548,
+            "email_consent_rate": 0.6601
+          },
+          {
+            "id": "new",
+            "description": "Se inscribieron en los últimos 45 días",
+            "customers": 171,
+            "avg_spend": 237.11,
+            "total_spend": 40546,
+            "push_consent_rate": 0.4737,
+            "whatsapp_consent_rate": 0.5789,
+            "email_consent_rate": 0.7602
+          },
+          {
+            "id": "at_risk",
+            "description": "10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir",
+            "customers": 483,
+            "avg_spend": 3276.78,
+            "total_spend": 1582686.8,
+            "push_consent_rate": 0.5052,
+            "whatsapp_consent_rate": 0.5569,
+            "email_consent_rate": 0.6874
+          },
+          {
+            "id": "dormant",
+            "description": "Más de 90 días sin venir, o sin visitas registradas",
+            "customers": 367,
+            "avg_spend": 1279.79,
+            "total_spend": 469681.6,
+            "push_consent_rate": 0.5259,
+            "whatsapp_consent_rate": 0.515,
+            "email_consent_rate": 0.6812
+          }
+        ]
+      },
+      {
+        "message_limits": {
+          "push": 140,
+          "whatsapp": 1024,
+          "email": 5000
+        }
+      }
+    ],
+    "transcripts": [
+      {
+        "caseId": "MEM-01",
+        "repeat": 1,
+        "transcript": {
+          "caseId": "MEM-01",
+          "messages": [
+            {
+              "id": "u0",
+              "role": "user",
+              "parts": [
+                {
+                  "type": "text",
+                  "text": "Recuerda que para mis campañas prefiero WhatsApp."
+                }
+              ]
+            },
+            {
+              "id": "msg-7YPBc2QQBANvKRSH",
+              "metadata": {
+                "model": "anthropic/claude-haiku-5.5",
+                "llmCalls": 2,
+                "toolCalls": 1,
+                "tokensIn": 39068,
+                "tokensOut": 186,
+                "costUsd": 0.0039997999999999995,
+                "latencyMs": 3915
+              },
+              "role": "assistant",
+              "parts": [
+                {
+                  "type": "step-start"
+                },
+                {
+                  "type": "tool-remember_preference",
+                  "toolCallId": "toolu_01AstPb29T99W33EQJ5NfwDL",
+                  "state": "output-available",
+                  "input": {
+                    "key": "preferred_channel",
+                    "value": "whatsapp",
+                    "reason": "La dueña pidió guardar WhatsApp como canal preferido para sus campañas."
+                  },
+                  "output": {
+                    "saved": true,
+                    "key": "preferred_channel",
+                    "label": "Canal preferido",
+                    "value": "whatsapp"
+                  },
+                  "callProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": []
+                    }
+                  },
+                  "resultProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": []
+                    }
+                  }
+                },
+                {
+                  "type": "step-start"
+                },
+                {
+                  "type": "text",
+                  "text": "Listo, guardé WhatsApp como tu canal preferido para tus campañas. Al proponer una, la armaré por ese canal salvo que me pidas otro.",
+                  "state": "done"
+                }
+              ]
+            },
+            {
+              "id": "u1",
+              "role": "user",
+              "parts": [
+                {
+                  "type": "text",
+                  "text": "Propón una campaña para recuperar a los clientes en riesgo."
+                }
+              ]
+            },
+            {
+              "id": "msg-lsvP0UDyF5WYeWMI",
+              "metadata": {
+                "model": "anthropic/claude-haiku-5.5",
+                "llmCalls": 4,
+                "toolCalls": 7,
+                "tokensIn": 77877,
+                "tokensOut": 3180,
+                "costUsd": 0.009377700000000001,
+                "latencyMs": 17868
+              },
+              "role": "assistant",
+              "parts": [
+                {
+                  "type": "step-start"
+                },
+                {
+                  "type": "reasoning",
+                  "id": "N72L4YFfFYqSvuKU",
+                  "text": "I'm planning to pull the business context and the at-risk customer segments first, and I'm wondering whether the context is actually needed before the segments. Customer segments and campaign performance can run in parallel either way.\n\n",
+                  "providerMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm planning to pull the business context and the at-risk customer segments first, and I'm wondering whether the context is actually needed before the segments. Customer segments and campaign performance can run in parallel either way.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "CAQS/gcKEAgTGAI4AUIIdGhpbmtpbmcSDEAJupMOlmbtOYd/vhoMEj0kHzru7e4i+vH4IjCqCgxUtDXNp9u5aoSZb2oqb+OhsdVDomg4JbWAM5PZthmFx6x5EABB5UVPGgKRXSYqmweQhvJZ51zqvxlsw0hMOJbyZl27o7PeYVa2EEZBDGnA6YDz09jOhAipvPNaxfKLPExdUPGzLXGIEu2l+IzTATF4MLVFmtkfDy7mbcnRm8BY5DxeJgcaEXp05PDsrrGswJEqDz8lZ967q7bPMs+HjP/f1J6GT/xbNkfditJqV3B5JY6ouiU9vdpmJrdiYO3bvqk7wjZMVEt9V48ygzt5HgRYU+g8bR+QZJTiZbA7+xuXgilKJuTv0JfxNwFAWtlup6griGJehW+O94r4XVmYLf2X+Z+MGD+lP1CUyk0xt9BgC61RTzw8MR5c9LTnI0c2nFSuZGB25iP3fwC5VPyVjyIn85Dzj/I5ByjxT/VAvYNSvSjYhRvD9oob3GS0UiBACu1INZbALaxDDnlbCAh/V3JtKeR38KE0NpUcjaustharOjZvfjUFP6gzGFX9EsyHGx2FQUtVO3N3w9UiO5rdCZISaUyJNsLBvlIaliiL0iUE5KQaNzMb5LU4V8za02o87DNRRNF7r0nojTbKCXNn+wVLoxQT3qIEnEeFb+wXnEc/UzHtPe2JP0po5P9h1zVyZnZcY98kUbITy2vgxyUP8DZFGsrkrNPtHzt4pCSa/vsTNCL1eV6wyRsxgO8D2WpoCx2dyfI4C+cKrEjnB6u0mvbB1MKvQ+RaIVGJ/Y73bKoawRlZPymwhLEuft12/mA4NablysUimSJ/ApE8XS62xZ7V866exGo5eqbr12GZQYVMS9HQLSlqcMcOZpUVxKvRD5XiusDKUkKvr8SujlQ1EAS9SNZD0iJFyYbZkIy27kAiyLA+rk8xhXM9a9M55NF+oQbmP+Cn5OKqlh/DJJT04zUKjLFcMPfmTSsWD/zVhqQzWqy23faKqYoqJZWJTA0XUEsOItee4/mJbpuFf6pnmzWVdl5P2X9spKd33tj2qp0kiUTJsiVBxxH9zvtoeVYepxYRGAl0nttGuZDcifm6QK6gtiOlbUxi6Mo+X/u2EiGyEPwog+S31dtk/350RrqYrW4/QRIP1GPT24sFFx6oOZNAEw0sBKB2CAJ2K/je36b8crCopwaUUE6BLUM7femQgdc5TsJMDl1OxSsXXuf4aEyequyOTUObAQ3qRwHaJWw8kvl0RZH/ObVlSb2kUrdoa4xSOrSVFFTgzt8Qf/kvqkdaCLsbgPtkizS2NM7oKZxz23rf2YRSi/HrYs1U+mui+7Fq0C4N8DqGDCzKwxgB.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  },
+                  "state": "done"
+                },
+                {
+                  "type": "dynamic-tool",
+                  "toolName": "customer_segments",
+                  "toolCallId": "toolu_0112hBTS5y3PoVgZNJSm8Wkq",
+                  "state": "output-available",
+                  "input": {
+                    "segment_ids": [
+                      "at_risk"
+                    ],
+                    "reason": "Dimensionar los clientes en riesgo antes de proponer la campaña."
+                  },
+                  "output": {
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "{\"data\":{\"home_location\":null,\"segments\":[{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483,\"avg_spend\":3276.78,\"consent_rates\":{\"push\":0.5052,\"whatsapp\":0.5569,\"email\":0.6874}}],\"total_customers\":483},\"notes\":[\"Segmentos calculados a la fecha de corte (2026-10-31).\",\"total_customers suma los segmentos pedidos; los segmentos son excluyentes.\",\"El tamaño del segmento no es el alcance: para saber a cuántos se puede contactar usar audience_reach.\"],\"warnings\":[],\"source\":{\"id\":\"src_4ddcf335f8\",\"tool\":\"customer_segments\",\"endpoints\":[\"GET /v1/business\",\"GET /v1/locations\",\"GET /v1/segments\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:01.130Z\"}}"
+                      }
+                    ],
+                    "isError": false
+                  },
+                  "title": "Segmentos de clientes",
+                  "toolMetadata": {
+                    "clientName": "ai-sdk-mcp-client",
+                    "toolName": "customer_segments",
+                    "title": "Segmentos de clientes"
+                  },
+                  "callProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm planning to pull the business context and the at-risk customer segments first, and I'm wondering whether the context is actually needed before the segments. Customer segments and campaign performance can run in parallel either way.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "CAQS/gcKEAgTGAI4AUIIdGhpbmtpbmcSDEAJupMOlmbtOYd/vhoMEj0kHzru7e4i+vH4IjCqCgxUtDXNp9u5aoSZb2oqb+OhsdVDomg4JbWAM5PZthmFx6x5EABB5UVPGgKRXSYqmweQhvJZ51zqvxlsw0hMOJbyZl27o7PeYVa2EEZBDGnA6YDz09jOhAipvPNaxfKLPExdUPGzLXGIEu2l+IzTATF4MLVFmtkfDy7mbcnRm8BY5DxeJgcaEXp05PDsrrGswJEqDz8lZ967q7bPMs+HjP/f1J6GT/xbNkfditJqV3B5JY6ouiU9vdpmJrdiYO3bvqk7wjZMVEt9V48ygzt5HgRYU+g8bR+QZJTiZbA7+xuXgilKJuTv0JfxNwFAWtlup6griGJehW+O94r4XVmYLf2X+Z+MGD+lP1CUyk0xt9BgC61RTzw8MR5c9LTnI0c2nFSuZGB25iP3fwC5VPyVjyIn85Dzj/I5ByjxT/VAvYNSvSjYhRvD9oob3GS0UiBACu1INZbALaxDDnlbCAh/V3JtKeR38KE0NpUcjaustharOjZvfjUFP6gzGFX9EsyHGx2FQUtVO3N3w9UiO5rdCZISaUyJNsLBvlIaliiL0iUE5KQaNzMb5LU4V8za02o87DNRRNF7r0nojTbKCXNn+wVLoxQT3qIEnEeFb+wXnEc/UzHtPe2JP0po5P9h1zVyZnZcY98kUbITy2vgxyUP8DZFGsrkrNPtHzt4pCSa/vsTNCL1eV6wyRsxgO8D2WpoCx2dyfI4C+cKrEjnB6u0mvbB1MKvQ+RaIVGJ/Y73bKoawRlZPymwhLEuft12/mA4NablysUimSJ/ApE8XS62xZ7V866exGo5eqbr12GZQYVMS9HQLSlqcMcOZpUVxKvRD5XiusDKUkKvr8SujlQ1EAS9SNZD0iJFyYbZkIy27kAiyLA+rk8xhXM9a9M55NF+oQbmP+Cn5OKqlh/DJJT04zUKjLFcMPfmTSsWD/zVhqQzWqy23faKqYoqJZWJTA0XUEsOItee4/mJbpuFf6pnmzWVdl5P2X9spKd33tj2qp0kiUTJsiVBxxH9zvtoeVYepxYRGAl0nttGuZDcifm6QK6gtiOlbUxi6Mo+X/u2EiGyEPwog+S31dtk/350RrqYrW4/QRIP1GPT24sFFx6oOZNAEw0sBKB2CAJ2K/je36b8crCopwaUUE6BLUM7femQgdc5TsJMDl1OxSsXXuf4aEyequyOTUObAQ3qRwHaJWw8kvl0RZH/ObVlSb2kUrdoa4xSOrSVFFTgzt8Qf/kvqkdaCLsbgPtkizS2NM7oKZxz23rf2YRSi/HrYs1U+mui+7Fq0C4N8DqGDCzKwxgB.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  },
+                  "resultProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm planning to pull the business context and the at-risk customer segments first, and I'm wondering whether the context is actually needed before the segments. Customer segments and campaign performance can run in parallel either way.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "CAQS/gcKEAgTGAI4AUIIdGhpbmtpbmcSDEAJupMOlmbtOYd/vhoMEj0kHzru7e4i+vH4IjCqCgxUtDXNp9u5aoSZb2oqb+OhsdVDomg4JbWAM5PZthmFx6x5EABB5UVPGgKRXSYqmweQhvJZ51zqvxlsw0hMOJbyZl27o7PeYVa2EEZBDGnA6YDz09jOhAipvPNaxfKLPExdUPGzLXGIEu2l+IzTATF4MLVFmtkfDy7mbcnRm8BY5DxeJgcaEXp05PDsrrGswJEqDz8lZ967q7bPMs+HjP/f1J6GT/xbNkfditJqV3B5JY6ouiU9vdpmJrdiYO3bvqk7wjZMVEt9V48ygzt5HgRYU+g8bR+QZJTiZbA7+xuXgilKJuTv0JfxNwFAWtlup6griGJehW+O94r4XVmYLf2X+Z+MGD+lP1CUyk0xt9BgC61RTzw8MR5c9LTnI0c2nFSuZGB25iP3fwC5VPyVjyIn85Dzj/I5ByjxT/VAvYNSvSjYhRvD9oob3GS0UiBACu1INZbALaxDDnlbCAh/V3JtKeR38KE0NpUcjaustharOjZvfjUFP6gzGFX9EsyHGx2FQUtVO3N3w9UiO5rdCZISaUyJNsLBvlIaliiL0iUE5KQaNzMb5LU4V8za02o87DNRRNF7r0nojTbKCXNn+wVLoxQT3qIEnEeFb+wXnEc/UzHtPe2JP0po5P9h1zVyZnZcY98kUbITy2vgxyUP8DZFGsrkrNPtHzt4pCSa/vsTNCL1eV6wyRsxgO8D2WpoCx2dyfI4C+cKrEjnB6u0mvbB1MKvQ+RaIVGJ/Y73bKoawRlZPymwhLEuft12/mA4NablysUimSJ/ApE8XS62xZ7V866exGo5eqbr12GZQYVMS9HQLSlqcMcOZpUVxKvRD5XiusDKUkKvr8SujlQ1EAS9SNZD0iJFyYbZkIy27kAiyLA+rk8xhXM9a9M55NF+oQbmP+Cn5OKqlh/DJJT04zUKjLFcMPfmTSsWD/zVhqQzWqy23faKqYoqJZWJTA0XUEsOItee4/mJbpuFf6pnmzWVdl5P2X9spKd33tj2qp0kiUTJsiVBxxH9zvtoeVYepxYRGAl0nttGuZDcifm6QK6gtiOlbUxi6Mo+X/u2EiGyEPwog+S31dtk/350RrqYrW4/QRIP1GPT24sFFx6oOZNAEw0sBKB2CAJ2K/je36b8crCopwaUUE6BLUM7femQgdc5TsJMDl1OxSsXXuf4aEyequyOTUObAQ3qRwHaJWw8kvl0RZH/ObVlSb2kUrdoa4xSOrSVFFTgzt8Qf/kvqkdaCLsbgPtkizS2NM7oKZxz23rf2YRSi/HrYs1U+mui+7Fq0C4N8DqGDCzKwxgB.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "dynamic-tool",
+                  "toolName": "campaign_performance",
+                  "toolCallId": "toolu_017mwrBzuPEPQSevoi6g8NQT",
+                  "state": "output-available",
+                  "input": {
+                    "similar_to": {
+                      "channel": "whatsapp",
+                      "keyword": "recuperar"
+                    },
+                    "reason": "Ver qué campañas parecidas de recuperación funcionaron por WhatsApp."
+                  },
+                  "output": {
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "{\"data\":{\"campaigns\":[{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"objective\":\"Recuperar clientes inactivos\",\"status\":\"completed\",\"channel\":\"whatsapp\",\"audience_description\":\"Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp\",\"offer\":{\"type\":\"free_item\",\"value\":null,\"product_id\":\"prd_concha\",\"product_name\":\"Concha\"},\"valid_from\":\"2026-06-08\",\"valid_to\":\"2026-06-21\",\"results\":{\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"}},{\"id\":\"cmp_0002\",\"name\":\"Martes de 2x1 en Americano\",\"objective\":\"Piloto para mover tráfico de martes\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes de Coyoacán con wallet y consentimiento de push\",\"offer\":{\"type\":\"two_for_one\",\"value\":null,\"product_id\":\"prd_americano\",\"product_name\":\"Americano\"},\"valid_from\":\"2026-02-03\",\"valid_to\":\"2026-02-24\",\"results\":{\"sent\":383,\"delivered\":372,\"redeemed\":153,\"control_size\":0,\"open_rate_percent\":61,\"redemption_rate_percent\":39.9,\"treatment_visit_rate_percent\":76,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":13296,\"discount_cost\":9984,\"attributed_gross_profit\":7899,\"cost_per_redemption\":65.25,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0001\",\"name\":\"20% en todo por Buen Fin\",\"objective\":\"Subir ventas en Buen Fin\",\"status\":\"completed\",\"channel\":\"email\",\"audience_description\":\"Todos los clientes con consentimiento de email\",\"offer\":{\"type\":\"percent_off\",\"value\":20,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2025-11-14\",\"valid_to\":\"2025-11-17\",\"results\":{\"sent\":1379,\"delivered\":1312,\"redeemed\":201,\"control_size\":0,\"open_rate_percent\":30.6,\"redemption_rate_percent\":14.6,\"treatment_visit_rate_percent\":26.6,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":17731.2,\"discount_cost\":4432.8,\"attributed_gross_profit\":11410.2,\"cost_per_redemption\":22.05,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0003\",\"name\":\"Puntos dobles Día de las Madres\",\"objective\":\"Reconocer a clientes activos\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes con consentimiento de push\",\"offer\":{\"type\":\"points_multiplier\",\"value\":2,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2026-05-08\",\"valid_to\":\"2026-05-10\",\"results\":{\"sent\":1004,\"delivered\":969,\"redeemed\":98,\"control_size\":0,\"open_rate_percent\":33.5,\"redemption_rate_percent\":9.8,\"treatment_visit_rate_percent\":24.8,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":8912,\"discount_cost\":0,\"attributed_gross_profit\":6420,\"cost_per_redemption\":0,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_297f6b6a1b0d\",\"name\":\"[prueba] Te extrañamos\",\"objective\":\"Verificación de escritura del servidor MCP\",\"status\":\"sent\",\"channel\":\"email\",\"audience_description\":null,\"offer\":{\"type\":\"percent_off\",\"value\":10,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2026-11-10\",\"valid_to\":\"2026-11-20\",\"results\":null}],\"similar\":[{\"id\":\"cmp_0004\",\"score\":3}],\"learnings\":[\"1 de 4 campañas tienen grupo de control; solo en esas el efecto en visitas es atribuible.\",\"Mayor efecto medido: \\\"Te extrañamos\\\" (whatsapp, free_item) con +23.9 pts de visita contra el control (confiabilidad media).\",\"\\\"Martes de 2x1 en Americano\\\": 39.9% de canje, sin grupo de control.\",\"\\\"20% en todo por Buen Fin\\\": 14.6% de canje, sin grupo de control.\",\"\\\"Puntos dobles Día de las Madres\\\": 9.8% de canje, sin grupo de control.\"]},\"notes\":[\"lift_points = tasa de visita del grupo tratado menos la del grupo de control, en puntos porcentuales.\",\"La tasa de canje sin grupo de control no mide efecto: también canjean clientes que habrían venido de todos modos.\"],\"warnings\":[\"Solo 1 campaña(s) con grupo de control: muestra pequeña para generalizar.\"],\"source\":{\"id\":\"src_15d0fce626\",\"tool\":\"campaign_performance\",\"endpoints\":[\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:03.032Z\"}}"
+                      }
+                    ],
+                    "isError": false
+                  },
+                  "title": "Desempeño de campañas",
+                  "toolMetadata": {
+                    "clientName": "ai-sdk-mcp-client",
+                    "toolName": "campaign_performance",
+                    "title": "Desempeño de campañas"
+                  }
+                },
+                {
+                  "type": "step-start"
+                },
+                {
+                  "type": "reasoning",
+                  "id": "UaOCXKXGW1yQRHPb",
+                  "text": "I'm drafting a WhatsApp campaign for the at-risk segment, offering a free item similar to cmp_0004. I still need to check the audience reach, the offer economics, and the estimated campaign impact, and I'll run those three in parallel.\n\n",
+                  "providerMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm drafting a WhatsApp campaign for the at-risk segment, offering a free item similar to cmp_0004. I still need to check the audience reach, the offer economics, and the estimated campaign impact, and I'll run those three in parallel.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "CAQS/gYKEAgTGAI4AUIIdGhpbmtpbmcSDGe7rlzvtXrdQzWfwhoMpfvMCN1Ep3rycX1xIjCuiN7fWxx0fRDCbjYkFM9oHme3D6OXqnCkkNm3A/+NeDCE24/Hl8eaKrCf3erxihsqmwaHGeiCj6YflE0/WltJQHhkQUJGq4tV9tlW9tO4YMbu69wksTK1peJR9YI9cCLk7mIb3zFPcOLwyjQ4R3JPDPOHJo0a8ERgy84csWO+YdZlnd8qDEdZhCjsZrIZKvtyfTZ0a7XKbOD4WCWD0g1cTi5lFRtSlBsB9Fg/ajC0LS2MEEveqzsU2m+1dzAlIDDiIXdRs/YfYYT1N/GlpRIrNK+Ht0VyUHaEP3nWnG27hvN/wJ2lSrQOfl651zJoCOLv+LBV8VfNGAvnAfoMEW717WQLrjO0kCtRV0mh0xLWLnLhvWP4EeGoBcmhsn5a4bioAvq8QpBvpAXLFlTWb0RMw3q37vJgcPtGpH+HECwgKqb3jKGtAZFOglJC4fPYgxCooCh9pjMlLrQK++CFr85hPJP8bIGW+5fUi9kagQPCSgtaTE5379JVlLFIWW7U6atmeG01mE2b/bP9VT2UWWx2cYgjJIq0W5cTqJzKCF3GYaplJvswh2MzKceqFi+V5gh4DMh0XGxEfTbOC3sUnF18LzLOW/oEgPMxix0FLLyAnnlFgNs0pirzDRlfyAZb+7SrqsuOpLy5cpuKrkGoVAM2Swz/cWWjqKNjuRqZsJafXsibIusqIlMdLacFGsCC2Y62I79sI2P88nry/lR/jnXp5d0QDtToOKwAgaOBu6nwP5ZBk6wbyuBNqRdRGTwcT+xAWmmNcdO7JZpyuUL7AFKnvAC7GbtFUb8jbCNPbcjELlyQDYjnPTN1heqqHCQNUBH05vXMMqQsbLBfV1SaQ5y9AgJEKh3AeAd5HYzdPdYRiN3xGxZ+JscVmtMAwsq7FLRQtWx1S34H3ovi/1x22TwFBeCbwCVmWYzfgjJVTmCewEB2G3vx4sNBs7r05sYiBzN8nbnlCOl1QidWjg8DBZlRzSr0IGM+TxvjqdSSGZLavQedLye7rbOTF1j0y7uNX+LspwJb/6IHGr/gpXOnIYmYc2hnAKNm5HKRfY3nlqapV4LcmQuFp64X+Y4Z1plocmkOgeJd0pi9ykILsPtqoju86UcXIikuQKhiXFdxua0YAQ==.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  },
+                  "state": "done"
+                },
+                {
+                  "type": "dynamic-tool",
+                  "toolName": "audience_reach",
+                  "toolCallId": "toolu_01Xs3ykhRWXw9oyNmy45raGy",
+                  "state": "output-available",
+                  "input": {
+                    "audience": {
+                      "segment_id": "at_risk"
+                    },
+                    "reason": "Alcance real por canal para clientes en riesgo."
+                  },
+                  "output": {
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "{\"data\":{\"audience\":{\"segment_id\":\"at_risk\"},\"matched\":483,\"by_channel\":[{\"channel\":\"email\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":151,\"excluded_duplicates\":2,\"reachable\":330},{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},{\"channel\":\"push\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":239,\"excluded_duplicates\":2,\"reachable\":242}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_4d3176cf45\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:05.548Z\"}}"
+                      }
+                    ],
+                    "isError": false
+                  },
+                  "title": "Alcance real de una audiencia",
+                  "toolMetadata": {
+                    "clientName": "ai-sdk-mcp-client",
+                    "toolName": "audience_reach",
+                    "title": "Alcance real de una audiencia"
+                  },
+                  "callProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm drafting a WhatsApp campaign for the at-risk segment, offering a free item similar to cmp_0004. I still need to check the audience reach, the offer economics, and the estimated campaign impact, and I'll run those three in parallel.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "CAQS/gYKEAgTGAI4AUIIdGhpbmtpbmcSDGe7rlzvtXrdQzWfwhoMpfvMCN1Ep3rycX1xIjCuiN7fWxx0fRDCbjYkFM9oHme3D6OXqnCkkNm3A/+NeDCE24/Hl8eaKrCf3erxihsqmwaHGeiCj6YflE0/WltJQHhkQUJGq4tV9tlW9tO4YMbu69wksTK1peJR9YI9cCLk7mIb3zFPcOLwyjQ4R3JPDPOHJo0a8ERgy84csWO+YdZlnd8qDEdZhCjsZrIZKvtyfTZ0a7XKbOD4WCWD0g1cTi5lFRtSlBsB9Fg/ajC0LS2MEEveqzsU2m+1dzAlIDDiIXdRs/YfYYT1N/GlpRIrNK+Ht0VyUHaEP3nWnG27hvN/wJ2lSrQOfl651zJoCOLv+LBV8VfNGAvnAfoMEW717WQLrjO0kCtRV0mh0xLWLnLhvWP4EeGoBcmhsn5a4bioAvq8QpBvpAXLFlTWb0RMw3q37vJgcPtGpH+HECwgKqb3jKGtAZFOglJC4fPYgxCooCh9pjMlLrQK++CFr85hPJP8bIGW+5fUi9kagQPCSgtaTE5379JVlLFIWW7U6atmeG01mE2b/bP9VT2UWWx2cYgjJIq0W5cTqJzKCF3GYaplJvswh2MzKceqFi+V5gh4DMh0XGxEfTbOC3sUnF18LzLOW/oEgPMxix0FLLyAnnlFgNs0pirzDRlfyAZb+7SrqsuOpLy5cpuKrkGoVAM2Swz/cWWjqKNjuRqZsJafXsibIusqIlMdLacFGsCC2Y62I79sI2P88nry/lR/jnXp5d0QDtToOKwAgaOBu6nwP5ZBk6wbyuBNqRdRGTwcT+xAWmmNcdO7JZpyuUL7AFKnvAC7GbtFUb8jbCNPbcjELlyQDYjnPTN1heqqHCQNUBH05vXMMqQsbLBfV1SaQ5y9AgJEKh3AeAd5HYzdPdYRiN3xGxZ+JscVmtMAwsq7FLRQtWx1S34H3ovi/1x22TwFBeCbwCVmWYzfgjJVTmCewEB2G3vx4sNBs7r05sYiBzN8nbnlCOl1QidWjg8DBZlRzSr0IGM+TxvjqdSSGZLavQedLye7rbOTF1j0y7uNX+LspwJb/6IHGr/gpXOnIYmYc2hnAKNm5HKRfY3nlqapV4LcmQuFp64X+Y4Z1plocmkOgeJd0pi9ykILsPtqoju86UcXIikuQKhiXFdxua0YAQ==.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  },
+                  "resultProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm drafting a WhatsApp campaign for the at-risk segment, offering a free item similar to cmp_0004. I still need to check the audience reach, the offer economics, and the estimated campaign impact, and I'll run those three in parallel.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "CAQS/gYKEAgTGAI4AUIIdGhpbmtpbmcSDGe7rlzvtXrdQzWfwhoMpfvMCN1Ep3rycX1xIjCuiN7fWxx0fRDCbjYkFM9oHme3D6OXqnCkkNm3A/+NeDCE24/Hl8eaKrCf3erxihsqmwaHGeiCj6YflE0/WltJQHhkQUJGq4tV9tlW9tO4YMbu69wksTK1peJR9YI9cCLk7mIb3zFPcOLwyjQ4R3JPDPOHJo0a8ERgy84csWO+YdZlnd8qDEdZhCjsZrIZKvtyfTZ0a7XKbOD4WCWD0g1cTi5lFRtSlBsB9Fg/ajC0LS2MEEveqzsU2m+1dzAlIDDiIXdRs/YfYYT1N/GlpRIrNK+Ht0VyUHaEP3nWnG27hvN/wJ2lSrQOfl651zJoCOLv+LBV8VfNGAvnAfoMEW717WQLrjO0kCtRV0mh0xLWLnLhvWP4EeGoBcmhsn5a4bioAvq8QpBvpAXLFlTWb0RMw3q37vJgcPtGpH+HECwgKqb3jKGtAZFOglJC4fPYgxCooCh9pjMlLrQK++CFr85hPJP8bIGW+5fUi9kagQPCSgtaTE5379JVlLFIWW7U6atmeG01mE2b/bP9VT2UWWx2cYgjJIq0W5cTqJzKCF3GYaplJvswh2MzKceqFi+V5gh4DMh0XGxEfTbOC3sUnF18LzLOW/oEgPMxix0FLLyAnnlFgNs0pirzDRlfyAZb+7SrqsuOpLy5cpuKrkGoVAM2Swz/cWWjqKNjuRqZsJafXsibIusqIlMdLacFGsCC2Y62I79sI2P88nry/lR/jnXp5d0QDtToOKwAgaOBu6nwP5ZBk6wbyuBNqRdRGTwcT+xAWmmNcdO7JZpyuUL7AFKnvAC7GbtFUb8jbCNPbcjELlyQDYjnPTN1heqqHCQNUBH05vXMMqQsbLBfV1SaQ5y9AgJEKh3AeAd5HYzdPdYRiN3xGxZ+JscVmtMAwsq7FLRQtWx1S34H3ovi/1x22TwFBeCbwCVmWYzfgjJVTmCewEB2G3vx4sNBs7r05sYiBzN8nbnlCOl1QidWjg8DBZlRzSr0IGM+TxvjqdSSGZLavQedLye7rbOTF1j0y7uNX+LspwJb/6IHGr/gpXOnIYmYc2hnAKNm5HKRfY3nlqapV4LcmQuFp64X+Y4Z1plocmkOgeJd0pi9ykILsPtqoju86UcXIikuQKhiXFdxua0YAQ==.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "dynamic-tool",
+                  "toolName": "estimate_campaign_impact",
+                  "toolCallId": "toolu_01WDHFWbqsbsyra283EHnesc",
+                  "state": "output-available",
+                  "input": {
+                    "audience": {
+                      "segment_id": "at_risk"
+                    },
+                    "channel": "whatsapp",
+                    "offer": {
+                      "type": "free_item",
+                      "product_id": "prd_concha"
+                    },
+                    "reason": "Estimar impacto de la campaña por WhatsApp con regalo de Concha, basado en 'Te extrañamos'."
+                  },
+                  "output": {
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "{\"data\":{\"reach\":{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},\"offer_economics\":{\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"]},\"reference_campaign\":{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"},\"similar_campaigns\":[\"cmp_0004\"],\"impact\":{\"kind\":\"incremental\",\"extra_visits\":[31,64,96],\"extra_net_sales\":[2905.32,5998.08,8997.12],\"expected_redemptions\":[84,84,84],\"offer_cost\":[840,840,840],\"net_gross_profit\":[1222.74,3418.56,5547.84],\"confidence\":\"media\"}},\"notes\":[\"Rangos en orden [bajo, central, alto]; la utilidad neta es conservadora (bajo = menor utilidad con mayor costo).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Supuesto: las visitas adicionales tienen el ticket promedio del negocio.\"],\"warnings\":[\"Una sola campaña de referencia: los canjes esperados no tienen rango de variación.\"],\"source\":{\"id\":\"src_4dbc58f1e6\",\"tool\":\"estimate_campaign_impact\",\"endpoints\":[\"POST /v1/campaigns/preview\",\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:06.096Z\"}}"
+                      }
+                    ],
+                    "isError": false
+                  },
+                  "title": "Impacto esperado de una campaña",
+                  "toolMetadata": {
+                    "clientName": "ai-sdk-mcp-client",
+                    "toolName": "estimate_campaign_impact",
+                    "title": "Impacto esperado de una campaña"
+                  }
+                },
+                {
+                  "type": "dynamic-tool",
+                  "toolName": "offer_economics",
+                  "toolCallId": "toolu_013Hqfn2aBKCkJtSSAEGK8FQ",
+                  "state": "output-available",
+                  "input": {
+                    "offer": {
+                      "type": "free_item",
+                      "product_id": "prd_concha"
+                    },
+                    "reason": "Costo de regalar una Concha y su efecto en margen."
+                  },
+                  "output": {
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "{\"data\":{\"offer\":{\"type\":\"free_item\",\"product_id\":\"prd_concha\"},\"product_name\":\"Concha\",\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"total_cost\":null},\"notes\":[\"Costo unitario de Concha regalado ($10).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"warnings\":[],\"source\":{\"id\":\"src_d8bd7a9096\",\"tool\":\"offer_economics\",\"endpoints\":[\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:06.545Z\"}}"
+                      }
+                    ],
+                    "isError": false
+                  },
+                  "title": "Economía de una oferta",
+                  "toolMetadata": {
+                    "clientName": "ai-sdk-mcp-client",
+                    "toolName": "offer_economics",
+                    "title": "Economía de una oferta"
+                  }
+                },
+                {
+                  "type": "step-start"
+                },
+                {
+                  "type": "reasoning",
+                  "id": "bq1T8IGW3SwLBMUv",
+                  "text": "I'm noting that WhatsApp is the preferred channel with 267 reachable, while email reaches 330 but is less preferred, so I'll mention that. The campaign card should show WhatsApp, the message has to stay under 1024 characters and short, and valid dates run from 2026-11-01 to 2026-11-14. I also need to flag that the reference campaign is single with a small control and the figures are estimates, and that cmp_0004 targeted 4+ visits.\n\nI'm planning the campaign card and approval request now, with sources and the impact range, extra sales between roughly 2,905 and 8,997 and visits between 31 and 96. The total cost stays at 840 since the tool already gave that figure, so I won't recompute it. Reach is 267 reachable out of 483 matched, and I'll write a brief intro in Spanish before showing the card.\n\n",
+                  "providerMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm noting that WhatsApp is the preferred channel with 267 reachable, while email reaches 330 but is less preferred, so I'll mention that. The campaign card should show WhatsApp, the message has to stay under 1024 characters and short, and valid dates run from 2026-11-01 to 2026-11-14. I also need to flag that the reference campaign is single with a small control and the figures are estimates, and that cmp_0004 targeted 4+ visits.\n\nI'm planning the campaign card and approval request now, with sources and the impact range, extra sales between roughly 2,905 and 8,997 and visits between 31 and 96. The total cost stays at 840 since the tool already gave that figure, so I won't recompute it. Reach is 267 reachable out of 483 matched, and I'll write a brief intro in Spanish before showing the card.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "CAQSsA4KEAgTGAI4AUIIdGhpbmtpbmcSDOrbFpDr/+5aCEeqLBoMw5s/ske5bZHPFOnvIjCYK8OleFLEmvSO1RJyrrMMT27G4POx5WxmuvzehpC8p+IDT65MNXaq0i1XWNe+jeQqzQ1mN3t/PX/OQVFFZ3RyPEjC0LFii4ESLedh4RxSj27Puyh6cnYmSX8Nwv+FqySRiT4Dv2djRSb7Rn1N7EARdmODug+4+fOsgV6e1ERLtJWcxFtrxC6M5BSVwkZpAzVLTTmVZU7fmXxawVYtmgpBMkx86fBAZufbSthFrn/9LCV5VuoJ+VYShuOHIx/PyLcMSfYPK0mPP11S5dKqAwZqMnOxU4cI9qmCd4khtrrsXJjVEguK4Yrzw0EsYOBnJ/HGmLFzpouqUol06h+14IVqrtabTlzenTRxz91hCz69FZkoWLEgd0Jt6DHs1jnUQp1Npm6i8DAN3l6mCypvyyxmvC7Krqn7T0oKEr0YZH6N/lPQlVzB/fGcQQcpo+88JjPHhddVhIFNUSHGUhCLK7Dz1lIliSZ0LLZTCGO+0kX2Dxut4SQNRUgm+f2Oggw6sQt9uqcUds4k/MEazj5CJ+9k2VCgNVor9Ub+5wimkAKc+Jnazu/PKpBD2Y1JSypzyrlfnpktCV+AHcMAwgAkdl4Iv3k+qpwgDdxaG5PHhPVN1kt5i5lOLSamA7LKm6tloK5qWXnq8A0SnbFzIAfI0gPzC8NgrKPrt9533sQRuqHhOdl/wMDbtNkXJ2ps0IMLJ6XjJwTwYRI38hEXsdMLqXVUzx+v0T0d6DRBl+Atc+l1kQIpwWMWSa7haVU5fh4eQ1797JWGVNi5ZqW1iy4W5NxGzkmUf7LmeB1QwF2xXDmMN16ok4Phiimn3Ze7T5+2nvnT/BiOtrRRCxdTOWQWdAmgjyFSAhiB/P1TiEdGxeNdUyD671/KMEY9r4oW9/mwKu+H+AbqJ3EOIzhDJ/468OPoaGsJI70/pc3cva7hf3gYc3L4LxAi7tLaVzTA51wLxcSHqvKMs+RFziZGUkHB5Wr5DnsT1o8HFQ6avJSL3v3D20UiiUJSp4TYDF53KiiK+MEqxYQ7+JrZX1O3ZUxHbQ/ISedH6BiqqmNeilqKfJpeLjEP2Yjg1JMrsxQZ34b4bfAwGFkAtGr3Qvn3ZPsgftG3AyzZEf2gzYASzGNih+70vSisHFb2teDYfMms7f81ZUXBz2b9HrFRAXbShaHwKfTPu1oap11h6TxQFiBgc/zkBlDhPa6hmoXo67VSbjIR7XxBWfEVAbBfQWVts+cmOxjdt0O1+b4UhmaG0PEyFzJ9BxLCFmSUdDH49nN9Fegk8hV8uSbeQL1f0MDBGwq3R/zkRn8o4BKmKOnjPPbtS0LqqUBgb/cW49y5FgdmEtv2vY4hrIY4opD2xeihUv/pIswljis7p/e80l15/onhXWqIHN+30G7CH2DVtGjod7EozZrQUSGm279veFTo8rviQMezYGZyvC6hrbAywZBeRQ2vznukZ/0hwJQmjr0tskcG9WfmGdh5I01DfspZz1ItP+4LJvOcvvDHGMWqjTt31R1kED3f+vinXd9s0IfrWBkT1GXUTYSs7okwzqBaODgMdoDQs86PQnzyVhS56TrjwKVS1uZ3i0xcXOyw+TUj2TPkXnHvW9Ib/KTkKNXLvSo9Rq9z8Cg6PbtvnorcL6AjviYW3BIb0TQf66MUY61SM8UT1iw8wAgcwoW+jxpqpuvMu6XjU3A/iEBZ6QryU2WOaFHvAKzquScgIV3+p2nsqlbQ3A2dC4l4TvR9zPuNFonkAkucsA9ajdVPX2Zk+sI7hvAHblmI6mK7ruy3f1NsjGrhaPCUwIudQxQFjSLbmV8KDuoEPXzGY5o3JxC2QkdUTOZ6+nLQlC3JzVKByOTsUwjRQKU8Au40vvll4hxItrc4JtUwOT+cj2Ki5A54fZ5lHaR50MntjMbBF8i0X3Ttp09aBBgg70gfZnPhE8RiXCHsRtBUumbQLC/9J03ZrVXKhRUBFVNUYhmpOOcPiuTced+ZHgBUkgO85IbwlRKt23sBEjbn9WhUN32D8uaa+oy/bi1Tgwz2w3gdFiBiwYZz04GVubSDMROlOAmmvDjE7MGtdMBcWn3Bkzs9Oq+AC++NUVJS9WBScnDmr8a8OGqYPl8ezYTGIK2lcYY6tb7I4n3rx/G4iUJ/mBQJkhukk9h1auGeqcuYUrDeeh9sqmgFIxXd/p7kk/0FEucHzjXlAS6r9TCTaq+b6i9IdSVvvP9JLGDL2wcauR/OX+iQ6DILFCHuFh28HeqgpqulF+V/CvqzqmHaA7GHRskJjjeJNLzVkKUo9Wjlr4U1QNuOUOvyht8RL5+/CbHjDdiNlUd+hpQ4UrhuQd6+wwJMqCQh4HRx6/qhj1UvB+etK9fHF5Byjx/Aic69CIT6EODXrV60AKYBC2u0GAE=.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  },
+                  "state": "done"
+                },
+                {
+                  "type": "text",
+                  "text": "Propongo una campaña de WhatsApp para los 483 clientes en riesgo (10 o más visitas, entre 30 y 90 días sin venir). Con WhatsApp, que es tu canal preferido, puedo contactar a 267. La oferta es una Concha gratis, igual que en \"Te extrañamos\", la campaña de recuperación con mejor resultado medido.\n\nTres advertencias antes de que decidas:\n- La referencia tuvo grupo de control, pero es pequeño (67 clientes) y su confiabilidad es media. Su audiencia era distinta (4 o más visitas y 21 o más días sin venir), así que el lift no es directo.\n- El alcance por email es mayor (330), pero no es tu canal preferido. Si prefieres email, lo ajusto.\n- La Concha cuesta $10 por canje y deja un margen de $56.54 por visita, según la utilidad bruta de los últimos 3 meses.",
+                  "state": "done"
+                },
+                {
+                  "type": "tool-show_campaign_card",
+                  "toolCallId": "toolu_01P1gwXZEmFyaXjvqrHnEWxV",
+                  "state": "output-available",
+                  "input": {
+                    "title": "Recuperar clientes en riesgo con una Concha",
+                    "period": {
+                      "from": "2026-11-01",
+                      "to": "2026-11-14",
+                      "label": "Vigencia propuesta"
+                    },
+                    "sources": [
+                      "src_4ddcf335f8",
+                      "src_15d0fce626",
+                      "src_4d3176cf45",
+                      "src_4dbc58f1e6",
+                      "src_d8bd7a9096"
+                    ],
+                    "notes": [
+                      "Impacto en rango bajo, central y alto: visitas adicionales 31, 64 y 96; ventas adicionales $2,905.32, $5,998.08 y $8,997.12."
+                    ],
+                    "state": "proposal",
+                    "name": "Te extrañamos: clientes en riesgo",
+                    "objective": "Recuperar a clientes en riesgo (10+ visitas, 30 a 90 días sin venir) con una visita de regreso.",
+                    "audience": {
+                      "filters": {
+                        "segment_id": "at_risk"
+                      },
+                      "description": "Clientes en riesgo de todas las sucursales, con consentimiento de WhatsApp"
+                    },
+                    "channel": "whatsapp",
+                    "reach": {
+                      "matched": 483,
+                      "reachable": 267,
+                      "excludedNoConsent": 214,
+                      "excludedSuspended": 0,
+                      "excludedDuplicates": 2,
+                      "otherChannels": [
+                        {
+                          "channel": "email",
+                          "reachable": 330
+                        },
+                        {
+                          "channel": "push",
+                          "reachable": 242
+                        }
+                      ]
+                    },
+                    "offer": {
+                      "type": "free_item",
+                      "productId": "prd_concha",
+                      "productName": "Concha",
+                      "validFrom": "2026-11-01",
+                      "validTo": "2026-11-14"
+                    },
+                    "economics": {
+                      "costPerRedemption": 10,
+                      "marginNote": "Cada canje cuesta $10 y deja $56.54 de margen por visita (utilidad bruta de los últimos 3 meses).",
+                      "totalCostRange": [
+                        840,
+                        840
+                      ]
+                    },
+                    "expectedImpact": {
+                      "extraVisitsRange": [
+                        31,
+                        96
+                      ],
+                      "extraSalesRange": [
+                        2905.32,
+                        8997.12
+                      ],
+                      "basis": "Lift de 'Te extrañamos' (+23.9 pts con control, IC 11.7 a 36) aplicado a 267 alcanzables; ticket promedio $93.72."
+                    },
+                    "history": [
+                      {
+                        "name": "Te extrañamos (WhatsApp, Concha gratis)",
+                        "lift": 23.9,
+                        "n": 272,
+                        "reliable": true
+                      }
+                    ],
+                    "message": {
+                      "text": "Hola {nombre}, te extrañamos en Café Alborada. Pasa esta semana por tu Concha gratis con tu tarjeta. ¡Te esperamos!"
+                    },
+                    "warnings": [
+                      "Referencia con grupo de control pequeño (67 clientes) y confiabilidad media.",
+                      "La audiencia de referencia era otra (4+ visitas y 21+ días sin venir); el lift puede diferir.",
+                      "Canjes esperados: 84 (única referencia, sin rango).",
+                      "Email alcanza 330 y push 242; WhatsApp es el canal preferido."
+                    ]
+                  },
+                  "output": {
+                    "shown": true
+                  },
+                  "callProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm noting that WhatsApp is the preferred channel with 267 reachable, while email reaches 330 but is less preferred, so I'll mention that. The campaign card should show WhatsApp, the message has to stay under 1024 characters and short, and valid dates run from 2026-11-01 to 2026-11-14. I also need to flag that the reference campaign is single with a small control and the figures are estimates, and that cmp_0004 targeted 4+ visits.\n\nI'm planning the campaign card and approval request now, with sources and the impact range, extra sales between roughly 2,905 and 8,997 and visits between 31 and 96. The total cost stays at 840 since the tool already gave that figure, so I won't recompute it. Reach is 267 reachable out of 483 matched, and I'll write a brief intro in Spanish before showing the card.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "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.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  },
+                  "resultProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": [
+                        {
+                          "type": "reasoning.text",
+                          "text": "I'm noting that WhatsApp is the preferred channel with 267 reachable, while email reaches 330 but is less preferred, so I'll mention that. The campaign card should show WhatsApp, the message has to stay under 1024 characters and short, and valid dates run from 2026-11-01 to 2026-11-14. I also need to flag that the reference campaign is single with a small control and the figures are estimates, and that cmp_0004 targeted 4+ visits.\n\nI'm planning the campaign card and approval request now, with sources and the impact range, extra sales between roughly 2,905 and 8,997 and visits between 31 and 96. The total cost stays at 840 since the tool already gave that figure, so I won't recompute it. Reach is 267 reachable out of 483 matched, and I'll write a brief intro in Spanish before showing the card.\n\n",
+                          "format": "anthropic-claude-v1",
+                          "index": 0,
+                          "signature": "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.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "step-start"
+                },
+                {
+                  "type": "tool-request_draft_approval",
+                  "toolCallId": "toolu_01SJEZqCGwgix3b8ughWwQ48",
+                  "state": "input-available",
+                  "input": {
+                    "campaign": {
+                      "name": "Te extrañamos: clientes en riesgo",
+                      "objective": "Recuperar a clientes en riesgo (10+ visitas, 30 a 90 días sin venir) con una visita de regreso.",
+                      "channel": "whatsapp",
+                      "audience": {
+                        "segment_id": "at_risk"
+                      },
+                      "offer": {
+                        "type": "free_item",
+                        "product_id": "prd_concha",
+                        "valid_from": "2026-11-01",
+                        "valid_to": "2026-11-14"
+                      },
+                      "message": "Hola {nombre}, te extrañamos en Café Alborada. Pasa esta semana por tu Concha gratis con tu tarjeta. ¡Te esperamos!"
+                    },
+                    "reason": "Pedir aprobación de la tarjeta de campaña mostrada para clientes en riesgo."
+                  },
+                  "callProviderMetadata": {
+                    "openrouter": {
+                      "reasoning_details": []
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "requests": [
+            {
+              "turn": 0,
+              "message": {
+                "id": "msg-7YPBc2QQBANvKRSH",
+                "metadata": {
+                  "model": "anthropic/claude-haiku-5.5",
+                  "llmCalls": 2,
+                  "toolCalls": 1,
+                  "tokensIn": 39068,
+                  "tokensOut": 186,
+                  "costUsd": 0.0039997999999999995,
+                  "latencyMs": 3915
+                },
+                "role": "assistant",
+                "parts": [
+                  {
+                    "type": "step-start"
+                  },
+                  {
+                    "type": "tool-remember_preference",
+                    "toolCallId": "toolu_01AstPb29T99W33EQJ5NfwDL",
+                    "state": "output-available",
+                    "input": {
+                      "key": "preferred_channel",
+                      "value": "whatsapp",
+                      "reason": "La dueña pidió guardar WhatsApp como canal preferido para sus campañas."
+                    },
+                    "output": {
+                      "saved": true,
+                      "key": "preferred_channel",
+                      "label": "Canal preferido",
+                      "value": "whatsapp"
+                    },
+                    "callProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": []
+                      }
+                    },
+                    "resultProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": []
+                      }
+                    }
+                  },
+                  {
+                    "type": "step-start"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Listo, guardé WhatsApp como tu canal preferido para tus campañas. Al proponer una, la armaré por ese canal salvo que me pidas otro.",
+                    "state": "done"
+                  }
+                ]
+              },
+              "firstTextMs": 4527.9548,
+              "totalMs": 4814.0636,
+              "errors": [],
+              "steps": [
+                {
+                  "kind": "llm",
+                  "name": "anthropic/claude-haiku-5.5",
+                  "tokensIn": 19448,
+                  "tokensOut": 129,
+                  "costUsd": 0.0020093,
+                  "latencyMs": 2234
+                },
+                {
+                  "kind": "tool",
+                  "name": "remember_preference",
+                  "input": {
+                    "key": "preferred_channel",
+                    "value": "whatsapp"
+                  },
+                  "reason": "La dueña pidió guardar WhatsApp como canal preferido para sus campañas.",
+                  "outputSummary": {
+                    "saved": true,
+                    "key": "preferred_channel",
+                    "label": "Canal preferido",
+                    "value": "whatsapp"
+                  },
+                  "latencyMs": 0
+                },
+                {
+                  "kind": "llm",
+                  "name": "anthropic/claude-haiku-5.5",
+                  "tokensIn": 19620,
+                  "tokensOut": 57,
+                  "costUsd": 0.0019905,
+                  "latencyMs": 1663
+                }
+              ],
+              "totals": {
+                "model": "anthropic/claude-haiku-5.5",
+                "llmCalls": 2,
+                "toolCalls": 1,
+                "tokensIn": 39068,
+                "tokensOut": 186,
+                "costUsd": 0.0039997999999999995,
+                "latencyMs": 3917
+              }
+            },
+            {
+              "turn": 1,
+              "message": {
+                "id": "msg-lsvP0UDyF5WYeWMI",
+                "metadata": {
+                  "model": "anthropic/claude-haiku-5.5",
+                  "llmCalls": 4,
+                  "toolCalls": 7,
+                  "tokensIn": 77877,
+                  "tokensOut": 3180,
+                  "costUsd": 0.009377700000000001,
+                  "latencyMs": 17868
+                },
+                "role": "assistant",
+                "parts": [
+                  {
+                    "type": "step-start"
+                  },
+                  {
+                    "type": "reasoning",
+                    "id": "N72L4YFfFYqSvuKU",
+                    "text": "I'm planning to pull the business context and the at-risk customer segments first, and I'm wondering whether the context is actually needed before the segments. Customer segments and campaign performance can run in parallel either way.\n\n",
+                    "providerMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm planning to pull the business context and the at-risk customer segments first, and I'm wondering whether the context is actually needed before the segments. Customer segments and campaign performance can run in parallel either way.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "CAQS/gcKEAgTGAI4AUIIdGhpbmtpbmcSDEAJupMOlmbtOYd/vhoMEj0kHzru7e4i+vH4IjCqCgxUtDXNp9u5aoSZb2oqb+OhsdVDomg4JbWAM5PZthmFx6x5EABB5UVPGgKRXSYqmweQhvJZ51zqvxlsw0hMOJbyZl27o7PeYVa2EEZBDGnA6YDz09jOhAipvPNaxfKLPExdUPGzLXGIEu2l+IzTATF4MLVFmtkfDy7mbcnRm8BY5DxeJgcaEXp05PDsrrGswJEqDz8lZ967q7bPMs+HjP/f1J6GT/xbNkfditJqV3B5JY6ouiU9vdpmJrdiYO3bvqk7wjZMVEt9V48ygzt5HgRYU+g8bR+QZJTiZbA7+xuXgilKJuTv0JfxNwFAWtlup6griGJehW+O94r4XVmYLf2X+Z+MGD+lP1CUyk0xt9BgC61RTzw8MR5c9LTnI0c2nFSuZGB25iP3fwC5VPyVjyIn85Dzj/I5ByjxT/VAvYNSvSjYhRvD9oob3GS0UiBACu1INZbALaxDDnlbCAh/V3JtKeR38KE0NpUcjaustharOjZvfjUFP6gzGFX9EsyHGx2FQUtVO3N3w9UiO5rdCZISaUyJNsLBvlIaliiL0iUE5KQaNzMb5LU4V8za02o87DNRRNF7r0nojTbKCXNn+wVLoxQT3qIEnEeFb+wXnEc/UzHtPe2JP0po5P9h1zVyZnZcY98kUbITy2vgxyUP8DZFGsrkrNPtHzt4pCSa/vsTNCL1eV6wyRsxgO8D2WpoCx2dyfI4C+cKrEjnB6u0mvbB1MKvQ+RaIVGJ/Y73bKoawRlZPymwhLEuft12/mA4NablysUimSJ/ApE8XS62xZ7V866exGo5eqbr12GZQYVMS9HQLSlqcMcOZpUVxKvRD5XiusDKUkKvr8SujlQ1EAS9SNZD0iJFyYbZkIy27kAiyLA+rk8xhXM9a9M55NF+oQbmP+Cn5OKqlh/DJJT04zUKjLFcMPfmTSsWD/zVhqQzWqy23faKqYoqJZWJTA0XUEsOItee4/mJbpuFf6pnmzWVdl5P2X9spKd33tj2qp0kiUTJsiVBxxH9zvtoeVYepxYRGAl0nttGuZDcifm6QK6gtiOlbUxi6Mo+X/u2EiGyEPwog+S31dtk/350RrqYrW4/QRIP1GPT24sFFx6oOZNAEw0sBKB2CAJ2K/je36b8crCopwaUUE6BLUM7femQgdc5TsJMDl1OxSsXXuf4aEyequyOTUObAQ3qRwHaJWw8kvl0RZH/ObVlSb2kUrdoa4xSOrSVFFTgzt8Qf/kvqkdaCLsbgPtkizS2NM7oKZxz23rf2YRSi/HrYs1U+mui+7Fq0C4N8DqGDCzKwxgB.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    },
+                    "state": "done"
+                  },
+                  {
+                    "type": "dynamic-tool",
+                    "toolName": "customer_segments",
+                    "toolCallId": "toolu_0112hBTS5y3PoVgZNJSm8Wkq",
+                    "state": "output-available",
+                    "input": {
+                      "segment_ids": [
+                        "at_risk"
+                      ],
+                      "reason": "Dimensionar los clientes en riesgo antes de proponer la campaña."
+                    },
+                    "output": {
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "{\"data\":{\"home_location\":null,\"segments\":[{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483,\"avg_spend\":3276.78,\"consent_rates\":{\"push\":0.5052,\"whatsapp\":0.5569,\"email\":0.6874}}],\"total_customers\":483},\"notes\":[\"Segmentos calculados a la fecha de corte (2026-10-31).\",\"total_customers suma los segmentos pedidos; los segmentos son excluyentes.\",\"El tamaño del segmento no es el alcance: para saber a cuántos se puede contactar usar audience_reach.\"],\"warnings\":[],\"source\":{\"id\":\"src_4ddcf335f8\",\"tool\":\"customer_segments\",\"endpoints\":[\"GET /v1/business\",\"GET /v1/locations\",\"GET /v1/segments\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:01.130Z\"}}"
+                        }
+                      ],
+                      "isError": false
+                    },
+                    "title": "Segmentos de clientes",
+                    "toolMetadata": {
+                      "clientName": "ai-sdk-mcp-client",
+                      "toolName": "customer_segments",
+                      "title": "Segmentos de clientes"
+                    },
+                    "callProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm planning to pull the business context and the at-risk customer segments first, and I'm wondering whether the context is actually needed before the segments. Customer segments and campaign performance can run in parallel either way.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "CAQS/gcKEAgTGAI4AUIIdGhpbmtpbmcSDEAJupMOlmbtOYd/vhoMEj0kHzru7e4i+vH4IjCqCgxUtDXNp9u5aoSZb2oqb+OhsdVDomg4JbWAM5PZthmFx6x5EABB5UVPGgKRXSYqmweQhvJZ51zqvxlsw0hMOJbyZl27o7PeYVa2EEZBDGnA6YDz09jOhAipvPNaxfKLPExdUPGzLXGIEu2l+IzTATF4MLVFmtkfDy7mbcnRm8BY5DxeJgcaEXp05PDsrrGswJEqDz8lZ967q7bPMs+HjP/f1J6GT/xbNkfditJqV3B5JY6ouiU9vdpmJrdiYO3bvqk7wjZMVEt9V48ygzt5HgRYU+g8bR+QZJTiZbA7+xuXgilKJuTv0JfxNwFAWtlup6griGJehW+O94r4XVmYLf2X+Z+MGD+lP1CUyk0xt9BgC61RTzw8MR5c9LTnI0c2nFSuZGB25iP3fwC5VPyVjyIn85Dzj/I5ByjxT/VAvYNSvSjYhRvD9oob3GS0UiBACu1INZbALaxDDnlbCAh/V3JtKeR38KE0NpUcjaustharOjZvfjUFP6gzGFX9EsyHGx2FQUtVO3N3w9UiO5rdCZISaUyJNsLBvlIaliiL0iUE5KQaNzMb5LU4V8za02o87DNRRNF7r0nojTbKCXNn+wVLoxQT3qIEnEeFb+wXnEc/UzHtPe2JP0po5P9h1zVyZnZcY98kUbITy2vgxyUP8DZFGsrkrNPtHzt4pCSa/vsTNCL1eV6wyRsxgO8D2WpoCx2dyfI4C+cKrEjnB6u0mvbB1MKvQ+RaIVGJ/Y73bKoawRlZPymwhLEuft12/mA4NablysUimSJ/ApE8XS62xZ7V866exGo5eqbr12GZQYVMS9HQLSlqcMcOZpUVxKvRD5XiusDKUkKvr8SujlQ1EAS9SNZD0iJFyYbZkIy27kAiyLA+rk8xhXM9a9M55NF+oQbmP+Cn5OKqlh/DJJT04zUKjLFcMPfmTSsWD/zVhqQzWqy23faKqYoqJZWJTA0XUEsOItee4/mJbpuFf6pnmzWVdl5P2X9spKd33tj2qp0kiUTJsiVBxxH9zvtoeVYepxYRGAl0nttGuZDcifm6QK6gtiOlbUxi6Mo+X/u2EiGyEPwog+S31dtk/350RrqYrW4/QRIP1GPT24sFFx6oOZNAEw0sBKB2CAJ2K/je36b8crCopwaUUE6BLUM7femQgdc5TsJMDl1OxSsXXuf4aEyequyOTUObAQ3qRwHaJWw8kvl0RZH/ObVlSb2kUrdoa4xSOrSVFFTgzt8Qf/kvqkdaCLsbgPtkizS2NM7oKZxz23rf2YRSi/HrYs1U+mui+7Fq0C4N8DqGDCzKwxgB.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    },
+                    "resultProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm planning to pull the business context and the at-risk customer segments first, and I'm wondering whether the context is actually needed before the segments. Customer segments and campaign performance can run in parallel either way.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "CAQS/gcKEAgTGAI4AUIIdGhpbmtpbmcSDEAJupMOlmbtOYd/vhoMEj0kHzru7e4i+vH4IjCqCgxUtDXNp9u5aoSZb2oqb+OhsdVDomg4JbWAM5PZthmFx6x5EABB5UVPGgKRXSYqmweQhvJZ51zqvxlsw0hMOJbyZl27o7PeYVa2EEZBDGnA6YDz09jOhAipvPNaxfKLPExdUPGzLXGIEu2l+IzTATF4MLVFmtkfDy7mbcnRm8BY5DxeJgcaEXp05PDsrrGswJEqDz8lZ967q7bPMs+HjP/f1J6GT/xbNkfditJqV3B5JY6ouiU9vdpmJrdiYO3bvqk7wjZMVEt9V48ygzt5HgRYU+g8bR+QZJTiZbA7+xuXgilKJuTv0JfxNwFAWtlup6griGJehW+O94r4XVmYLf2X+Z+MGD+lP1CUyk0xt9BgC61RTzw8MR5c9LTnI0c2nFSuZGB25iP3fwC5VPyVjyIn85Dzj/I5ByjxT/VAvYNSvSjYhRvD9oob3GS0UiBACu1INZbALaxDDnlbCAh/V3JtKeR38KE0NpUcjaustharOjZvfjUFP6gzGFX9EsyHGx2FQUtVO3N3w9UiO5rdCZISaUyJNsLBvlIaliiL0iUE5KQaNzMb5LU4V8za02o87DNRRNF7r0nojTbKCXNn+wVLoxQT3qIEnEeFb+wXnEc/UzHtPe2JP0po5P9h1zVyZnZcY98kUbITy2vgxyUP8DZFGsrkrNPtHzt4pCSa/vsTNCL1eV6wyRsxgO8D2WpoCx2dyfI4C+cKrEjnB6u0mvbB1MKvQ+RaIVGJ/Y73bKoawRlZPymwhLEuft12/mA4NablysUimSJ/ApE8XS62xZ7V866exGo5eqbr12GZQYVMS9HQLSlqcMcOZpUVxKvRD5XiusDKUkKvr8SujlQ1EAS9SNZD0iJFyYbZkIy27kAiyLA+rk8xhXM9a9M55NF+oQbmP+Cn5OKqlh/DJJT04zUKjLFcMPfmTSsWD/zVhqQzWqy23faKqYoqJZWJTA0XUEsOItee4/mJbpuFf6pnmzWVdl5P2X9spKd33tj2qp0kiUTJsiVBxxH9zvtoeVYepxYRGAl0nttGuZDcifm6QK6gtiOlbUxi6Mo+X/u2EiGyEPwog+S31dtk/350RrqYrW4/QRIP1GPT24sFFx6oOZNAEw0sBKB2CAJ2K/je36b8crCopwaUUE6BLUM7femQgdc5TsJMDl1OxSsXXuf4aEyequyOTUObAQ3qRwHaJWw8kvl0RZH/ObVlSb2kUrdoa4xSOrSVFFTgzt8Qf/kvqkdaCLsbgPtkizS2NM7oKZxz23rf2YRSi/HrYs1U+mui+7Fq0C4N8DqGDCzKwxgB.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "dynamic-tool",
+                    "toolName": "campaign_performance",
+                    "toolCallId": "toolu_017mwrBzuPEPQSevoi6g8NQT",
+                    "state": "output-available",
+                    "input": {
+                      "similar_to": {
+                        "channel": "whatsapp",
+                        "keyword": "recuperar"
+                      },
+                      "reason": "Ver qué campañas parecidas de recuperación funcionaron por WhatsApp."
+                    },
+                    "output": {
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "{\"data\":{\"campaigns\":[{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"objective\":\"Recuperar clientes inactivos\",\"status\":\"completed\",\"channel\":\"whatsapp\",\"audience_description\":\"Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp\",\"offer\":{\"type\":\"free_item\",\"value\":null,\"product_id\":\"prd_concha\",\"product_name\":\"Concha\"},\"valid_from\":\"2026-06-08\",\"valid_to\":\"2026-06-21\",\"results\":{\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"}},{\"id\":\"cmp_0002\",\"name\":\"Martes de 2x1 en Americano\",\"objective\":\"Piloto para mover tráfico de martes\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes de Coyoacán con wallet y consentimiento de push\",\"offer\":{\"type\":\"two_for_one\",\"value\":null,\"product_id\":\"prd_americano\",\"product_name\":\"Americano\"},\"valid_from\":\"2026-02-03\",\"valid_to\":\"2026-02-24\",\"results\":{\"sent\":383,\"delivered\":372,\"redeemed\":153,\"control_size\":0,\"open_rate_percent\":61,\"redemption_rate_percent\":39.9,\"treatment_visit_rate_percent\":76,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":13296,\"discount_cost\":9984,\"attributed_gross_profit\":7899,\"cost_per_redemption\":65.25,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0001\",\"name\":\"20% en todo por Buen Fin\",\"objective\":\"Subir ventas en Buen Fin\",\"status\":\"completed\",\"channel\":\"email\",\"audience_description\":\"Todos los clientes con consentimiento de email\",\"offer\":{\"type\":\"percent_off\",\"value\":20,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2025-11-14\",\"valid_to\":\"2025-11-17\",\"results\":{\"sent\":1379,\"delivered\":1312,\"redeemed\":201,\"control_size\":0,\"open_rate_percent\":30.6,\"redemption_rate_percent\":14.6,\"treatment_visit_rate_percent\":26.6,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":17731.2,\"discount_cost\":4432.8,\"attributed_gross_profit\":11410.2,\"cost_per_redemption\":22.05,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0003\",\"name\":\"Puntos dobles Día de las Madres\",\"objective\":\"Reconocer a clientes activos\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes con consentimiento de push\",\"offer\":{\"type\":\"points_multiplier\",\"value\":2,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2026-05-08\",\"valid_to\":\"2026-05-10\",\"results\":{\"sent\":1004,\"delivered\":969,\"redeemed\":98,\"control_size\":0,\"open_rate_percent\":33.5,\"redemption_rate_percent\":9.8,\"treatment_visit_rate_percent\":24.8,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":8912,\"discount_cost\":0,\"attributed_gross_profit\":6420,\"cost_per_redemption\":0,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_297f6b6a1b0d\",\"name\":\"[prueba] Te extrañamos\",\"objective\":\"Verificación de escritura del servidor MCP\",\"status\":\"sent\",\"channel\":\"email\",\"audience_description\":null,\"offer\":{\"type\":\"percent_off\",\"value\":10,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2026-11-10\",\"valid_to\":\"2026-11-20\",\"results\":null}],\"similar\":[{\"id\":\"cmp_0004\",\"score\":3}],\"learnings\":[\"1 de 4 campañas tienen grupo de control; solo en esas el efecto en visitas es atribuible.\",\"Mayor efecto medido: \\\"Te extrañamos\\\" (whatsapp, free_item) con +23.9 pts de visita contra el control (confiabilidad media).\",\"\\\"Martes de 2x1 en Americano\\\": 39.9% de canje, sin grupo de control.\",\"\\\"20% en todo por Buen Fin\\\": 14.6% de canje, sin grupo de control.\",\"\\\"Puntos dobles Día de las Madres\\\": 9.8% de canje, sin grupo de control.\"]},\"notes\":[\"lift_points = tasa de visita del grupo tratado menos la del grupo de control, en puntos porcentuales.\",\"La tasa de canje sin grupo de control no mide efecto: también canjean clientes que habrían venido de todos modos.\"],\"warnings\":[\"Solo 1 campaña(s) con grupo de control: muestra pequeña para generalizar.\"],\"source\":{\"id\":\"src_15d0fce626\",\"tool\":\"campaign_performance\",\"endpoints\":[\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:03.032Z\"}}"
+                        }
+                      ],
+                      "isError": false
+                    },
+                    "title": "Desempeño de campañas",
+                    "toolMetadata": {
+                      "clientName": "ai-sdk-mcp-client",
+                      "toolName": "campaign_performance",
+                      "title": "Desempeño de campañas"
+                    }
+                  },
+                  {
+                    "type": "step-start"
+                  },
+                  {
+                    "type": "reasoning",
+                    "id": "UaOCXKXGW1yQRHPb",
+                    "text": "I'm drafting a WhatsApp campaign for the at-risk segment, offering a free item similar to cmp_0004. I still need to check the audience reach, the offer economics, and the estimated campaign impact, and I'll run those three in parallel.\n\n",
+                    "providerMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm drafting a WhatsApp campaign for the at-risk segment, offering a free item similar to cmp_0004. I still need to check the audience reach, the offer economics, and the estimated campaign impact, and I'll run those three in parallel.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "CAQS/gYKEAgTGAI4AUIIdGhpbmtpbmcSDGe7rlzvtXrdQzWfwhoMpfvMCN1Ep3rycX1xIjCuiN7fWxx0fRDCbjYkFM9oHme3D6OXqnCkkNm3A/+NeDCE24/Hl8eaKrCf3erxihsqmwaHGeiCj6YflE0/WltJQHhkQUJGq4tV9tlW9tO4YMbu69wksTK1peJR9YI9cCLk7mIb3zFPcOLwyjQ4R3JPDPOHJo0a8ERgy84csWO+YdZlnd8qDEdZhCjsZrIZKvtyfTZ0a7XKbOD4WCWD0g1cTi5lFRtSlBsB9Fg/ajC0LS2MEEveqzsU2m+1dzAlIDDiIXdRs/YfYYT1N/GlpRIrNK+Ht0VyUHaEP3nWnG27hvN/wJ2lSrQOfl651zJoCOLv+LBV8VfNGAvnAfoMEW717WQLrjO0kCtRV0mh0xLWLnLhvWP4EeGoBcmhsn5a4bioAvq8QpBvpAXLFlTWb0RMw3q37vJgcPtGpH+HECwgKqb3jKGtAZFOglJC4fPYgxCooCh9pjMlLrQK++CFr85hPJP8bIGW+5fUi9kagQPCSgtaTE5379JVlLFIWW7U6atmeG01mE2b/bP9VT2UWWx2cYgjJIq0W5cTqJzKCF3GYaplJvswh2MzKceqFi+V5gh4DMh0XGxEfTbOC3sUnF18LzLOW/oEgPMxix0FLLyAnnlFgNs0pirzDRlfyAZb+7SrqsuOpLy5cpuKrkGoVAM2Swz/cWWjqKNjuRqZsJafXsibIusqIlMdLacFGsCC2Y62I79sI2P88nry/lR/jnXp5d0QDtToOKwAgaOBu6nwP5ZBk6wbyuBNqRdRGTwcT+xAWmmNcdO7JZpyuUL7AFKnvAC7GbtFUb8jbCNPbcjELlyQDYjnPTN1heqqHCQNUBH05vXMMqQsbLBfV1SaQ5y9AgJEKh3AeAd5HYzdPdYRiN3xGxZ+JscVmtMAwsq7FLRQtWx1S34H3ovi/1x22TwFBeCbwCVmWYzfgjJVTmCewEB2G3vx4sNBs7r05sYiBzN8nbnlCOl1QidWjg8DBZlRzSr0IGM+TxvjqdSSGZLavQedLye7rbOTF1j0y7uNX+LspwJb/6IHGr/gpXOnIYmYc2hnAKNm5HKRfY3nlqapV4LcmQuFp64X+Y4Z1plocmkOgeJd0pi9ykILsPtqoju86UcXIikuQKhiXFdxua0YAQ==.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    },
+                    "state": "done"
+                  },
+                  {
+                    "type": "dynamic-tool",
+                    "toolName": "audience_reach",
+                    "toolCallId": "toolu_01Xs3ykhRWXw9oyNmy45raGy",
+                    "state": "output-available",
+                    "input": {
+                      "audience": {
+                        "segment_id": "at_risk"
+                      },
+                      "reason": "Alcance real por canal para clientes en riesgo."
+                    },
+                    "output": {
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "{\"data\":{\"audience\":{\"segment_id\":\"at_risk\"},\"matched\":483,\"by_channel\":[{\"channel\":\"email\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":151,\"excluded_duplicates\":2,\"reachable\":330},{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},{\"channel\":\"push\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":239,\"excluded_duplicates\":2,\"reachable\":242}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_4d3176cf45\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:05.548Z\"}}"
+                        }
+                      ],
+                      "isError": false
+                    },
+                    "title": "Alcance real de una audiencia",
+                    "toolMetadata": {
+                      "clientName": "ai-sdk-mcp-client",
+                      "toolName": "audience_reach",
+                      "title": "Alcance real de una audiencia"
+                    },
+                    "callProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm drafting a WhatsApp campaign for the at-risk segment, offering a free item similar to cmp_0004. I still need to check the audience reach, the offer economics, and the estimated campaign impact, and I'll run those three in parallel.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "CAQS/gYKEAgTGAI4AUIIdGhpbmtpbmcSDGe7rlzvtXrdQzWfwhoMpfvMCN1Ep3rycX1xIjCuiN7fWxx0fRDCbjYkFM9oHme3D6OXqnCkkNm3A/+NeDCE24/Hl8eaKrCf3erxihsqmwaHGeiCj6YflE0/WltJQHhkQUJGq4tV9tlW9tO4YMbu69wksTK1peJR9YI9cCLk7mIb3zFPcOLwyjQ4R3JPDPOHJo0a8ERgy84csWO+YdZlnd8qDEdZhCjsZrIZKvtyfTZ0a7XKbOD4WCWD0g1cTi5lFRtSlBsB9Fg/ajC0LS2MEEveqzsU2m+1dzAlIDDiIXdRs/YfYYT1N/GlpRIrNK+Ht0VyUHaEP3nWnG27hvN/wJ2lSrQOfl651zJoCOLv+LBV8VfNGAvnAfoMEW717WQLrjO0kCtRV0mh0xLWLnLhvWP4EeGoBcmhsn5a4bioAvq8QpBvpAXLFlTWb0RMw3q37vJgcPtGpH+HECwgKqb3jKGtAZFOglJC4fPYgxCooCh9pjMlLrQK++CFr85hPJP8bIGW+5fUi9kagQPCSgtaTE5379JVlLFIWW7U6atmeG01mE2b/bP9VT2UWWx2cYgjJIq0W5cTqJzKCF3GYaplJvswh2MzKceqFi+V5gh4DMh0XGxEfTbOC3sUnF18LzLOW/oEgPMxix0FLLyAnnlFgNs0pirzDRlfyAZb+7SrqsuOpLy5cpuKrkGoVAM2Swz/cWWjqKNjuRqZsJafXsibIusqIlMdLacFGsCC2Y62I79sI2P88nry/lR/jnXp5d0QDtToOKwAgaOBu6nwP5ZBk6wbyuBNqRdRGTwcT+xAWmmNcdO7JZpyuUL7AFKnvAC7GbtFUb8jbCNPbcjELlyQDYjnPTN1heqqHCQNUBH05vXMMqQsbLBfV1SaQ5y9AgJEKh3AeAd5HYzdPdYRiN3xGxZ+JscVmtMAwsq7FLRQtWx1S34H3ovi/1x22TwFBeCbwCVmWYzfgjJVTmCewEB2G3vx4sNBs7r05sYiBzN8nbnlCOl1QidWjg8DBZlRzSr0IGM+TxvjqdSSGZLavQedLye7rbOTF1j0y7uNX+LspwJb/6IHGr/gpXOnIYmYc2hnAKNm5HKRfY3nlqapV4LcmQuFp64X+Y4Z1plocmkOgeJd0pi9ykILsPtqoju86UcXIikuQKhiXFdxua0YAQ==.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    },
+                    "resultProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm drafting a WhatsApp campaign for the at-risk segment, offering a free item similar to cmp_0004. I still need to check the audience reach, the offer economics, and the estimated campaign impact, and I'll run those three in parallel.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "CAQS/gYKEAgTGAI4AUIIdGhpbmtpbmcSDGe7rlzvtXrdQzWfwhoMpfvMCN1Ep3rycX1xIjCuiN7fWxx0fRDCbjYkFM9oHme3D6OXqnCkkNm3A/+NeDCE24/Hl8eaKrCf3erxihsqmwaHGeiCj6YflE0/WltJQHhkQUJGq4tV9tlW9tO4YMbu69wksTK1peJR9YI9cCLk7mIb3zFPcOLwyjQ4R3JPDPOHJo0a8ERgy84csWO+YdZlnd8qDEdZhCjsZrIZKvtyfTZ0a7XKbOD4WCWD0g1cTi5lFRtSlBsB9Fg/ajC0LS2MEEveqzsU2m+1dzAlIDDiIXdRs/YfYYT1N/GlpRIrNK+Ht0VyUHaEP3nWnG27hvN/wJ2lSrQOfl651zJoCOLv+LBV8VfNGAvnAfoMEW717WQLrjO0kCtRV0mh0xLWLnLhvWP4EeGoBcmhsn5a4bioAvq8QpBvpAXLFlTWb0RMw3q37vJgcPtGpH+HECwgKqb3jKGtAZFOglJC4fPYgxCooCh9pjMlLrQK++CFr85hPJP8bIGW+5fUi9kagQPCSgtaTE5379JVlLFIWW7U6atmeG01mE2b/bP9VT2UWWx2cYgjJIq0W5cTqJzKCF3GYaplJvswh2MzKceqFi+V5gh4DMh0XGxEfTbOC3sUnF18LzLOW/oEgPMxix0FLLyAnnlFgNs0pirzDRlfyAZb+7SrqsuOpLy5cpuKrkGoVAM2Swz/cWWjqKNjuRqZsJafXsibIusqIlMdLacFGsCC2Y62I79sI2P88nry/lR/jnXp5d0QDtToOKwAgaOBu6nwP5ZBk6wbyuBNqRdRGTwcT+xAWmmNcdO7JZpyuUL7AFKnvAC7GbtFUb8jbCNPbcjELlyQDYjnPTN1heqqHCQNUBH05vXMMqQsbLBfV1SaQ5y9AgJEKh3AeAd5HYzdPdYRiN3xGxZ+JscVmtMAwsq7FLRQtWx1S34H3ovi/1x22TwFBeCbwCVmWYzfgjJVTmCewEB2G3vx4sNBs7r05sYiBzN8nbnlCOl1QidWjg8DBZlRzSr0IGM+TxvjqdSSGZLavQedLye7rbOTF1j0y7uNX+LspwJb/6IHGr/gpXOnIYmYc2hnAKNm5HKRfY3nlqapV4LcmQuFp64X+Y4Z1plocmkOgeJd0pi9ykILsPtqoju86UcXIikuQKhiXFdxua0YAQ==.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "dynamic-tool",
+                    "toolName": "estimate_campaign_impact",
+                    "toolCallId": "toolu_01WDHFWbqsbsyra283EHnesc",
+                    "state": "output-available",
+                    "input": {
+                      "audience": {
+                        "segment_id": "at_risk"
+                      },
+                      "channel": "whatsapp",
+                      "offer": {
+                        "type": "free_item",
+                        "product_id": "prd_concha"
+                      },
+                      "reason": "Estimar impacto de la campaña por WhatsApp con regalo de Concha, basado en 'Te extrañamos'."
+                    },
+                    "output": {
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "{\"data\":{\"reach\":{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},\"offer_economics\":{\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"]},\"reference_campaign\":{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"},\"similar_campaigns\":[\"cmp_0004\"],\"impact\":{\"kind\":\"incremental\",\"extra_visits\":[31,64,96],\"extra_net_sales\":[2905.32,5998.08,8997.12],\"expected_redemptions\":[84,84,84],\"offer_cost\":[840,840,840],\"net_gross_profit\":[1222.74,3418.56,5547.84],\"confidence\":\"media\"}},\"notes\":[\"Rangos en orden [bajo, central, alto]; la utilidad neta es conservadora (bajo = menor utilidad con mayor costo).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Supuesto: las visitas adicionales tienen el ticket promedio del negocio.\"],\"warnings\":[\"Una sola campaña de referencia: los canjes esperados no tienen rango de variación.\"],\"source\":{\"id\":\"src_4dbc58f1e6\",\"tool\":\"estimate_campaign_impact\",\"endpoints\":[\"POST /v1/campaigns/preview\",\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:06.096Z\"}}"
+                        }
+                      ],
+                      "isError": false
+                    },
+                    "title": "Impacto esperado de una campaña",
+                    "toolMetadata": {
+                      "clientName": "ai-sdk-mcp-client",
+                      "toolName": "estimate_campaign_impact",
+                      "title": "Impacto esperado de una campaña"
+                    }
+                  },
+                  {
+                    "type": "dynamic-tool",
+                    "toolName": "offer_economics",
+                    "toolCallId": "toolu_013Hqfn2aBKCkJtSSAEGK8FQ",
+                    "state": "output-available",
+                    "input": {
+                      "offer": {
+                        "type": "free_item",
+                        "product_id": "prd_concha"
+                      },
+                      "reason": "Costo de regalar una Concha y su efecto en margen."
+                    },
+                    "output": {
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "{\"data\":{\"offer\":{\"type\":\"free_item\",\"product_id\":\"prd_concha\"},\"product_name\":\"Concha\",\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"total_cost\":null},\"notes\":[\"Costo unitario de Concha regalado ($10).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"warnings\":[],\"source\":{\"id\":\"src_d8bd7a9096\",\"tool\":\"offer_economics\",\"endpoints\":[\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T07:47:06.545Z\"}}"
+                        }
+                      ],
+                      "isError": false
+                    },
+                    "title": "Economía de una oferta",
+                    "toolMetadata": {
+                      "clientName": "ai-sdk-mcp-client",
+                      "toolName": "offer_economics",
+                      "title": "Economía de una oferta"
+                    }
+                  },
+                  {
+                    "type": "step-start"
+                  },
+                  {
+                    "type": "reasoning",
+                    "id": "bq1T8IGW3SwLBMUv",
+                    "text": "I'm noting that WhatsApp is the preferred channel with 267 reachable, while email reaches 330 but is less preferred, so I'll mention that. The campaign card should show WhatsApp, the message has to stay under 1024 characters and short, and valid dates run from 2026-11-01 to 2026-11-14. I also need to flag that the reference campaign is single with a small control and the figures are estimates, and that cmp_0004 targeted 4+ visits.\n\nI'm planning the campaign card and approval request now, with sources and the impact range, extra sales between roughly 2,905 and 8,997 and visits between 31 and 96. The total cost stays at 840 since the tool already gave that figure, so I won't recompute it. Reach is 267 reachable out of 483 matched, and I'll write a brief intro in Spanish before showing the card.\n\n",
+                    "providerMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm noting that WhatsApp is the preferred channel with 267 reachable, while email reaches 330 but is less preferred, so I'll mention that. The campaign card should show WhatsApp, the message has to stay under 1024 characters and short, and valid dates run from 2026-11-01 to 2026-11-14. I also need to flag that the reference campaign is single with a small control and the figures are estimates, and that cmp_0004 targeted 4+ visits.\n\nI'm planning the campaign card and approval request now, with sources and the impact range, extra sales between roughly 2,905 and 8,997 and visits between 31 and 96. The total cost stays at 840 since the tool already gave that figure, so I won't recompute it. Reach is 267 reachable out of 483 matched, and I'll write a brief intro in Spanish before showing the card.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "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.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    },
+                    "state": "done"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Propongo una campaña de WhatsApp para los 483 clientes en riesgo (10 o más visitas, entre 30 y 90 días sin venir). Con WhatsApp, que es tu canal preferido, puedo contactar a 267. La oferta es una Concha gratis, igual que en \"Te extrañamos\", la campaña de recuperación con mejor resultado medido.\n\nTres advertencias antes de que decidas:\n- La referencia tuvo grupo de control, pero es pequeño (67 clientes) y su confiabilidad es media. Su audiencia era distinta (4 o más visitas y 21 o más días sin venir), así que el lift no es directo.\n- El alcance por email es mayor (330), pero no es tu canal preferido. Si prefieres email, lo ajusto.\n- La Concha cuesta $10 por canje y deja un margen de $56.54 por visita, según la utilidad bruta de los últimos 3 meses.",
+                    "state": "done"
+                  },
+                  {
+                    "type": "tool-show_campaign_card",
+                    "toolCallId": "toolu_01P1gwXZEmFyaXjvqrHnEWxV",
+                    "state": "output-available",
+                    "input": {
+                      "title": "Recuperar clientes en riesgo con una Concha",
+                      "period": {
+                        "from": "2026-11-01",
+                        "to": "2026-11-14",
+                        "label": "Vigencia propuesta"
+                      },
+                      "sources": [
+                        "src_4ddcf335f8",
+                        "src_15d0fce626",
+                        "src_4d3176cf45",
+                        "src_4dbc58f1e6",
+                        "src_d8bd7a9096"
+                      ],
+                      "notes": [
+                        "Impacto en rango bajo, central y alto: visitas adicionales 31, 64 y 96; ventas adicionales $2,905.32, $5,998.08 y $8,997.12."
+                      ],
+                      "state": "proposal",
+                      "name": "Te extrañamos: clientes en riesgo",
+                      "objective": "Recuperar a clientes en riesgo (10+ visitas, 30 a 90 días sin venir) con una visita de regreso.",
+                      "audience": {
+                        "filters": {
+                          "segment_id": "at_risk"
+                        },
+                        "description": "Clientes en riesgo de todas las sucursales, con consentimiento de WhatsApp"
+                      },
+                      "channel": "whatsapp",
+                      "reach": {
+                        "matched": 483,
+                        "reachable": 267,
+                        "excludedNoConsent": 214,
+                        "excludedSuspended": 0,
+                        "excludedDuplicates": 2,
+                        "otherChannels": [
+                          {
+                            "channel": "email",
+                            "reachable": 330
+                          },
+                          {
+                            "channel": "push",
+                            "reachable": 242
+                          }
+                        ]
+                      },
+                      "offer": {
+                        "type": "free_item",
+                        "productId": "prd_concha",
+                        "productName": "Concha",
+                        "validFrom": "2026-11-01",
+                        "validTo": "2026-11-14"
+                      },
+                      "economics": {
+                        "costPerRedemption": 10,
+                        "marginNote": "Cada canje cuesta $10 y deja $56.54 de margen por visita (utilidad bruta de los últimos 3 meses).",
+                        "totalCostRange": [
+                          840,
+                          840
+                        ]
+                      },
+                      "expectedImpact": {
+                        "extraVisitsRange": [
+                          31,
+                          96
+                        ],
+                        "extraSalesRange": [
+                          2905.32,
+                          8997.12
+                        ],
+                        "basis": "Lift de 'Te extrañamos' (+23.9 pts con control, IC 11.7 a 36) aplicado a 267 alcanzables; ticket promedio $93.72."
+                      },
+                      "history": [
+                        {
+                          "name": "Te extrañamos (WhatsApp, Concha gratis)",
+                          "lift": 23.9,
+                          "n": 272,
+                          "reliable": true
+                        }
+                      ],
+                      "message": {
+                        "text": "Hola {nombre}, te extrañamos en Café Alborada. Pasa esta semana por tu Concha gratis con tu tarjeta. ¡Te esperamos!"
+                      },
+                      "warnings": [
+                        "Referencia con grupo de control pequeño (67 clientes) y confiabilidad media.",
+                        "La audiencia de referencia era otra (4+ visitas y 21+ días sin venir); el lift puede diferir.",
+                        "Canjes esperados: 84 (única referencia, sin rango).",
+                        "Email alcanza 330 y push 242; WhatsApp es el canal preferido."
+                      ]
+                    },
+                    "output": {
+                      "shown": true
+                    },
+                    "callProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm noting that WhatsApp is the preferred channel with 267 reachable, while email reaches 330 but is less preferred, so I'll mention that. The campaign card should show WhatsApp, the message has to stay under 1024 characters and short, and valid dates run from 2026-11-01 to 2026-11-14. I also need to flag that the reference campaign is single with a small control and the figures are estimates, and that cmp_0004 targeted 4+ visits.\n\nI'm planning the campaign card and approval request now, with sources and the impact range, extra sales between roughly 2,905 and 8,997 and visits between 31 and 96. The total cost stays at 840 since the tool already gave that figure, so I won't recompute it. Reach is 267 reachable out of 483 matched, and I'll write a brief intro in Spanish before showing the card.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "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.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    },
+                    "resultProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": [
+                          {
+                            "type": "reasoning.text",
+                            "text": "I'm noting that WhatsApp is the preferred channel with 267 reachable, while email reaches 330 but is less preferred, so I'll mention that. The campaign card should show WhatsApp, the message has to stay under 1024 characters and short, and valid dates run from 2026-11-01 to 2026-11-14. I also need to flag that the reference campaign is single with a small control and the figures are estimates, and that cmp_0004 targeted 4+ visits.\n\nI'm planning the campaign card and approval request now, with sources and the impact range, extra sales between roughly 2,905 and 8,997 and visits between 31 and 96. The total cost stays at 840 since the tool already gave that figure, so I won't recompute it. Reach is 267 reachable out of 483 matched, and I'll write a brief intro in Spanish before showing the card.\n\n",
+                            "format": "anthropic-claude-v1",
+                            "index": 0,
+                            "signature": "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.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8YW50aHJvcGljIn0"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "step-start"
+                  },
+                  {
+                    "type": "tool-request_draft_approval",
+                    "toolCallId": "toolu_01SJEZqCGwgix3b8ughWwQ48",
+                    "state": "input-available",
+                    "input": {
+                      "campaign": {
+                        "name": "Te extrañamos: clientes en riesgo",
+                        "objective": "Recuperar a clientes en riesgo (10+ visitas, 30 a 90 días sin venir) con una visita de regreso.",
+                        "channel": "whatsapp",
+                        "audience": {
+                          "segment_id": "at_risk"
+                        },
+                        "offer": {
+                          "type": "free_item",
+                          "product_id": "prd_concha",
+                          "valid_from": "2026-11-01",
+                          "valid_to": "2026-11-14"
+                        },
+                        "message": "Hola {nombre}, te extrañamos en Café Alborada. Pasa esta semana por tu Concha gratis con tu tarjeta. ¡Te esperamos!"
+                      },
+                      "reason": "Pedir aprobación de la tarjeta de campaña mostrada para clientes en riesgo."
+                    },
+                    "callProviderMetadata": {
+                      "openrouter": {
+                        "reasoning_details": []
+                      }
+                    }
+                  }
+                ]
+              },
+              "firstTextMs": 11641.0671,
+              "totalMs": 17879.0664,
+              "errors": [],
+              "steps": [
+                {
+                  "kind": "llm",
+                  "name": "anthropic/claude-haiku-5.5",
+                  "tokensIn": 19450,
+                  "tokensOut": 345,
+                  "costUsd": 0.0021175,
+                  "latencyMs": 1999
+                },
+                {
+                  "kind": "tool",
+                  "name": "customer_segments",
+                  "input": {
+                    "segment_ids": [
+                      "at_risk"
+                    ]
+                  },
+                  "reason": "Dimensionar los clientes en riesgo antes de proponer la campaña.",
+                  "outputSummary": {
+                    "source": "src_4ddcf335f8",
+                    "warnings": 0
+                  },
+                  "latencyMs": 6
+                },
+                {
+                  "kind": "tool",
+                  "name": "campaign_performance",
+                  "input": {
+                    "similar_to": {
+                      "channel": "whatsapp",
+                      "keyword": "recuperar"
+                    }
+                  },
+                  "reason": "Ver qué campañas parecidas de recuperación funcionaron por WhatsApp.",
+                  "outputSummary": {
+                    "source": "src_15d0fce626",
+                    "warnings": 1
+                  },
+                  "latencyMs": 1905
+                },
+                {
+                  "kind": "llm",
+                  "name": "anthropic/claude-haiku-5.5",
+                  "tokensIn": 22222,
+                  "tokensOut": 476,
+                  "costUsd": 0.0024602,
+                  "latencyMs": 2232
+                },
+                {
+                  "kind": "tool",
+                  "name": "audience_reach",
+                  "input": {
+                    "audience": {
+                      "segment_id": "at_risk"
+                    }
+                  },
+                  "reason": "Alcance real por canal para clientes en riesgo.",
+                  "outputSummary": {
+                    "source": "src_4d3176cf45",
+                    "warnings": 0
+                  },
+                  "latencyMs": 281
+                },
+                {
+                  "kind": "tool",
+                  "name": "estimate_campaign_impact",
+                  "input": {
+                    "audience": {
+                      "segment_id": "at_risk"
+                    },
+                    "channel": "whatsapp",
+                    "offer": {
+                      "type": "free_item",
+                      "product_id": "prd_concha"
+                    }
+                  },
+                  "reason": "Estimar impacto de la campaña por WhatsApp con regalo de Concha, basado en 'Te extrañamos'.",
+                  "outputSummary": {
+                    "source": "src_4dbc58f1e6",
+                    "warnings": 1
+                  },
+                  "latencyMs": 830
+                },
+                {
+                  "kind": "tool",
+                  "name": "offer_economics",
+                  "input": {
+                    "offer": {
+                      "type": "free_item",
+                      "product_id": "prd_concha"
+                    }
+                  },
+                  "reason": "Costo de regalar una Concha y su efecto en margen.",
+                  "outputSummary": {
+                    "source": "src_d8bd7a9096",
+                    "warnings": 0
+                  },
+                  "latencyMs": 1278
+                },
+                {
+                  "kind": "llm",
+                  "name": "anthropic/claude-haiku-5.5",
+                  "tokensIn": 24424,
+                  "tokensOut": 2031,
+                  "costUsd": 0.0034579,
+                  "latencyMs": 8813
+                },
+                {
+                  "kind": "presentation",
+                  "name": "show_campaign_card",
+                  "input": {
+                    "title": "Recuperar clientes en riesgo con una Concha",
+                    "period": {
+                      "from": "2026-11-01",
+                      "to": "2026-11-14",
+                      "label": "Vigencia propuesta"
+                    },
+                    "sources": [
+                      "src_4ddcf335f8",
+                      "src_15d0fce626",
+                      "src_4d3176cf45",
+                      "src_4dbc58f1e6",
+                      "src_d8bd7a9096"
+                    ],
+                    "notes": [
+                      "Impacto en rango bajo, central y alto: visitas adicionales 31, 64 y 96; ventas adicionales $2,905.32, $5,998.08 y $8,997.12."
+                    ],
+                    "state": "proposal",
+                    "name": "Te extrañamos: clientes en riesgo",
+                    "objective": "Recuperar a clientes en riesgo (10+ visitas, 30 a 90 días sin venir) con una visita de regreso.",
+                    "audience": {
+                      "filters": {
+                        "segment_id": "at_risk"
+                      },
+                      "description": "Clientes en riesgo de todas las sucursales, con consentimiento de WhatsApp"
+                    },
+                    "channel": "whatsapp",
+                    "reach": {
+                      "matched": 483,
+                      "reachable": 267,
+                      "excludedNoConsent": 214,
+                      "excludedSuspended": 0,
+                      "excludedDuplicates": 2,
+                      "otherChannels": [
+                        {
+                          "channel": "email",
+                          "reachable": 330
+                        },
+                        {
+                          "channel": "push",
+                          "reachable": 242
+                        }
+                      ]
+                    },
+                    "offer": {
+                      "type": "free_item",
+                      "productId": "prd_concha",
+                      "productName": "Concha",
+                      "validFrom": "2026-11-01",
+                      "validTo": "2026-11-14"
+                    },
+                    "economics": {
+                      "costPerRedemption": 10,
+                      "marginNote": "Cada canje cuesta $10 y deja $56.54 de margen por visita (utilidad bruta de los últimos 3 meses).",
+                      "totalCostRange": [
+                        840,
+                        840
+                      ]
+                    },
+                    "expectedImpact": {
+                      "extraVisitsRange": [
+                        31,
+                        96
+                      ],
+                      "extraSalesRange": [
+                        2905.32,
+                        8997.12
+                      ],
+                      "basis": "Lift de 'Te extrañamos' (+23.9 pts con control, IC 11.7 a 36) aplicado a 267 alcanzables; ticket promedio $93.72."
+                    },
+                    "history": [
+                      {
+                        "name": "Te extrañamos (WhatsApp, Concha gratis)",
+                        "lift": 23.9,
+                        "n": 272,
+                        "reliable": true
+                      }
+                    ],
+                    "message": {
+                      "text": "Hola {nombre}, te extrañamos en Café Alborada. Pasa esta semana por tu Concha gratis con tu tarjeta. ¡Te esperamos!"
+                    },
+                    "warnings": [
+                      "Referencia con grupo de control pequeño (67 clientes) y confiabilidad media.",
+                      "La audiencia de referencia era otra (4+ visitas y 21+ días sin venir); el lift puede diferir.",
+                      "Canjes esperados: 84 (única referencia, sin rango).",
+                      "Email alcanza 330 y push 242; WhatsApp es el canal preferido."
+                    ]
+                  },
+                  "outputSummary": {
+                    "shown": true
+                  },
+                  "latencyMs": 0
+                },
+                {
+                  "kind": "llm",
+                  "name": "anthropic/claude-haiku-5.5",
+                  "tokensIn": 11781,
+                  "tokensOut": 328,
+                  "costUsd": 0.0013421,
+                  "latencyMs": 1633
+                },
+                {
+                  "kind": "approval",
+                  "name": "request_draft_approval",
+                  "input": {
+                    "campaign": {
+                      "name": "Te extrañamos: clientes en riesgo",
+                      "objective": "Recuperar a clientes en riesgo (10+ visitas, 30 a 90 días sin venir) con una visita de regreso.",
+                      "channel": "whatsapp",
+                      "audience": {
+                        "segment_id": "at_risk"
+                      },
+                      "offer": {
+                        "type": "free_item",
+                        "product_id": "prd_concha",
+                        "valid_from": "2026-11-01",
+                        "valid_to": "2026-11-14"
+                      },
+                      "message": "Hola {nombre}, te extrañamos en Café Alborada. Pasa esta semana por tu Concha gratis con tu tarjeta. ¡Te esperamos!"
+                    }
+                  },
+                  "reason": "Pedir aprobación de la tarjeta de campaña mostrada para clientes en riesgo.",
+                  "outputSummary": {
+                    "awaiting": "person"
+                  }
+                }
+              ],
+              "totals": {
+                "model": "anthropic/claude-haiku-5.5",
+                "llmCalls": 4,
+                "toolCalls": 7,
+                "tokensIn": 77877,
+                "tokensOut": 3180,
+                "costUsd": 0.009377700000000001,
+                "latencyMs": 17869
+              }
+            }
+          ],
+          "writes": [],
+          "faultHits": [],
+          "replies": [],
+          "pendingApproval": true
+        }
+      }
+    ]
+  }
+}

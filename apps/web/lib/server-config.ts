@@ -7,8 +7,11 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
-
-const MIN_SECRET_LENGTH = 32;
+import {
+  MIN_SECRET_LENGTH,
+  parseBusinessRegistry,
+  type BusinessConfig,
+} from "./tenancy/business-registry";
 
 const optionalText = z.preprocess(
   (value) => (value === "" ? undefined : value),
@@ -16,27 +19,32 @@ const optionalText = z.preprocess(
 );
 
 const ServerEnv = z.object({
-  LUYOA_API_KEY: z.string().min(1, "Falta LUYOA_API_KEY"),
   LUYOA_API_BASE_URL: z.string().url().default("https://prueba-developer.luyoa.dev"),
   APPROVAL_SECRET: z
     .string()
     .min(MIN_SECRET_LENGTH, `APPROVAL_SECRET requiere ${MIN_SECRET_LENGTH} caracteres o más`),
-  MCP_SERVICE_TOKEN: z
-    .string()
-    .min(MIN_SECRET_LENGTH, `MCP_SERVICE_TOKEN requiere ${MIN_SECRET_LENGTH} caracteres o más`),
   DATABASE_URL: z.string().default("file:./data/local.db"),
   DATABASE_AUTH_TOKEN: optionalText,
-  BUSINESS_ID: z.string().default("biz_alborada"),
+  // ES: Secreto con el que Vercel Cron llama /api/cron/weekly; sin él, el cron no corre.
+  // EN: Secret Vercel Cron uses to call /api/cron/weekly; without it, the cron does not run.
+  CRON_SECRET: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z
+      .string()
+      .min(MIN_SECRET_LENGTH, `CRON_SECRET requiere ${MIN_SECRET_LENGTH} caracteres o más`)
+      .optional(),
+  ),
 });
 
 export type ServerConfig = {
-  apiKey: string;
   apiBaseUrl: string;
   approvalSecret: string;
-  mcpServiceToken: string;
   databaseUrl: string;
   databaseAuthToken: string | undefined;
-  businessId: string;
+  cronSecret: string | undefined;
+  // ES: Negocios registrados (X-05); el primero es el negocio por defecto.
+  // EN: Registered businesses (X-05); the first one is the default business.
+  businesses: BusinessConfig[];
 };
 
 /**
@@ -77,13 +85,12 @@ export function serverConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig
     );
   }
   const config: ServerConfig = {
-    apiKey: parsed.data.LUYOA_API_KEY,
     apiBaseUrl: parsed.data.LUYOA_API_BASE_URL,
     approvalSecret: parsed.data.APPROVAL_SECRET,
-    mcpServiceToken: parsed.data.MCP_SERVICE_TOKEN,
     databaseUrl: resolveDatabaseUrl(parsed.data.DATABASE_URL),
     databaseAuthToken: parsed.data.DATABASE_AUTH_TOKEN,
-    businessId: parsed.data.BUSINESS_ID,
+    cronSecret: parsed.data.CRON_SECRET,
+    businesses: parseBusinessRegistry(env),
   };
   if (env === process.env) cached = config;
   return config;

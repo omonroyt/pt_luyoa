@@ -40,7 +40,11 @@ export function createServerFactory(
     apiKey: config.apiKey,
     fetchImpl: dependencies.fetchImpl,
   });
-  const ctx = createToolContext(api, { now: dependencies.now, approvals: dependencies.approvals });
+  const ctx = createToolContext(api, {
+    now: dependencies.now,
+    approvals: dependencies.approvals,
+    expectedBusinessId: config.businessId,
+  });
   return () => {
     const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
     registerTools(server, ctx);

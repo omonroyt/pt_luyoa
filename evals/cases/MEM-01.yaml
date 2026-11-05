@@ -6,6 +6,7 @@ requires: ["memory"]
 turns:
   - user: "Recuerda que para mis campañas prefiero WhatsApp."
   - user: "Propón una campaña para recuperar a los clientes en riesgo."
+    new_conversation: true
 expect:
   tools_forbidden: ["create_campaign_draft", "send_campaign"]
   must_mention:

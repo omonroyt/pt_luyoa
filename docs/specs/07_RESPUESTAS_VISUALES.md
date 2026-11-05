@@ -285,6 +285,8 @@ Cada chip `[Fuente: …]` abre un panel:
 | Error de herramienta | Un paso falló: muestra qué falló, en una línea, y botón "Reintentar" si `retryable` |
 | Paso en curso | "Consultando ventas por categoría…" con el nombre amable de la herramienta |
 | Aviso de verificación | El verificador de cifras rechazó un bloque y el agente lo corrigió (solo en el panel de trazas) |
+| Resumen de la semana | Sugerencia "Resumen de la semana" al inicio de la lista. Si el cron dejó un resumen y el chat está vacío, un aviso "Tu resumen de la semana al AAAA-MM-DD está listo" con "Ver resumen", que carga la pregunta y la respuesta guardadas en el chat (X-02) |
+| Panel de preferencias | Botón "Preferencias" del encabezado: lista lo que el agente recuerda del negocio (canal, descuento máximo, tono, sucursal, productos a evitar y duración), con "Olvidar" en cada una. Misma hoja inferior en celular y columna lateral en escritorio que el panel de trazas; solo hay un panel abierto a la vez (X-04) |
 
 ---
 

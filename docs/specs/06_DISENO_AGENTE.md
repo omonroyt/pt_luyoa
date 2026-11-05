@@ -272,6 +272,12 @@ stateDiagram-v2
 - Disparo: botón "Resumen de la semana" y Cron semanal que lo deja listo al abrir el chat.
 - Pasos: `compare_periods` (última semana contra anterior), `location_health`, `customer_segments`, `campaign_performance`.
 - Salida: `show_kpis` + 2 o 3 oportunidades, cada una con evidencia y botón "Armar campaña".
+- **Implementación (M7, IMP-60):**
+  - **Prompt:** la sección "RESUMEN DE LA SEMANA" fija las consultas (last_week contra previous_week y las otras tres), la semana y la fecha de corte, `show_kpis` y 2 o 3 oportunidades numeradas con evidencia, acción y alcance real. El resumen no muestra tarjetas ni pide aprobaciones, porque el cron lo genera sin la persona. Cierra ofreciendo armar la campaña de la oportunidad que se elija.
+  - **Generación** (`lib/agent/weekly-summary.ts`): el mismo `streamAgentTurn` con la pregunta del resumen (`WEEKLY_SUMMARY_PROMPT`), leído completo en el servidor (`collect-message.ts`). Se guarda la pregunta y la respuesta como mensajes, con la fecha final de last_week. No se guarda si hubo errores del stream, si no hay texto o si quedó una aprobación pedida.
+  - **Disparo:** la sugerencia "Resumen de la semana" del chat y `GET /api/cron/weekly`, que Vercel Cron llama los lunes a las 13:00 UTC (7:00 en Ciudad de México) con `Authorization: Bearer CRON_SECRET`. Sin `CRON_SECRET` configurado, la ruta responde 503.
+  - **Al abrir el chat:** si hay un resumen guardado (`GET /api/weekly-summary`, solo del negocio), un aviso ofrece "Ver resumen". Al abrirlo, sus mensajes se cargan en el chat y la persona puede seguir preguntando con las mismas fuentes.
+  - **Diferencia con el diseño:** "Armar campaña" no es un botón por oportunidad. El resumen termina invitando a pedirla ("arma la campaña de la oportunidad 2"), porque las oportunidades van en el texto y no en un bloque con estructura.
 
 ### 12.2 Memoria de preferencias (X-04)
 
@@ -280,3 +286,9 @@ stateDiagram-v2
 - Se inyectan en el prompt de sistema de cada conversación del mismo negocio.
 - Se pueden ver y borrar desde la interfaz.
 - Claves iniciales: `preferred_channel`, `max_discount_pct`, `message_tone`, `focus_location`, `avoid_products`, `campaign_duration_days`.
+- **Implementación (M7, IMP-61):**
+  - **Claves y valores** (`lib/memory/preferences.ts`): cada clave valida su valor. El canal es `push`, `whatsapp` o `email`; el descuento, un entero de 1 a 100; la duración, de 1 a 60 días; la sucursal, un id `loc_…`; tono y productos, textos breves. Un valor inválido falla en la entrada de la herramienta con el motivo, y el modelo corrige.
+  - **Almacén por negocio** (`lib/memory/preference-store.ts`): el `businessId` se fija al crear el almacén y ninguna operación recibe otro, así que un negocio no puede leer ni borrar las preferencias de otro (CA-X05, ADR-16). Hay una versión en base de datos (tabla `preferences`, una fila por negocio y clave) y otra en memoria para pruebas y evaluaciones.
+  - **Prompt:** al inicio de cada turno se leen las preferencias y entran en la sección "PREFERENCIAS DEL NEGOCIO" como valores entre comillas, marcados como datos y no como instrucciones. Si la petición del turno las contradice, gana la petición y el agente lo dice. Si no se pueden leer, el turno sigue sin ellas y el prompt lo advierte.
+  - **Interfaz:** el botón "Preferencias" abre un panel con lo guardado y un botón "Olvidar" por preferencia (`GET` y `DELETE /api/preferences`, solo del mismo origen y del negocio de la sesión).
+  - **Sin memoria:** si el turno no recibe almacén, no hay herramientas de memoria ni sección de preferencias.

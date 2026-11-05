@@ -7,7 +7,7 @@
  *     M7 features is marked as skipped and does not count as passed.
  */
 import type { LanguageModel } from "ai";
-import type { EvalCase } from "./cases/case-schema";
+import { missingRequirements, type EvalCase } from "./cases/case-schema";
 import { loadGolden } from "./cases/load-cases";
 import { BUDGET_EXHAUSTED, type Budget } from "./budget";
 import { retryRateLimited } from "./runner/retry";
@@ -139,9 +139,8 @@ export async function evaluateCase(
   deps: EvaluationDependencies,
 ): Promise<CaseResult> {
   const base = baseOf(evalCase, repeat);
-  if (evalCase.requires.length > 0) {
-    return { ...base, skipped: `Requiere ${evalCase.requires.join(", ")} (M7)` };
-  }
+  const missing = missingRequirements(evalCase);
+  if (missing.length > 0) return { ...base, skipped: `Requiere ${missing.join(", ")} (M7)` };
   if (deps.budget && !deps.budget.canStart()) return { ...base, skipped: BUDGET_EXHAUSTED };
   const result = await runAndScore(evalCase, repeat, deps);
   deps.budget?.add((result.usage?.agentCostUsd ?? 0) + (result.usage?.judgeCostUsd ?? 0));

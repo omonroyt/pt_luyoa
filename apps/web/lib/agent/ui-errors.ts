@@ -20,6 +20,8 @@ export const UNVERIFIED_BLOCK_MESSAGE =
 //     (card-gate.ts), o llamó una herramienta que el paso no ofrece (ADR-08).
 // EN: The model asked for approval before a card passed the verifier (card-gate.ts), or
 //     called a tool the step does not offer (ADR-08).
+export const INVALID_PREFERENCE_MESSAGE =
+  "El agente está corrigiendo una preferencia con un valor no válido.";
 export const EARLY_STEP_MESSAGE = "El agente pidió un paso antes de tiempo y lo está corrigiendo.";
 
 // ES: El AI SDK reporta un mismo error dos veces: como objeto (tool-input-error o
@@ -30,6 +32,13 @@ export const EARLY_STEP_MESSAGE = "El agente pidió un paso antes de tiempo y lo
 //     future version changes that format.
 const isNamed = (error: unknown, name: string) =>
   typeof error === "string" && error.startsWith(name);
+
+const PREFERENCE_INPUT = /^AI_InvalidToolInputError: Invalid input for tool remember_preference/;
+
+function isInvalidPreference(error: unknown): boolean {
+  if (InvalidToolInputError.isInstance(error)) return error.toolName === "remember_preference";
+  return typeof error === "string" && PREFERENCE_INPUT.test(error);
+}
 
 const APPROVAL_INPUT =
   /^AI_InvalidToolInputError: Invalid input for tool request_(draft|send)_approval/;
@@ -45,6 +54,7 @@ function isEarlyApproval(error: unknown): boolean {
 
 export function uiErrorMessage(error: unknown): string {
   if (isEarlyApproval(error)) return EARLY_STEP_MESSAGE;
+  if (isInvalidPreference(error)) return INVALID_PREFERENCE_MESSAGE;
   if (InvalidToolInputError.isInstance(error) || isNamed(error, "AI_InvalidToolInputError")) {
     return INVALID_BLOCK_MESSAGE;
   }

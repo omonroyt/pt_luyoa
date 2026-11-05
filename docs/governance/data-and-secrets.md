@@ -12,7 +12,7 @@
 
 | Clase | Ejemplos | Dónde puede vivir | Quién o qué puede leerlo |
 |---|---|---|---|
-| **Secreto** | `LUYOA_API_KEY`, `OPENROUTER_API_KEY`, `APPROVAL_SECRET`, `MCP_SERVICE_TOKEN`, tokens de BD | `.env` local (ignorado por git) y variables de entorno cifradas del despliegue | Solo el proceso del servidor. **Nunca** el navegador, el modelo, las trazas, el repositorio ni el asistente de desarrollo |
+| **Secreto** | `LUYOA_API_KEY`, `OPENROUTER_API_KEY`, `APPROVAL_SECRET`, `MCP_SERVICE_TOKEN`, `CRON_SECRET`, las llaves y tokens de cada negocio (`LUYOA_API_KEY_<NEGOCIO>`, `MCP_SERVICE_TOKEN_<NEGOCIO>`), tokens de BD | `.env` local (ignorado por git) y variables de entorno cifradas del despliegue | Solo el proceso del servidor. **Nunca** el navegador, el modelo, las trazas, el repositorio ni el asistente de desarrollo |
 | **Personal (ficticio)** | Nombre, teléfono, correo, historial individual de un cliente | Solo en la API de Luyoa | El MCP cuando una herramienta lo necesita; se tratan como datos personales reales aunque sean ficticios |
 | **Interno** | Agregados de ventas, visitas, segmentos, campañas, trazas, preferencias del negocio | BD de la app, respuestas del agente, reportes de evaluación | La app, el modelo (agregados) y el equipo |
 | **Público** | Código, documentación, `.env.example`, configuración de `.claude/` | Repositorio | Cualquiera |

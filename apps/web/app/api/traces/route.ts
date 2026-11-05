@@ -7,7 +7,7 @@
 import { readConversationCost, readMessageTrace, TraceQuery } from "@/lib/agent/trace-reader";
 import { isSameOrigin } from "@/lib/auth/service-token";
 import { getDatabase } from "@/lib/db/client";
-import { serverConfig } from "@/lib/server-config";
+import { currentBusiness } from "@/lib/tenancy/current-business";
 
 const errorResponse = (status: number, code: string, message: string) =>
   Response.json({ error: { code, message } }, { status });
@@ -23,7 +23,7 @@ export async function GET(request: Request): Promise<Response> {
     return errorResponse(400, "validation_error", "Conversación o mensaje inválidos.");
   }
   const db = await getDatabase();
-  const { businessId } = serverConfig();
+  const businessId = currentBusiness().id;
   const [steps, conversationCostUsd] = await Promise.all([
     readMessageTrace(db, businessId, query.data),
     readConversationCost(db, businessId, query.data.conversation),
