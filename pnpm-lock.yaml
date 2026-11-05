@@ -284,6 +284,12 @@ importers:
       '@alborada/shared':
         specifier: workspace:*
         version: link:../packages/shared
+      '@alborada/web':
+        specifier: workspace:*
+        version: link:../apps/web
+      ai:
+        specifier: ^7.0.162
+        version: 7.0.162(zod@4.6.7)
       yaml:
         specifier: ^2.9.1
         version: 2.9.1
