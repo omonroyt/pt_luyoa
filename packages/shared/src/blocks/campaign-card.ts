@@ -37,7 +37,11 @@ export function messageLength(text: string): number {
   return text.length;
 }
 
-const Range = z.tuple([z.number(), z.number()]).describe("Rango [mínimo, máximo]");
+// ES: Lista de exactamente dos números y no z.tuple: el proveedor original de GLM (Z.AI)
+//     rechaza toda la solicitud si una herramienta usa un esquema de tupla (prefixItems).
+// EN: A list of exactly two numbers rather than z.tuple: GLM's original provider (Z.AI)
+//     rejects the whole request if a tool uses a tuple schema (prefixItems).
+const Range = z.array(z.number()).min(2).max(2).describe("Rango [mínimo, máximo]");
 
 const Reach = z
   .object({

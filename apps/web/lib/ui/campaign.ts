@@ -48,11 +48,11 @@ export function offerLabel(offer: OfferLike): string {
   return OFFER_TEXT[offer.type]?.(offer) ?? offer.type;
 }
 
-export function mxnRange([min, max]: [number, number]): string {
+export function mxnRange([min = 0, max = min]: readonly number[]): string {
   return min === max ? formatMxn(min) : `${formatMxn(min)} a ${formatMxn(max)}`;
 }
 
-export function countRange([min, max]: [number, number]): string {
+export function countRange([min = 0, max = min]: readonly number[]): string {
   const format = (value: number) => value.toLocaleString("es-MX");
   return min === max ? format(min) : `${format(min)} a ${format(max)}`;
 }
