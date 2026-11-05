@@ -1,10 +1,12 @@
 /**
  * ES: Cron del resumen semanal (X-02, IMP-60). Vercel Cron lo llama con
  *     Authorization: Bearer CRON_SECRET; sin ese secreto configurado, la ruta no corre.
- *     Genera el resumen con el agente y lo guarda para el negocio de la sesión.
+ *     Genera y guarda un resumen por cada negocio registrado (X-05), cada uno con su propio
+ *     servidor MCP y su propia memoria. Responde 502 solo si fallaron todos.
  * EN: Weekly summary cron (X-02, IMP-60). Vercel Cron calls it with Authorization: Bearer
- *     CRON_SECRET; without that secret configured, the route does not run. It generates
- *     the summary with the agent and stores it for the session's business.
+ *     CRON_SECRET; without that secret configured, the route does not run. It generates and
+ *     stores one summary per registered business (X-05), each with its own MCP server and
+ *     memory. It answers 502 only if all of them failed.
  */
 import { agentConfig } from "@/lib/agent/agent-config";
 import { createAgentModel } from "@/lib/agent/model";
@@ -15,9 +17,10 @@ import { getDatabase } from "@/lib/db/client";
 import { mcpServerFactory } from "@/lib/mcp/runtime";
 import { createDbPreferenceStore } from "@/lib/memory/preference-store";
 import { serverConfig } from "@/lib/server-config";
+import { forEachBusiness } from "@/lib/tenancy/for-each-business";
 
-// ES: El resumen consulta 4 o 5 herramientas; cabe en el mismo límite que un turno del chat.
-// EN: The summary queries 4 or 5 tools; it fits in the same limit as a chat turn.
+// ES: Los negocios corren en paralelo; cada resumen cabe en el límite de un turno del chat.
+// EN: Businesses run in parallel; each summary fits in the limit of a chat turn.
 export const maxDuration = 60;
 
 const errorResponse = (status: number, code: string, message: string) =>
@@ -33,19 +36,17 @@ export async function GET(request: Request): Promise<Response> {
   }
   const agent = agentConfig();
   const db = await getDatabase();
-  try {
+  const results = await forEachBusiness(config.businesses, async (business) => {
     const summary = await generateWeeklySummary({
       model: createAgentModel({ apiKey: agent.openRouterApiKey, modelId: agent.modelId }),
-      mcp: { serviceToken: config.mcpServiceToken, createServer: mcpServerFactory() },
-      memory: createDbPreferenceStore(db, config.businessId),
+      mcp: { serviceToken: business.mcpServiceToken, createServer: mcpServerFactory(business) },
+      memory: createDbPreferenceStore(db, business.id),
     });
-    const id = await saveWeeklySummary(db, config.businessId, summary);
-    return Response.json({ id, weekEnd: summary.weekEnd });
-  } catch (error) {
-    console.error(
-      "No se pudo generar el resumen semanal:",
-      error instanceof Error ? error.message : "error desconocido",
-    );
+    const id = await saveWeeklySummary(db, business.id, summary);
+    return { id, weekEnd: summary.weekEnd };
+  });
+  if (results.every((result) => !result.ok)) {
     return errorResponse(502, "summary_failed", "No se pudo generar el resumen semanal.");
   }
+  return Response.json({ results });
 }

@@ -10,13 +10,13 @@ import { isSameOrigin } from "@/lib/auth/service-token";
 import { getDatabase } from "@/lib/db/client";
 import { createDbPreferenceStore } from "@/lib/memory/preference-store";
 import { PREFERENCE_LABELS, PreferenceKeySchema } from "@/lib/memory/preferences";
-import { serverConfig } from "@/lib/server-config";
+import { currentBusiness } from "@/lib/tenancy/current-business";
 
 const errorResponse = (status: number, code: string, message: string) =>
   Response.json({ error: { code, message } }, { status });
 
 async function businessStore() {
-  return createDbPreferenceStore(await getDatabase(), serverConfig().businessId);
+  return createDbPreferenceStore(await getDatabase(), currentBusiness().id);
 }
 
 export async function GET(request: Request): Promise<Response> {

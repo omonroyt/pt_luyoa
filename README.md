@@ -42,7 +42,8 @@ Detalle y diagramas: [`docs/specs/03_ARQUITECTURA.md`](docs/specs/03_ARQUITECTUR
    |---|---|
    | `LUYOA_API_KEY` | Portal https://prueba-developer.luyoa.dev, panel "Tu llave de API" |
    | `OPENROUTER_API_KEY` | Mismo portal; llave con límite de gasto |
-   | `APPROVAL_SECRET`, `MCP_SERVICE_TOKEN` | Valores aleatorios de 32 bytes: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` |
+   | `APPROVAL_SECRET`, `MCP_SERVICE_TOKEN`, `CRON_SECRET` | Valores aleatorios de 32 bytes: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` |
+   | `BUSINESSES` (opcional) | Registro de varios negocios con los nombres de sus variables secretas; formato en `.env.example` (ADR-16) |
 
 3. Levantar la aplicación:
 

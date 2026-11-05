@@ -13,7 +13,7 @@ export type McpRequestDependencies = {
   createServer: () => McpServer;
 };
 
-const unauthorized = () =>
+export const unauthorizedMcpResponse = () =>
   Response.json(
     { error: { code: "unauthorized", message: "Token de servicio MCP ausente o inválido." } },
     { status: 401, headers: { "WWW-Authenticate": "Bearer" } },
@@ -23,7 +23,7 @@ export async function handleMcpRequest(
   request: Request,
   dependencies: McpRequestDependencies,
 ): Promise<Response> {
-  if (!hasValidBearerToken(request, dependencies.serviceToken)) return unauthorized();
+  if (!hasValidBearerToken(request, dependencies.serviceToken)) return unauthorizedMcpResponse();
   const server = dependencies.createServer();
   const transport = new WebStandardStreamableHTTPServerTransport({
     sessionIdGenerator: undefined,

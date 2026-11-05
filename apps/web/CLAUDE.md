@@ -17,6 +17,7 @@ components/chat/        Hilo, entrada, panel de trazas
 lib/agent/              Prompt de sistema, herramientas de presentación, verificador de cifras, trazas
 lib/approvals/          Emisión y verificación de tokens de aprobación
 lib/db/                 Esquema Drizzle y consultas
+lib/tenancy/            Registro de negocios y negocio de cada solicitud (X-05)
 ```
 
 ## Reglas

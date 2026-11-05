@@ -7,7 +7,7 @@
 import { latestWeeklySummary } from "@/lib/agent/weekly-summary-store";
 import { isSameOrigin } from "@/lib/auth/service-token";
 import { getDatabase } from "@/lib/db/client";
-import { serverConfig } from "@/lib/server-config";
+import { currentBusiness } from "@/lib/tenancy/current-business";
 
 export async function GET(request: Request): Promise<Response> {
   if (!isSameOrigin(request)) {
@@ -16,7 +16,7 @@ export async function GET(request: Request): Promise<Response> {
       { status: 403 },
     );
   }
-  const summary = await latestWeeklySummary(await getDatabase(), serverConfig().businessId);
+  const summary = await latestWeeklySummary(await getDatabase(), currentBusiness().id);
   return Response.json({
     summary: summary
       ? {
