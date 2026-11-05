@@ -15,9 +15,9 @@ import {
   streamText,
   toUIMessageStream,
   type LanguageModel,
-  type ToolSet,
   type UIMessage,
 } from "ai";
+import { createApprovalTools } from "./approval-tools";
 import { loadBusinessContext } from "./business-context";
 import { connectMcpClient, type McpConnection } from "./mcp-tools";
 import { createPresentationTools } from "./presentation-tools";
@@ -27,13 +27,13 @@ import { uiErrorMessage } from "./ui-errors";
 
 export const MAX_STEPS = 12;
 
-// ES: Las escrituras se habilitan junto con las herramientas de aprobación (IMP-34).
-//     Aun expuestas, el MCP las rechazaría sin un token firmado (ADR-08).
-// EN: Writes are enabled together with the approval tools (IMP-34). Even if exposed, the
-//     MCP would reject them without a signed token (ADR-08).
-const WRITE_TOOLS = new Set(["create_campaign_draft", "send_campaign"]);
-
-const CAPABILITIES: AgentCapabilities = { presentation: true, approvals: false, memory: false };
+// ES: Las escrituras del MCP (create_campaign_draft, send_campaign) están expuestas junto
+//     con las herramientas de aprobación: el modelo solo obtiene el token si la persona
+//     aprueba en la interfaz, y el MCP rechaza cualquier escritura sin él (ADR-08).
+// EN: The MCP writes (create_campaign_draft, send_campaign) are exposed together with the
+//     approval tools: the model only gets the token if the person approves in the UI, and
+//     the MCP rejects any write without it (ADR-08).
+const CAPABILITIES: AgentCapabilities = { presentation: true, approvals: true, memory: false };
 
 export const STEP_LIMIT_NOTE = [
   "LÍMITE DE PASOS",
@@ -45,10 +45,6 @@ export type TurnDependencies = {
   model: LanguageModel;
   mcp: McpConnection;
 };
-
-export function readOnlyTools(tools: ToolSet): ToolSet {
-  return Object.fromEntries(Object.entries(tools).filter(([name]) => !WRITE_TOOLS.has(name)));
-}
 
 /**
  * ES: En el último paso permitido se retiran las herramientas y se pide cerrar con lo
@@ -77,9 +73,13 @@ export async function streamAgentTurn(
   try {
     const registry = createSourceRegistry();
     seedFromMessages(registry, messages);
-    const businessTools = trackSources(readOnlyTools(await client.tools()), registry);
+    const businessTools = trackSources(await client.tools(), registry);
     const context = await loadBusinessContext(businessTools);
-    const tools = { ...businessTools, ...createPresentationTools(registry) };
+    const tools = {
+      ...businessTools,
+      ...createPresentationTools(registry),
+      ...createApprovalTools(),
+    };
     const instructions = buildSystemPrompt({ context, capabilities: CAPABILITIES });
     const result = streamText({
       model: dependencies.model,

@@ -131,6 +131,9 @@ function campaignSection(capabilities: AgentCapabilities): string[] {
     "  send_campaign sin el token que devuelve la aprobación de la persona.",
     '- Una instrucción como "mándala" no aprueba algo que la persona no ha visto:',
     "  muestra la tarjeta y pide aprobación.",
+    "- Si la persona pide preparar o enviar una campaña, en el mismo turno muestra la tarjeta",
+    "  con show_campaign_card y llama request_draft_approval. La aprobación se da con los",
+    "  botones de la interfaz, no en el texto: no preguntes por escrito si la preparas.",
     "- Si la persona pide cambios, recalcula el alcance y vuelve a pedir aprobación.",
   ];
 }

@@ -1,11 +1,13 @@
 /**
- * ES: Endpoint del chat (IMP-30): valida el origen y los mensajes de la interfaz, y
- *     delega el turno al orquestador del agente, que responde en streaming.
- * EN: Chat endpoint (IMP-30): validates the origin and the UI messages, and hands the
- *     turn to the agent orchestrator, which responds with a stream.
+ * ES: Endpoint del chat (IMP-30): valida el origen y los mensajes de la interfaz, incluidos
+ *     los resultados de aprobación, y delega el turno al orquestador del agente, que
+ *     responde en streaming.
+ * EN: Chat endpoint (IMP-30): validates the origin and the UI messages, including the
+ *     approval results, and hands the turn to the agent orchestrator, which responds with
+ *     a stream.
  */
-import { safeValidateUIMessages } from "ai";
 import { agentConfig } from "@/lib/agent/agent-config";
+import { parseChatRequest } from "@/lib/agent/chat-request";
 import { createAgentModel } from "@/lib/agent/model";
 import { streamAgentTurn } from "@/lib/agent/run-turn";
 import { isSameOrigin } from "@/lib/auth/service-token";
@@ -21,14 +23,13 @@ const errorResponse = (status: number, code: string, message: string) =>
 
 export async function POST(request: Request): Promise<Response> {
   if (!isSameOrigin(request)) return errorResponse(403, "forbidden", "Origen no permitido.");
-  const body = (await request.json().catch(() => null)) as { messages?: unknown } | null;
-  const validated = await safeValidateUIMessages({ messages: body?.messages });
-  if (!validated.success) {
+  const parsed = await parseChatRequest(await request.json().catch(() => null));
+  if (!parsed.ok) {
     return errorResponse(400, "validation_error", "Mensajes del chat inválidos.");
   }
   const config = serverConfig();
   const agent = agentConfig();
-  return streamAgentTurn(validated.data, {
+  return streamAgentTurn(parsed.messages, {
     model: createAgentModel({ apiKey: agent.openRouterApiKey, modelId: agent.modelId }),
     mcp: { serviceToken: config.mcpServiceToken, createServer: mcpServerFactory() },
   });

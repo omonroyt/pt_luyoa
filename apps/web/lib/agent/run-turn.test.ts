@@ -1,5 +1,6 @@
 import type { UIMessage } from "ai";
 import { beforeAll, describe, expect, it } from "vitest";
+import { APPROVAL_TOOLS } from "./approval-tools";
 import { PRESENTATION_TOOLS } from "./presentation-tools";
 import { MAX_STEPS, streamAgentTurn } from "./run-turn";
 import { INVALID_BLOCK_MESSAGE, UNVERIFIED_BLOCK_MESSAGE } from "./ui-errors";
@@ -74,15 +75,23 @@ describe("streamAgentTurn", () => {
     expect(second!.prompt.some((message) => message.role === "tool")).toBe(true);
   });
 
-  it("expone lectura y presentación, pero no escrituras mientras no existan las aprobaciones", async () => {
+  it("expone las escrituras solo junto con las herramientas de aprobación", async () => {
     const model = scriptedModel(() => ({ text: "Hola." }));
     await (await streamAgentTurn(QUESTION, { model, mcp: fixtureMcpConnection() })).text();
     const [first] = model.doStreamCalls as unknown as DoStreamCall[];
     const names = first!.tools?.map((tool) => tool.name) ?? [];
-    expect(names).toEqual(expect.arrayContaining(["compare_periods", ...PRESENTATION_TOOLS]));
-    expect(names).not.toContain("create_campaign_draft");
-    expect(names).not.toContain("send_campaign");
+    expect(names).toEqual(
+      expect.arrayContaining([
+        "compare_periods",
+        ...PRESENTATION_TOOLS,
+        ...APPROVAL_TOOLS,
+        "create_campaign_draft",
+        "send_campaign",
+      ]),
+    );
+    expect(names).toHaveLength(20);
     expect(systemText(first!)).toContain("show_chart");
+    expect(systemText(first!)).toContain("request_draft_approval");
   });
 
   it("envía el bloque de indicadores cuando sus cifras salen de la fuente consultada", async () => {

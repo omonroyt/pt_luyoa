@@ -35,9 +35,14 @@ const ECONOMICS = {
   source: { id: "src_cccccccccc", tool: "offer_economics" },
 };
 
+const CREATED = {
+  data: { campaign_id: "cmp_test01", status: "draft" },
+  source: { id: "src_dddddddddd", tool: "create_campaign_draft" },
+};
+
 function registry() {
   const sources = createSourceRegistry();
-  [SEGMENTS, REACH, ECONOMICS].forEach((payload) => sources.register(mcpResult(payload)));
+  [SEGMENTS, REACH, ECONOMICS, CREATED].forEach((payload) => sources.register(mcpResult(payload)));
   return sources;
 }
 
@@ -50,6 +55,7 @@ const kpis = (values: number[], sources = ["src_aaaaaaaaaa"]) => ({
 
 const CARD = {
   ...BASE,
+  state: "proposal",
   sources: ["src_bbbbbbbbbb", "src_cccccccccc"],
   channel: "whatsapp",
   reach: {
@@ -119,6 +125,22 @@ describe("verifyBlock", () => {
     const problems = verifyBlock("show_campaign_card", card, registry()).join(" ");
     expect(problems).toContain("debe citar el resultado de audience_reach");
     expect(problems).toContain("el límite es 140");
+  });
+
+  it("muestra un borrador solo con el campaignId que devolvió create_campaign_draft", () => {
+    const draft = {
+      ...CARD,
+      state: "draft",
+      campaignId: "cmp_test01",
+      sources: ["src_dddddddddd", "src_bbbbbbbbbb", "src_cccccccccc"],
+    };
+    expect(verifyBlock("show_campaign_card", draft, registry())).toEqual([]);
+  });
+
+  it("rechaza una tarjeta enviada que no cita la escritura que la respalda", () => {
+    const sent = { ...CARD, state: "sent", campaignId: "cmp_inventada" };
+    const problems = verifyBlock("show_campaign_card", sent, registry()).join(" ");
+    expect(problems).toContain("debe llevar el campaignId que devolvió create_campaign_draft");
   });
 });
 

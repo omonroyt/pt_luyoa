@@ -60,6 +60,7 @@ describe("buildSystemPrompt", () => {
     });
     expect(prompt).toContain("show_chart");
     expect(prompt).toContain("request_draft_approval");
+    expect(prompt).toContain("en el mismo turno muestra la tarjeta");
     expect(prompt).toContain("- Tope de descuento: 20%");
   });
 });

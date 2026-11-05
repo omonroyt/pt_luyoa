@@ -10,7 +10,7 @@
  *     latest cited audience_reach and a message within the channel limit. If anything
  *     fails, the block is not shown and the model receives the list of problems to fix.
  */
-import { MESSAGE_LIMITS, type CampaignCardBlock } from "@alborada/shared";
+import { MESSAGE_LIMITS, messageLength, type CampaignCardBlock } from "@alborada/shared";
 import { z } from "zod";
 import { collectNumbers, type RegisteredSource, type SourceRegistry } from "./source-registry";
 
@@ -109,9 +109,36 @@ function reachProblems(card: CampaignCardBlock, cited: RegisteredSource[]): stri
   return wrong.map(([key, value]) => `reach.${key} debe ser ${value}, como en ${latest.id}.`);
 }
 
+const PROPOSAL_STATES = new Set(["proposal", "awaiting_draft_approval"]);
+const CREATED_STATES = new Set(["draft", "awaiting_send_approval", "sent"]);
+const WRITE_TOOLS = new Set(["create_campaign_draft", "send_campaign"]);
+const CampaignIdData = z.object({ campaign_id: z.string() });
+
+/**
+ * ES: Una tarjeta solo puede mostrar una campaña como creada o enviada si cita el resultado
+ *     del MCP que la creó o la envió, con el mismo campaign_id.
+ * EN: A card can only show a campaign as created or sent if it cites the MCP result that
+ *     created or sent it, with the same campaign_id.
+ */
+function campaignIdProblems(card: CampaignCardBlock, cited: RegisteredSource[]): string[] {
+  const written = cited
+    .filter((source) => WRITE_TOOLS.has(source.tool))
+    .map((source) => CampaignIdData.safeParse(source.data).data?.campaign_id);
+  if (card.campaignId && written.includes(card.campaignId)) return [];
+  return [
+    `Una tarjeta en estado ${card.state} debe llevar el campaignId que devolvió create_campaign_draft o send_campaign y citar ese resultado.`,
+  ];
+}
+
+function stateProblems(card: CampaignCardBlock, cited: RegisteredSource[]): string[] {
+  if (PROPOSAL_STATES.has(card.state)) return reachProblems(card, cited);
+  if (CREATED_STATES.has(card.state)) return campaignIdProblems(card, cited);
+  return [];
+}
+
 function messageProblems(card: CampaignCardBlock): string[] {
   const limit = MESSAGE_LIMITS[card.channel];
-  const length = [...card.message.text].length;
+  const length = messageLength(card.message.text);
   const problems: string[] = [];
   if (card.message.limit !== limit)
     problems.push(`message.limit debe ser ${limit} para ${card.channel}.`);
@@ -130,7 +157,7 @@ export function verifyBlock(name: string, block: unknown, registry: SourceRegist
   problems.push(...unsupportedFigures(blockFigures(name, record), cited));
   if (name === "show_campaign_card") {
     const card = block as CampaignCardBlock;
-    problems.push(...reachProblems(card, cited), ...messageProblems(card));
+    problems.push(...stateProblems(card, cited), ...messageProblems(card));
   }
   return problems;
 }
