@@ -25,6 +25,18 @@ export const MESSAGE_LIMITS = { push: 140, whatsapp: 1024, email: 5000 } as cons
   number
 >;
 
+/**
+ * ES: Longitud de un mensaje según el MCP y el verificador. Cuenta unidades UTF-16, así que
+ *     un emoji cuenta 2: es conservador, porque no está verificado cómo cuenta la API, y
+ *     un mensaje que pasa esta regla no excede el límite por contar de menos.
+ * EN: Message length as counted by the MCP and the verifier. It counts UTF-16 units, so an
+ *     emoji counts 2: it is conservative, because how the API counts is not verified, and a
+ *     message that passes this rule does not exceed the limit by undercounting.
+ */
+export function messageLength(text: string): number {
+  return text.length;
+}
+
 const Range = z.tuple([z.number(), z.number()]).describe("Rango [mínimo, máximo]");
 
 const Reach = z

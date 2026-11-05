@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CampaignCardBlock } from "./campaign-card";
+import { CampaignCardBlock, messageLength } from "./campaign-card";
 import { ChartBlock, MAX_CHART_POINTS } from "./chart";
 import { CiteSourcesBlock } from "./cite-sources";
 import { KpisBlock } from "./kpis";
@@ -104,6 +104,11 @@ describe("bloques visuales", () => {
       { key: "b", label: "B" },
     ];
     expect(TableBlock.safeParse({ ...BASE, columns, rows }).success).toBe(false);
+  });
+
+  it("cuenta la longitud del mensaje en unidades UTF-16: un emoji cuenta 2", () => {
+    expect(messageLength("¡Hola!")).toBe(6);
+    expect(messageLength("¡Hola! 🥐")).toBe(9);
   });
 
   it("rechaza una tarjeta con canal o estado fuera del catálogo", () => {

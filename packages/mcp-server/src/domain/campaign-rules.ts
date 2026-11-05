@@ -6,7 +6,7 @@
  *     (pitfall T-11): message length per channel, validity after data_as_of and the
  *     offer's required fields.
  */
-import { MESSAGE_LIMITS } from "@alborada/shared";
+import { MESSAGE_LIMITS, messageLength } from "@alborada/shared";
 import type { Product } from "../api/schemas";
 import { ToolFailure } from "../errors";
 import { resolveOfferProduct } from "./offers";
@@ -39,9 +39,10 @@ function assertMessage(draft: CampaignDraft): void {
   const limit = MESSAGE_LIMITS[draft.channel];
   if (draft.message.trim().length === 0)
     fail("El mensaje está vacío.", "Redactar el mensaje de la campaña.");
-  if (draft.message.length > limit) {
+  const length = messageLength(draft.message);
+  if (length > limit) {
     fail(
-      `El mensaje tiene ${draft.message.length} caracteres y el límite de ${draft.channel} es ${limit}.`,
+      `El mensaje tiene ${length} caracteres y el límite de ${draft.channel} es ${limit}.`,
       `Recortar el mensaje a ${limit} caracteres o menos.`,
     );
   }
