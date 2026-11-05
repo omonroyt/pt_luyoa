@@ -9,6 +9,7 @@
 import type { LanguageModel } from "ai";
 import type { EvalCase } from "./cases/case-schema";
 import { loadGolden } from "./cases/load-cases";
+import { retryRateLimited } from "./runner/retry";
 import { runCase, type RunDependencies } from "./runner/run-case";
 import { runChecks, type Checks } from "./scoring/checks";
 import { extract, withContext } from "./scoring/extract";
@@ -135,7 +136,7 @@ export async function evaluateCase(
     return { ...base, skipped: `Requiere ${evalCase.requires.join(", ")} (M7)` };
   }
   try {
-    const transcript = await runCase(evalCase, deps);
+    const transcript = await retryRateLimited(() => runCase(evalCase, deps));
     const extracted = withContext(extract(transcript), deps.context ?? []);
     const failure = serviceFailure(transcript, extracted);
     if (failure) return { ...base, error: failure, usage: usageOf(transcript, 0) };
