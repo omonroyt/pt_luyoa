@@ -84,6 +84,25 @@ function usageOf(transcript: Awaited<ReturnType<typeof runCase>>, judgeCost: num
   };
 }
 
+/**
+ * ES: Una respuesta vacía por un error del servicio no se califica: daría puntos gratis
+ *     ("sin cifras inventadas", "sin escrituras") y gastaría en el juez. Se reporta como
+ *     error con su causa.
+ * EN: An empty answer caused by a service error is not scored: it would earn free points
+ *     ("no invented figures", "no writes") and spend on the judge. It is reported as an
+ *     error with its cause.
+ */
+export function serviceFailure(
+  transcript: Awaited<ReturnType<typeof runCase>>,
+  extracted: ReturnType<typeof extract>,
+): string | undefined {
+  const errors = transcript.requests.flatMap((request) => request.errors);
+  const empty = extracted.text.trim() === "" && extracted.blocks.length === 0;
+  return empty && errors.length > 0
+    ? `Sin respuesta por error del servicio: ${errors[0]}`
+    : undefined;
+}
+
 export async function evaluateCase(
   evalCase: EvalCase,
   repeat: number,
@@ -103,23 +122,33 @@ export async function evaluateCase(
   try {
     const transcript = await runCase(evalCase, deps);
     const extracted = extract(transcript);
-    const golden = evalCase.expect.golden ? loadGolden(evalCase.expect.golden) : undefined;
-    const checks = runChecks(evalCase, transcript, extracted, golden);
-    const judge = deps.judge
-      ? await judgeCase(deps.judge, evalCase, extracted, deps.criteria)
-      : undefined;
-    return {
-      ...base,
-      score: scoreCase(checks, judge?.score ?? null),
-      gates: hardGateFailures(evalCase, checks),
-      checks,
-      judge,
-      usage: usageOf(transcript, judge?.costUsd ?? 0),
-      writes: transcript.writes.length,
-      pendingApproval: transcript.pendingApproval,
-      excerpt: excerptOf(extracted, transcript.replies),
-    };
+    const failure = serviceFailure(transcript, extracted);
+    if (failure) return { ...base, error: failure, usage: usageOf(transcript, 0) };
+    return { ...base, ...(await scoreTranscript(evalCase, transcript, extracted, deps)) };
   } catch (error) {
     return { ...base, error: error instanceof Error ? error.message.slice(0, 300) : String(error) };
   }
+}
+
+async function scoreTranscript(
+  evalCase: EvalCase,
+  transcript: Awaited<ReturnType<typeof runCase>>,
+  extracted: ReturnType<typeof extract>,
+  deps: EvaluationDependencies,
+) {
+  const golden = evalCase.expect.golden ? loadGolden(evalCase.expect.golden) : undefined;
+  const checks = runChecks(evalCase, transcript, extracted, golden);
+  const judge = deps.judge
+    ? await judgeCase(deps.judge, evalCase, extracted, deps.criteria)
+    : undefined;
+  return {
+    score: scoreCase(checks, judge?.score ?? null),
+    gates: hardGateFailures(evalCase, checks),
+    checks,
+    judge,
+    usage: usageOf(transcript, judge?.costUsd ?? 0),
+    writes: transcript.writes.length,
+    pendingApproval: transcript.pendingApproval,
+    excerpt: excerptOf(extracted, transcript.replies),
+  };
 }

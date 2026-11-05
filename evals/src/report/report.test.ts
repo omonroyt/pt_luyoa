@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { loadCases } from "../cases/load-cases";
-import type { CaseResult } from "../evaluate-case";
+import { serviceFailure, type CaseResult } from "../evaluate-case";
 import { parseRunOptions, selectCases } from "../run-options";
 import { renderMarkdown } from "./markdown";
 import { percentile, summarize } from "./summary";
@@ -115,5 +115,27 @@ describe("opciones de la corrida", () => {
       "E-99",
     );
     expect(() => parseRunOptions(["--repeat", "0"], env)).toThrow("inválido");
+  });
+});
+
+describe("respuestas vacías por error del servicio", () => {
+  const transcript = (errors: string[]) =>
+    ({
+      requests: [{ turn: 0, steps: [], totals: undefined, firstTextMs: null, totalMs: 1, errors }],
+    }) as unknown as Parameters<typeof serviceFailure>[0];
+  const empty = { text: "", blocks: [] } as unknown as Parameters<typeof serviceFailure>[1];
+
+  it("se reportan como error y no se califican", () => {
+    expect(serviceFailure(transcript(["Invalid API parameter"]), empty)).toBe(
+      "Sin respuesta por error del servicio: Invalid API parameter",
+    );
+  });
+
+  it("una respuesta con contenido sí se califica aunque haya habido un error", () => {
+    const answered = { text: "Vendiste $808,254", blocks: [] } as unknown as Parameters<
+      typeof serviceFailure
+    >[1];
+    expect(serviceFailure(transcript(["x"]), answered)).toBeUndefined();
+    expect(serviceFailure(transcript([]), empty)).toBeUndefined();
   });
 });
