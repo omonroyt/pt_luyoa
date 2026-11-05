@@ -9,7 +9,9 @@ import { SourceChips } from "@/components/blocks/source-chips";
 import { citedSourcesOf } from "@/lib/ui/cited-sources";
 import { PartView } from "./part-view";
 
-export function MessageItem({ message }: { message: UIMessage }) {
+type MessageItemProps = { message: UIMessage; onShowTrace: (messageId: string) => void };
+
+export function MessageItem({ message, onShowTrace }: MessageItemProps) {
   if (message.role === "user") {
     const text = message.parts.map((part) => (part.type === "text" ? part.text : "")).join("");
     return (
@@ -24,6 +26,13 @@ export function MessageItem({ message }: { message: UIMessage }) {
         <PartView key={`${message.id}-${index}`} part={part} />
       ))}
       <SourceChips ids={citedSourcesOf(message)} />
+      <button
+        type="button"
+        onClick={() => onShowTrace(message.id)}
+        className="self-start text-xs text-muted underline-offset-2 hover:underline"
+      >
+        Ver traza de esta respuesta
+      </button>
     </article>
   );
 }

@@ -8,7 +8,9 @@ import type { UIMessage } from "ai";
 import { useEffect, useRef } from "react";
 import { MessageItem } from "./message-item";
 
-export function MessageThread({ messages }: { messages: UIMessage[] }) {
+type MessageThreadProps = { messages: UIMessage[]; onShowTrace: (messageId: string) => void };
+
+export function MessageThread({ messages, onShowTrace }: MessageThreadProps) {
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => {
     end.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -16,7 +18,7 @@ export function MessageThread({ messages }: { messages: UIMessage[] }) {
   return (
     <div className="flex flex-col gap-6" role="log" aria-live="polite" aria-label="Conversación">
       {messages.map((message) => (
-        <MessageItem key={message.id} message={message} />
+        <MessageItem key={message.id} message={message} onShowTrace={onShowTrace} />
       ))}
       <div ref={end} />
     </div>

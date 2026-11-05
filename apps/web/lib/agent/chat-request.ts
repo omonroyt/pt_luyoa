@@ -15,7 +15,7 @@ import { createApprovalTools } from "./approval-tools";
 export type ChatRequest =
   { ok: true; conversationId: string; messages: UIMessage[] } | { ok: false };
 
-const CONVERSATION_ID = /^[A-Za-z0-9_-]{1,100}$/;
+export const CONVERSATION_ID = /^[A-Za-z0-9_-]{1,100}$/;
 
 export async function parseChatRequest(body: unknown): Promise<ChatRequest> {
   const { id, messages } = (body ?? {}) as { id?: unknown; messages?: unknown };
