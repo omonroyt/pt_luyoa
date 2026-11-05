@@ -78,11 +78,14 @@ export async function saveTurn(db: Database, record: TurnRecord): Promise<void> 
         });
     }
     if (assistant?.role === "assistant" && record.steps.length > 0) {
-      await tx
-        .insert(traceSteps)
-        .values(
-          record.steps.map((step) => ({ id: randomUUID(), messageId: assistant.id, ...step })),
-        );
+      await tx.insert(traceSteps).values(
+        record.steps.map((step) => ({
+          id: randomUUID(),
+          messageId: assistant.id,
+          ...step,
+          input: maskApprovalTokens(step.input),
+        })),
+      );
     }
     await tx
       .update(conversations)
