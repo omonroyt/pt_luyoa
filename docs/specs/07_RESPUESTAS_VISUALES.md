@@ -247,6 +247,16 @@ interface CampaignCardBlock extends BlockBase {
 
 Al pulsar un botón, la tarjeta se bloquea (sin doble clic) hasta que el agente responde.
 
+**Implementación (IMP-42):** los botones viven en un panel de aprobación que la interfaz dibuja a partir de la llamada `request_draft_approval` o `request_send_approval`, justo debajo de la tarjeta. El panel muestra el contenido exacto que firmará el token: nombre, canal, filtros de audiencia, oferta con sus fechas y el mensaje con su conteo de caracteres. La tarjeta (`show_campaign_card`) queda como evidencia y estado. Así la persona aprueba lo que se va a crear o enviar, no un resumen redactado por el modelo.
+
+| Botón | Qué devuelve al agente |
+|---|---|
+| Preparar borrador · Enviar | Pide el token a `/api/approvals` con el contenido sin modificar y devuelve `{ approved: true, approval_token, approval_id, expires_at }`. Si la solicitud falla, nada queda aprobado y el panel lo indica |
+| Cambiar | Abre un campo de texto y devuelve `{ approved: false, reason: "La persona pidió cambios: …" }` |
+| Descartar | Devuelve `{ approved: false, reason: "La persona descartó la campaña." }` |
+
+Mientras haya una aprobación sin resolver, la entrada de texto y las sugerencias se bloquean: el agente espera el resultado de esa llamada.
+
 ### 3.5 `cite_sources` y chip de fuente
 
 ```ts
