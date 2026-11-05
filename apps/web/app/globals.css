@@ -1,15 +1,47 @@
 @import "tailwindcss";
 
+/*
+ * ES: Paleta del copiloto (tonos café). Los colores se definen como variables para el modo
+ *     claro y oscuro, y Tailwind los expone como utilidades (bg-card, text-muted…).
+ * EN: Copilot palette (coffee tones). Colors are defined as variables for light and dark
+ *     mode, and Tailwind exposes them as utilities (bg-card, text-muted…).
+ */
 :root {
   --background: #faf7f2;
   --foreground: #2b211a;
+  --card: #ffffff;
+  --muted: #6f6158;
+  --border: #e6ddd2;
+  --accent: #8a4b22;
+  --accent-foreground: #ffffff;
+  --positive: #1f7a4d;
+  --negative: #b4372f;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #17120e;
     --foreground: #f3ece4;
+    --card: #221a14;
+    --muted: #b3a597;
+    --border: #3a2e25;
+    --accent: #d08a52;
+    --accent-foreground: #17120e;
+    --positive: #5cc493;
+    --negative: #ef7d73;
   }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
 }
 
 body {
