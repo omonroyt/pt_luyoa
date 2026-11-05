@@ -120,7 +120,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-43 | Panel de trazas | CA-Q05 |
 | IMP-44 | Responsivo y accesible | CA-F07 |
 
-### M6 · Evaluaciones y modelos — rama sugerida `feat/evaluaciones`
+### M6 · Evaluaciones y modelos (hecho, rama `feat/evaluaciones`)
 
 | ID | Tarea | Criterio |
 |---|---|---|
@@ -128,6 +128,20 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-51 | Corredor con verificaciones deterministas, juez con rúbrica y puertas duras | CA-Q02 |
 | IMP-52 | Comparación de al menos 4 modelos y reporte | CA-Q03, ADR-13 |
 | IMP-53 | Ajustes de prompt y herramientas hasta cumplir las metas | `08_PLAN_EVALUACION.md` §4.4 |
+
+**Resultado:**
+- La comparación midió 5 modelos en el humo y a GLM-5.3-Flash y Claude Haiku 5.5 en la corrida completa (34 casos × 2). El modelo final es `anthropic/claude-haiku-5.5` (ADR-13).
+- Los ajustes de IMP-53 salen de las transcripciones de Haiku:
+  - tarjeta con solo el texto del mensaje;
+  - una compuerta de tarjeta que solo acepta la aprobación después de una tarjeta verificada, y la tarjeta del borrador obligatoria;
+  - total de clientes en riesgo por sucursal;
+  - reglas de cifras exactas en el prompt.
+- **Corrida completa final** (`2026-11-05-compare-completa-claude-haiku-5.5`, 34 casos × 1): cumple todas las metas de §4.4.
+  - 0.97 ± 0.04 de puntaje medio;
+  - 100% de exactitud en escenarios, 0 cifras sin fuente y 0 violaciones de control;
+  - 100% de negativos honestos;
+  - 0.0112 USD por conversación y 11.1 s de mediana.
+- La segunda repetición no se corrió por el tope de gasto de la corrida.
 
 ### M7 · Extras y demo publicada — rama sugerida `feat/extras`
 
