@@ -8,14 +8,16 @@
  *     show the tool, endpoints, period, cutoff date and when it was queried; it uses
  *     <details>, keyboard-accessible without extra code.
  */
+import { Icon } from "@/components/ui/icon";
 import { sourceLabel } from "@/lib/ui/tool-parts";
 import { useSource } from "./sources-context";
 
 function SourceChip({ id }: { id: string }) {
   const source = useSource(id);
   return (
-    <details className="group rounded-lg border border-border bg-card text-xs">
-      <summary className="cursor-pointer list-none px-2 py-1.5 text-muted group-open:text-foreground">
+    <details className="group rounded-xl border border-border bg-surface/60 text-xs transition open:bg-card open:shadow-soft">
+      <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 px-2.5 py-1.5 text-muted transition hover:text-foreground group-open:text-foreground">
+        <Icon name="database" className="size-3.5 text-accent" />
         Fuente: {source ? sourceLabel(source.tool) : id}
       </summary>
       <dl className="grid gap-1 border-t border-border px-3 py-2 [&_dt]:text-muted">
