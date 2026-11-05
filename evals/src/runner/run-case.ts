@@ -10,7 +10,12 @@
  */
 import { randomBytes } from "node:crypto";
 import { createMemoryApprovalStore, createServerFactory } from "@alborada/mcp-server";
-import { streamAgentTurn, type TraceStep, type TurnTotals } from "@alborada/web/agent";
+import {
+  createMemoryPreferenceStore,
+  streamAgentTurn,
+  type TraceStep,
+  type TurnTotals,
+} from "@alborada/web/agent";
 import type { LanguageModel, UIMessage } from "ai";
 import type { ApprovalReply, EvalCase } from "../cases/case-schema";
 import { answerApproval, pendingApprovalOf, withToolOutput, type Issuer } from "./approval-replies";
@@ -70,10 +75,19 @@ function setup(evalCase: EvalCase, deps: RunDependencies) {
     approvals: { secret: issuer.secret, store: issuer.store },
   });
   const mcp = { serviceToken: randomBytes(24).toString("hex"), createServer };
-  return { evalFetch, issuer, mcp };
+  // ES: Cada caso con memoria tiene su propio almacén, compartido entre sus conversaciones.
+  // EN: Each memory case has its own store, shared across its conversations.
+  const memory = evalCase.requires.includes("memory") ? createMemoryPreferenceStore() : undefined;
+  return { evalFetch, issuer, mcp, memory };
 }
 
-type Session = ReturnType<typeof setup> & { deps: RunDependencies; transcript: CaseTranscript };
+// ES: conversationStart marca dónde empieza la conversación actual dentro de la transcripción.
+// EN: conversationStart marks where the current conversation starts within the transcript.
+type Session = ReturnType<typeof setup> & {
+  deps: RunDependencies;
+  transcript: CaseTranscript;
+  conversationStart: number;
+};
 
 /**
  * ES: Una solicitud al agente; si el último mensaje es del asistente (tras responder una
@@ -87,9 +101,10 @@ async function requestTurn(session: Session, turn: number) {
   let persisted: () => void = () => undefined;
   const done = new Promise<void>((resolve) => (persisted = resolve));
   const startedAt = performance.now();
-  const response = await streamAgentTurn(transcript.messages, {
+  const response = await streamAgentTurn(transcript.messages.slice(session.conversationStart), {
     model: session.deps.model,
     mcp: session.mcp,
+    memory: session.memory,
     persist: async (record) => {
       captured = { steps: record.steps, totals: record.totals };
       persisted();
@@ -113,7 +128,7 @@ async function requestTurn(session: Session, turn: number) {
   return read.message;
 }
 
-type PlannedTurn = { user: string; approvals: ApprovalReply[] };
+type PlannedTurn = { user: string; approvals: ApprovalReply[]; newConversation?: boolean };
 
 /**
  * ES: Siguiente respuesta a una aprobación pendiente. Si las del turno se acabaron, el
@@ -159,14 +174,16 @@ export async function runCase(evalCase: EvalCase, deps: RunDependencies): Promis
     replies: [],
     pendingApproval: false,
   };
-  const session: Session = { ...parts, deps, transcript };
+  const session: Session = { ...parts, deps, transcript, conversationStart: 0 };
   const turns: PlannedTurn[] = evalCase.turns.map((turn) => ({
     user: turn.user,
     approvals: [...turn.approvals],
+    newConversation: turn.new_conversation,
   }));
   for (let index = 0; index < turns.length; index += 1) {
     const turn = turns[index];
     if (!turn) break;
+    if (turn.newConversation) session.conversationStart = transcript.messages.length;
     transcript.messages.push(userMessage(index, turn.user));
     await requestTurn(session, index);
     await answerPending(session, turns, index);

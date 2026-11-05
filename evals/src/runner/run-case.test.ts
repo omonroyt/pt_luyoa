@@ -144,4 +144,44 @@ describe("corredor de casos", () => {
     expect(transcript.pendingApproval).toBe(true);
     expect(transcript.requests).toHaveLength(1);
   });
+
+  it("con memoria, la preferencia de una conversación llega a la siguiente (CA-X04)", async () => {
+    const memoryCase = parseCase(
+      `id: T-02
+group: memory
+title: "Memoria entre conversaciones"
+criteria: ["CA-X04"]
+requires: ["memory"]
+turns:
+  - user: "Recuerda que prefiero WhatsApp."
+  - user: "Propón una campaña."
+    new_conversation: true
+expect: {}
+`,
+      "t.yaml",
+    );
+    const prompts: string[] = [];
+    const transcript = await runCase(
+      memoryCase,
+      deps((call, prompt) => {
+        prompts.push(JSON.stringify(prompt));
+        if (call === 0) {
+          return {
+            toolName: "remember_preference",
+            input: { key: "preferred_channel", value: "whatsapp" },
+          };
+        }
+        return { text: "Listo." };
+      }),
+    );
+    const secondConversation = prompts[2] ?? "";
+    expect(secondConversation).toContain('Canal preferido: \\"whatsapp\\"');
+    expect(secondConversation).not.toContain("Recuerda que prefiero WhatsApp");
+    expect(transcript.messages.map((message) => message.role)).toEqual([
+      "user",
+      "assistant",
+      "user",
+      "assistant",
+    ]);
+  });
 });
