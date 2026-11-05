@@ -71,6 +71,8 @@ const TOOL_LABELS: Record<string, string> = {
   lookup: "Buscando el detalle",
   create_campaign_draft: "Creando el borrador",
   send_campaign: "Enviando la campaña",
+  remember_preference: "Guardando tu preferencia",
+  forget_preference: "Olvidando la preferencia",
 };
 
 export function toolLabel(name: string): string {

@@ -42,6 +42,11 @@ describe("stepStatus y toolLabel", () => {
     expect(toolLabel("audience_reach")).toBe("Calculando el alcance real");
     expect(toolLabel("otra_herramienta")).toBe("Consultando otra_herramienta");
   });
+
+  it("da un nombre amable a las herramientas de memoria", () => {
+    expect(toolLabel("remember_preference")).toBe("Guardando tu preferencia");
+    expect(toolLabel("forget_preference")).toBe("Olvidando la preferencia");
+  });
 });
 
 describe("SUGGESTIONS", () => {
