@@ -23,7 +23,7 @@ lib/tenancy/            Registro de negocios y negocio de cada solicitud (X-05)
 lib/auth/               Token de servicio del MCP y sesión firmada de la demo (IMP-63)
 lib/demo/               Topes de la demo publicada: turnos, intentos y gasto diario
 proxy.ts                Puerta de la demo: exige la sesión cuando hay código de acceso
-public/brand/           Ilustración de la marca (Fluent Emoji, MIT; créditos en el README)
+public/brand/           Ilustración de la marca (Fluent Emoji, MIT; créditos en docs/specs/07_RESPUESTAS_VISUALES.md)
 ```
 
 ## Reglas

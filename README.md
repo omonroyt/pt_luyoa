@@ -1,10 +1,16 @@
+<p align="center">
+  <img src="docs/assets/luyoa.png" alt="Luyoa" width="180">
+</p>
+
 # Copiloto Café Alborada
 
 Copiloto de negocio para la dueña de Café Alborada. Responde cómo va el negocio con datos de la API, gráficas, tablas y fuentes verificables, detecta oportunidades y propone campañas con alcance real por canal. Ninguna campaña se crea ni se envía sin su aprobación explícita.
 
-Prueba técnica de AI Engineer para Luyoa · Oscar Monroy.
+<p align="center">
+  <img src="docs/assets/demo.png" alt="Interfaz del copiloto: pantalla de inicio y respuesta con gráfica de transacciones por día de la semana" width="100%">
+</p>
 
-> **Estado:** servidor MCP con 13 herramientas (11 de lectura y 2 de escritura protegidas por aprobación), base de datos, endpoints `/api/mcp` y `/api/approvals`, arneses de calidad y gobernanza de IA. En construcción: agente e interfaz (ver el [plan de implementación](docs/specs/09_PLAN_IMPLEMENTACION.md)).
+> **Estado:** servidor MCP con 13 herramientas (11 de lectura y 2 de escritura protegidas por aprobación), agente, interfaz de chat con bloques visuales y aprobación de campañas, evaluaciones y comparación de modelos, y demo desplegada. Detalle por hito en el [plan de implementación](docs/specs/09_PLAN_IMPLEMENTACION.md).
 
 ## Arquitectura
 
@@ -40,7 +46,7 @@ Detalle y diagramas: [`docs/specs/03_ARQUITECTURA.md`](docs/specs/03_ARQUITECTUR
 
    | Variable | Origen |
    |---|---|
-   | `LUYOA_API_KEY` | Portal https://prueba-developer.luyoa.dev, panel "Tu llave de API" |
+   | `LUYOA_API_KEY` | Portal (enlace del portal), panel "Tu llave de API" |
    | `OPENROUTER_API_KEY` | Mismo portal; llave con límite de gasto |
    | `APPROVAL_SECRET`, `MCP_SERVICE_TOKEN`, `CRON_SECRET` | Valores aleatorios de 32 bytes: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` |
    | `BUSINESSES` (opcional) | Registro de varios negocios con los nombres de sus variables secretas; formato en `.env.example` (ADR-16) |
@@ -111,20 +117,13 @@ Uso fuera de la aplicación:
 
 Con `DEMO_ACCESS_CODE` configurado, `proxy.ts` exige la sesión firmada en todas las páginas y rutas de la interfaz, y `/api/chat` aplica los topes de turnos por sesión e IP y el de gasto diario (ADR-14).
 
-## Despliegue (Vercel + Turso)
+## Despliegue
 
-Demo publicada: https://copiloto-cafe-alborada.vercel.app (protegida con código de acceso).
-
-
-1. Crear la base en Turso y obtener su URL (`libsql://…`) y un token.
-2. Importar el repositorio en Vercel con **Root Directory** `apps/web`; Vercel detecta Next.js y pnpm.
-3. Definir las variables de entorno del proyecto: las de `.env.example` con `DATABASE_URL` y `DATABASE_AUTH_TOKEN` de Turso, `DEMO_ACCESS_CODE` y `CRON_SECRET`. Para pnpm 12 vía corepack, agregar `ENABLE_EXPERIMENTAL_COREPACK=1`.
-4. Desplegar. Las migraciones se aplican solas en la primera solicitud; `GET /api/health` confirma las variables y `"database": "turso"`.
-5. `apps/web/vercel.json` programa el cron semanal; Vercel lo llama con `CRON_SECRET`.
+La aplicación está desplegada en Vercel: https://copiloto-cafe-alborada.vercel.app (protegida con código de acceso).
 
 ## Base de datos
 
-SQLite local en `data/local.db` (ignorado por git) o Turso en despliegue, según `DATABASE_URL`. Las migraciones de `apps/web/lib/db/migrations` se aplican automáticamente al abrir la conexión. Tras cambiar el esquema: `pnpm --filter @alborada/web db:generate`.
+SQLite en local y Turso en el despliegue. Las migraciones se aplican automáticamente al abrir la conexión.
 
 ## Respuestas de referencia
 
@@ -136,10 +135,10 @@ SQLite local en `data/local.db` (ignorado por git) o Turso en despliegue, según
 - [`docs/`](docs/README.md): especificaciones, estándares de código y gobernanza de IA.
 - Commits en Conventional Commits, validados por los hooks de `.githooks/` y por la CI.
 
-## Créditos
-
-- Ilustración de la taza: "Hot beverage" de [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) © Microsoft Corporation, licencia MIT, recoloreada para la marca (`apps/web/public/brand/taza-cafe.png`, `apps/web/app/icon.png`).
-
 ## Seguridad
 
 Las llaves solo existen en `.env` (ignorado por git) o en las variables de entorno del despliegue. La CI ejecuta gitleaks sobre todo el historial en cada push.
+
+---
+
+**Desarrollador responsable:** Oscar Monroy
