@@ -110,6 +110,17 @@ flowchart LR
     score --> report["evals/reports/<br/>AAAA-MM-DD.md y .json"]
 ```
 
+**Cómo corre un caso** (`evals/src/runner/run-case.ts`):
+
+- El agente es el mismo de `/api/chat`, importado de la API pública `@alborada/web/agent`: mismo prompt, mismas herramientas y mismo MCP dentro del proceso.
+- El MCP recibe un `fetch` de evaluación que aplica, en orden, las fallas del caso, el doble de escrituras y la API real.
+- El corredor hace de la persona:
+  - envía cada turno;
+  - si el agente pide una aprobación, responde la siguiente del caso: con `approve` pide el token con el contenido exacto que mostró el agente, igual que el botón; con `discard` o `change` devuelve los mismos resultados que los botones;
+  - después continúa el mismo mensaje del asistente.
+- Por cada solicitud guarda los pasos de la traza, los totales (tokens y costo de OpenRouter), el tiempo al primer texto y el total, y los errores del stream.
+- Un tope de 8 solicitudes por caso evita gastar sin límite si algo falla.
+
 ## 4. Métricas y cómo se calculan
 
 ### 4.1 Deterministas
