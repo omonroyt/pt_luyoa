@@ -254,6 +254,15 @@ flowchart TB
 
 **Verificador de cifras (veracidad):** antes de emitir un bloque, el orquestador comprueba que cada número del bloque aparece en el resultado de alguna de las fuentes citadas (con tolerancia de redondeo). Si no, devuelve un error a la herramienta de presentación para que el modelo corrija. Lo mismo corre en las evaluaciones sobre el texto final (M-02).
 
+Así se implementa (`apps/web/lib/agent/source-registry.ts` y `figure-verifier.ts`):
+
+- **Registro de fuentes.** Cada turno arma un registro con dos orígenes: los resultados de herramientas que ya vienen en el historial y cada resultado nuevo del MCP. Para lo segundo, las herramientas de negocio se envuelven y registran su salida.
+- **Coincidencia de cifras.** Una cifra del bloque coincide con una de la fuente si son iguales al redondear la de la fuente a los decimales mostrados. También se acepta una proporción mostrada como porcentaje (0.5569 como 55.7).
+- **Alcance de la tarjeta.** La tarjeta de campaña debe repetir el alcance del último `audience_reach` citado para su canal.
+- **Mensaje de la tarjeta.** El mensaje debe declarar su longitud real y respetar el límite del canal.
+- **Si un bloque falla:** el modelo recibe la lista de problemas y la interfaz solo un aviso de corrección.
+- **Alcance del verificador.** Revisa los bloques, no el texto libre. En la prueba de punta a punta del 2026-11-04 el modelo de desarrollo sumó cifras en el texto pese a la regla 1 del prompt. Eso lo mide la métrica de cifras sin fuente en las evaluaciones.
+
 ### 4.3 Interfaz
 
 ```mermaid
