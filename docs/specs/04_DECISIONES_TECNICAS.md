@@ -103,6 +103,17 @@
 - **Alternativas:** confiar solo en el prompt; quitar al agente las escrituras y que solo la interfaz llame la API.
 - **Por qué:** el prompt no es una garantía. Quitarle las escrituras al agente cumple el control, pero rompe "el agente crea el borrador". Con dos candados, el agente conduce el flujo y la garantía es criptográfica.
 - **Consecuencias:** hay que probar ambos candados (CA-C02, CA-C03, CA-M07) y el caso "mándala" (CA-C04, CA-N04).
+- **Implementación (IMP-34):**
+  - `request_draft_approval` y `request_send_approval` no tienen `execute`. Al llamarlas, el turno se detiene; la interfaz pide el token a `/api/approvals` solo si la persona pulsa el botón y lo devuelve como resultado de la herramienta.
+  - `/api/chat` valida ese resultado contra su esquema antes de dárselo al modelo.
+  - Las escrituras del MCP solo se exponen junto con estas herramientas.
+  - Las pruebas recorren el flujo completo con el MCP real y fixtures: el turno se detiene, el token emitido crea el borrador, un token inventado no llega a la API y un contenido alterado invalida el token.
+- **Requisito para la interfaz (M5):** la tarjeta con los botones de aprobación se dibuja con el `campaign` de `request_draft_approval` (o de `request_send_approval`), que es exactamente el contenido que se firma. Así lo que la persona ve es lo que aprueba, aunque el modelo hubiera mostrado antes una tarjeta distinta.
+- **Alternativa evaluada en IMP-34: aprobación nativa del AI SDK 7** (`toolApproval` con `experimental_toolApprovalSecret`).
+  - Firma con HMAC la solicitud de aprobación y la liga a la herramienta, al id de la llamada y a sus argumentos.
+  - Se descartó porque duplica lo que ya garantiza el token propio, que además es de un solo uso, vence a los 10 minutos y lo verifica el MCP.
+  - Además obligaría a emitir el token dentro de `/api/chat`, lo que borra la separación entre quien aprueba (la interfaz y `/api/approvals`) y quien ejecuta (el agente).
+  - La propia documentación del AI SDK advierte que el historial lo controla el cliente; este diseño no confía en él para autorizar escrituras.
 
 ## ADR-09 · Las cifras las calcula el MCP; el agente las verifica
 

@@ -211,7 +211,7 @@ stateDiagram-v2
 
 | Situación | Comportamiento |
 |---|---|
-| "Prepárala y mándala" | Arma la propuesta y pide la primera aprobación. Tras crear, pide la segunda. Nunca se salta pasos |
+| "Prepárala y mándala" | Arma la propuesta y, en el mismo turno, muestra la tarjeta y llama `request_draft_approval` (no pregunta por escrito). Tras crear, pide la segunda. Nunca se salta pasos. Regla agregada al prompt el 2026-11-04: en la prueba de punta a punta el modelo pedía la aprobación en el texto y costaba un turno extra |
 | "Sí" escrito en el chat en lugar del botón | Se trata como aprobación solo si hay una aprobación pendiente y la tarjeta está visible; la interfaz convierte el "sí" en la acción del botón para que el token se emita igual |
 | La persona cambia el mensaje o la oferta | Nueva tarjeta, alcance recalculado si cambió audiencia o canal, nueva aprobación. El token anterior queda inválido (hash distinto) |
 | Token vencido o ya usado | El MCP rechaza; el agente explica y vuelve a pedir aprobación |
