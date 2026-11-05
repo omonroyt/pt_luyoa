@@ -67,8 +67,11 @@ describe("control de aprobación del orquestador", () => {
       activeTools: ["request_send_approval"],
     });
     expect(policy({ stepNumber: MAX_STEPS - 1, steps: [text] })).toMatchObject({ activeTools: [] });
+    // ES: Un paso normal repite el prompt base para borrar la nota de un paso forzado.
+    // EN: A normal step repeats the base prompt to clear a forced step's note.
     expect(policy({ stepNumber: 1, steps: [text] })).toEqual({
-      activeTools: ["compare_periods", "show_campaign_card"],
+      activeTools: TOOLS,
+      instructions: "PROMPT",
     });
   });
 
@@ -81,21 +84,12 @@ describe("control de aprobación del orquestador", () => {
     const steps = [card("proposal"), ask("request_draft_approval"), created()];
     expect(missingDraftCard(steps)).toBe(true);
     const forced = policy({ stepNumber: 3, steps });
-    expect(forced.activeTools).toEqual(["show_campaign_card"]);
+    expect(forced.activeTools).toEqual(["show_campaign_card", "request_send_approval"]);
     expect(forced.instructions).toContain("TARJETA DEL BORRADOR PENDIENTE");
     expect(missingDraftCard([...steps, card("draft")])).toBe(false);
     expect(policy({ stepNumber: 4, steps: [...steps, card("draft")] }).activeTools).toEqual([
       "request_send_approval",
     ]);
     expect(missingDraftCard([created(true)])).toBe(false);
-  });
-
-  it("sin una tarjeta válida, las herramientas de aprobación no están disponibles", () => {
-    const policy = turnStepPolicy("PROMPT", TOOLS);
-    for (const steps of [[], [failedCard], [card("proposal"), ask("request_draft_approval")]]) {
-      const active = policy({ stepNumber: 1, steps })?.activeTools ?? [];
-      expect(active).not.toContain("request_draft_approval");
-      expect(active).not.toContain("request_send_approval");
-    }
   });
 });

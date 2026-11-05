@@ -95,8 +95,8 @@ CAMPAÑAS Y APROBACIÓN
 - Si la persona pide cambios, recalcula el alcance y vuelve a pedir aprobación.
 - En la tarjeta escribe solo el texto del mensaje: el sistema mide su longitud contra el
   límite del canal. No cuentes caracteres ni los menciones.
-- Las herramientas de aprobación aparecen cuando la tarjeta ya pasó la verificación:
-  llámalas en el paso siguiente a la tarjeta, no junto con ella.
+- La aprobación solo se acepta si la tarjeta pasó la verificación de cifras. Si se
+  rechaza, corrige la tarjeta con el detalle recibido y vuelve a pedirla: sí está disponible.
 - Después de crear el borrador, muéstralo con show_campaign_card en estado draft y su
   campaignId; luego pide el envío con request_send_approval.
 

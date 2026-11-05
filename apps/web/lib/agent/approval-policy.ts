@@ -19,15 +19,9 @@
  *     name and with "required" (verified in M6).
  */
 import { APPROVAL_TOOLS } from "./approval-tools";
+import { APPROVAL_BY_CARD_STATE as TOOL_BY_STATE, type ApprovalToolName } from "./card-gate";
 
-type ApprovalTool = (typeof APPROVAL_TOOLS)[number];
-
-const TOOL_BY_STATE: Record<string, ApprovalTool> = {
-  proposal: "request_draft_approval",
-  awaiting_draft_approval: "request_draft_approval",
-  draft: "request_send_approval",
-  awaiting_send_approval: "request_send_approval",
-};
+type ApprovalTool = ApprovalToolName;
 
 const approvalTools = new Set<string>(APPROVAL_TOOLS);
 
@@ -45,12 +39,12 @@ function cardState(part: StepPart): string | undefined {
   return (part.input as { state?: unknown } | undefined)?.state as string | undefined;
 }
 
-// ES: Una llamada a una herramienta inactiva llega marcada como inválida y el SDK la
-//     rechaza; no cuenta como aprobación pedida (en M6, Haiku la llamaba junto con la
-//     tarjeta, cuando todavía no estaba disponible).
-// EN: A call to an inactive tool arrives marked as invalid and the SDK rejects it; it does
-//     not count as a requested approval (in M6, Haiku called it together with the card,
-//     when it was not available yet).
+// ES: Una llamada rechazada (entrada inválida, por ejemplo antes de una tarjeta verificada,
+//     o herramienta inactiva) llega marcada como inválida y no cuenta como aprobación
+//     pedida (en M6, Haiku la llamaba junto con la tarjeta).
+// EN: A rejected call (invalid input, for example before a verified card, or an inactive
+//     tool) arrives marked as invalid and does not count as a requested approval (in M6,
+//     Haiku called it together with the card).
 const isApprovalCall = (part: StepPart) =>
   part.type === "tool-call" && part.invalid !== true && approvalTools.has(part.toolName ?? "");
 
@@ -112,26 +106,13 @@ const approvalNote = (toolName: ApprovalTool) =>
   ].join("\n");
 
 /**
- * ES: Sin una tarjeta mostrada con éxito, las herramientas de aprobación no están
- *     disponibles. En M6, Claude Haiku 5.5 pedía la aprobación en el mismo paso que la
- *     tarjeta; la tarjeta fallaba el verificador y la persona habría aprobado sin ver la
- *     evidencia (CA-C03). Así la aprobación siempre llega después de una tarjeta válida.
- * EN: Without a successfully shown card, the approval tools are not available. In M6,
- *     Claude Haiku 5.5 asked for approval in the same step as the card; the card failed
- *     the verifier and the person would have approved without seeing the evidence
- *     (CA-C03). Approval thus always comes after a valid card.
- */
-export function withoutApprovalTools(toolNames: ReadonlyArray<string>) {
-  return { activeTools: toolNames.filter((name) => !approvalTools.has(name)) };
-}
-
-/**
  * ES: Paso con la aprobación pendiente: solo queda activa la herramienta que corresponde a
  *     la última tarjeta mostrada con éxito, con una instrucción para llamarla. Si lo que
- *     falta es la tarjeta del borrador recién creado, solo queda activa show_campaign_card.
+ *     falta es la tarjeta del borrador recién creado, quedan activas show_campaign_card y
+ *     la aprobación de envío.
  * EN: Step with the approval pending: only the tool matching the last successfully shown
  *     card stays active, with an instruction to call it. If what is missing is the card of
- *     the draft just created, only show_campaign_card stays active.
+ *     the draft just created, show_campaign_card and the send approval stay active.
  */
 export function approvalStepPolicy(instructions: string) {
   return ({ steps }: { steps: ReadonlyArray<StepLike> }) => {
@@ -143,8 +124,12 @@ export function approvalStepPolicy(instructions: string) {
       };
     }
     if (!missingDraftCard(steps)) return undefined;
+    // ES: La aprobación de envío sigue activa: el modelo suele pedirla junto con la tarjeta
+    //     del borrador, y la compuerta solo la acepta si esa tarjeta pasa (card-gate.ts).
+    // EN: Send approval stays active: the model usually asks for it together with the draft
+    //     card, and the gate only accepts it if that card passes (card-gate.ts).
     return {
-      activeTools: ["show_campaign_card"],
+      activeTools: ["show_campaign_card", "request_send_approval"],
       instructions: `${instructions}\n\n${DRAFT_CARD_NOTE}`,
     };
   };

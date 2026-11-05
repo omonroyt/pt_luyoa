@@ -16,10 +16,10 @@ export const INVALID_BLOCK_MESSAGE =
   "El agente armó un bloque con datos inválidos y lo está corrigiendo.";
 export const UNVERIFIED_BLOCK_MESSAGE =
   "El agente está corrigiendo un bloque cuyas cifras no coincidían con sus fuentes.";
-// ES: El modelo llamó una herramienta que el orquestador todavía no ofrece, como la
-//     aprobación antes de que la tarjeta pase el verificador (ADR-08).
-// EN: The model called a tool the orchestrator does not offer yet, such as approval
-//     before the card passes the verifier (ADR-08).
+// ES: El modelo pidió la aprobación antes de que una tarjeta pasara el verificador
+//     (card-gate.ts), o llamó una herramienta que el paso no ofrece (ADR-08).
+// EN: The model asked for approval before a card passed the verifier (card-gate.ts), or
+//     called a tool the step does not offer (ADR-08).
 export const EARLY_STEP_MESSAGE = "El agente pidió un paso antes de tiempo y lo está corrigiendo.";
 
 // ES: El AI SDK reporta un mismo error dos veces: como objeto (tool-input-error o
@@ -31,15 +31,25 @@ export const EARLY_STEP_MESSAGE = "El agente pidió un paso antes de tiempo y lo
 const isNamed = (error: unknown, name: string) =>
   typeof error === "string" && error.startsWith(name);
 
+const APPROVAL_INPUT =
+  /^AI_InvalidToolInputError: Invalid input for tool request_(draft|send)_approval/;
+
+function isEarlyApproval(error: unknown): boolean {
+  if (InvalidToolInputError.isInstance(error)) return error.toolName.endsWith("_approval");
+  if (NoSuchToolError.isInstance(error)) return true;
+  return (
+    isNamed(error, "AI_NoSuchToolError") ||
+    (typeof error === "string" && APPROVAL_INPUT.test(error))
+  );
+}
+
 export function uiErrorMessage(error: unknown): string {
+  if (isEarlyApproval(error)) return EARLY_STEP_MESSAGE;
   if (InvalidToolInputError.isInstance(error) || isNamed(error, "AI_InvalidToolInputError")) {
     return INVALID_BLOCK_MESSAGE;
   }
   if (error instanceof FigureVerificationError || isNamed(error, "FigureVerificationError")) {
     return UNVERIFIED_BLOCK_MESSAGE;
-  }
-  if (NoSuchToolError.isInstance(error) || isNamed(error, "AI_NoSuchToolError")) {
-    return EARLY_STEP_MESSAGE;
   }
   return STREAM_ERROR_MESSAGE;
 }

@@ -150,8 +150,8 @@ function campaignSection(capabilities: AgentCapabilities): string[] {
     "- Toda tarjeta de campaña va seguida de su aprobación: request_draft_approval para una",
     "  propuesta y request_send_approval para un borrador. Escribe tu explicación antes de",
     "  mostrar la tarjeta, porque al pedir la aprobación el turno espera a la persona.",
-    "- Las herramientas de aprobación aparecen cuando la tarjeta ya pasó la verificación:",
-    "  llámalas en el paso siguiente a la tarjeta, no junto con ella.",
+    "- La aprobación solo se acepta si la tarjeta pasó la verificación de cifras. Si se",
+    "  rechaza, corrige la tarjeta con el detalle recibido y vuelve a pedirla: sí está disponible.",
     "- Después de crear el borrador, muéstralo con show_campaign_card en estado draft y su",
     "  campaignId; luego pide el envío con request_send_approval.",
   ];

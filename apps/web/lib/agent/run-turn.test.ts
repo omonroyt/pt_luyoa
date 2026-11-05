@@ -88,10 +88,10 @@ describe("streamAgentTurn", () => {
         "send_campaign",
       ]),
     );
-    // ES: 20 herramientas en el turno; las 2 de aprobación esperan una tarjeta válida.
-    // EN: 20 tools in the turn; the 2 approval tools wait for a valid card.
-    expect(names).toHaveLength(18);
-    expect(names).not.toEqual(expect.arrayContaining([...APPROVAL_TOOLS]));
+    // ES: 20 herramientas; las de aprobación validan que haya una tarjeta (card-gate.ts).
+    // EN: 20 tools; the approval ones check there is a card (card-gate.ts).
+    expect(names).toHaveLength(20);
+    expect(names).toEqual(expect.arrayContaining([...APPROVAL_TOOLS]));
     expect(systemText(first!)).toContain("show_chart");
     expect(systemText(first!)).toContain("request_draft_approval");
   });

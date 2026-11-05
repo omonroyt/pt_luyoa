@@ -69,7 +69,7 @@ describe("buildSystemPrompt", () => {
     expect(prompt).toContain("en el mismo turno muestra la tarjeta");
     expect(prompt).toContain("campañas pasadas usa show_table");
     expect(prompt).toContain("No cuentes caracteres");
-    expect(prompt).toContain("en el paso siguiente a la tarjeta, no junto con ella");
+    expect(prompt).toContain("vuelve a pedirla: sí está disponible");
     expect(prompt).toContain("muéstralo con show_campaign_card en estado draft");
     expect(prompt).toContain("- Tope de descuento: 20%");
   });
