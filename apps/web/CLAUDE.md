@@ -14,10 +14,12 @@ Interfaz de chat, orquestador del agente (`/api/chat`), aprobaciones (`/api/appr
 app/                    Rutas de Next.js (páginas y route handlers)
 components/blocks/      Un componente por bloque visual: chart, table, kpis, campaign-card, source
 components/chat/        Hilo, entrada, panel de trazas
+components/ui/          Piezas de interfaz compartidas: marca, íconos, tema, script en línea
 lib/agent/              Prompt de sistema, herramientas de presentación, verificador de cifras, trazas
 lib/approvals/          Emisión y verificación de tokens de aprobación
 lib/db/                 Esquema Drizzle y consultas
 lib/tenancy/            Registro de negocios y negocio de cada solicitud (X-05)
+public/brand/           Ilustración de la marca (Fluent Emoji, MIT; créditos en el README)
 ```
 
 ## Reglas

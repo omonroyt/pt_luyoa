@@ -320,6 +320,19 @@ Cada chip `[Fuente: …]` abre un panel:
 
 **Celular (375 px):** una columna; las trazas se abren como hoja inferior; las tablas anchas se desplazan horizontalmente dentro de su tarjeta (la página no); las gráficas de barras pasan a horizontales.
 
+**Diseño visual (implementado en `apps/web`):**
+- **Marca:** taza de café en 3D sin recuadro ("Hot beverage" de Fluent Emoji, Microsoft, licencia MIT, recoloreada al terracota de la paleta). Nombre en Fraunces; interfaz en Geist.
+- **Superficies:** fondo sólido, tarjetas con borde fino y sombra suave, acento terracota sólido. Sin degradados de fondo ni íconos dentro de recuadros de color; los íconos van sueltos en el color del acento.
+- **Modo claro y oscuro:** botón en el encabezado. La preferencia se guarda en `localStorage` y, sin ella, se usa la del sistema. Un script en línea la aplica antes de pintar, así que no hay destello al cargar.
+- **Bienvenida:** saludo a la dueña y cuadrícula de preguntas sugeridas. Ya en la conversación, las sugerencias pasan a una franja de una fila sobre la entrada.
+- **Movimiento:**
+  - los mensajes y bloques entran con una animación corta;
+  - las barras crecen desde cero, serie por serie, y las líneas se trazan sobre un área tenue;
+  - las cifras de los indicadores suben desde cero.
+
+  Con `prefers-reduced-motion` todo aparece completo y al instante.
+- **Seguimiento del hilo:** la página acompaña la respuesta mientras crece y deja de seguirla si la persona sube a leer. Una pregunta nueva la vuelve a seguir.
+
 ---
 
 ## 5. Convenciones de formato
@@ -331,7 +344,7 @@ Cada chip `[Fuente: …]` abre un panel:
 | Puntos porcentuales | Para lift y tasas: "6.1 pts" |
 | Fechas | "10 al 24 nov 2026" en texto; ISO en fuentes |
 | Días y horas | Nombres en español; horas en formato 24 h local |
-| Colores | Variación positiva/negativa según `goodWhen`; una paleta categórica fija por sucursal en todas las gráficas |
+| Colores | Variación positiva/negativa según `goodWhen`; una paleta categórica fija por serie en todas las gráficas, definida como variables CSS con su valor para modo claro y oscuro |
 | Accesibilidad | Toda gráfica tiene título y una tabla equivalente accesible ("Ver datos"); contraste AA; los colores no son la única señal |
 
 ---
