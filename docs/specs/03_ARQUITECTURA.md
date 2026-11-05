@@ -70,6 +70,7 @@ flowchart TB
     subgraph servidor["Aplicación Next.js (un solo despliegue)"]
         chatApi["/api/chat<br/>Orquestador del agente<br/>AI SDK + OpenRouter"]
         approvalApi["/api/approvals<br/>Emite tokens de aprobación"]
+        traceApi["/api/traces<br/>Lee las trazas guardadas"]
         mcpRoute["/api/mcp<br/>Servidor MCP<br/>(Streamable HTTP)"]
         cron["/api/cron/weekly<br/>Resumen semanal"]
     end
@@ -86,10 +87,12 @@ flowchart TB
 
     ui -- "HTTP + streaming (SSE)" --> chatApi
     ui -- "POST aprobar / rechazar" --> approvalApi
+    ui -- "GET traza de un mensaje" --> traceApi
     chatApi -- "cliente MCP (HTTP)" --> mcpRoute
     chatApi -- "chat completions" --> openrouter
     chatApi -- "lee/escribe" --> db
     approvalApi -- "lee/escribe" --> db
+    traceApi -- "lee" --> db
     cron -- "invoca agente" --> chatApi
     mcpRoute --> mcpCore
     stdio --> mcpCore
@@ -105,6 +108,7 @@ flowchart TB
 | Interfaz de chat | Mostrar conversación, bloques visuales, tarjetas con botones de aprobación y panel de trazas | Next.js (App Router), React, AI SDK UI (`useChat`), Recharts, Tailwind |
 | Orquestador del agente (`/api/chat`) | Bucle del agente: prompt de sistema, memoria, herramientas del MCP, herramientas de presentación, streaming, registro de trazas y costo | AI SDK Core (`streamText`), proveedor de OpenRouter, cliente MCP del AI SDK |
 | Aprobaciones (`/api/approvals`) | Registrar la decisión de la persona y emitir un token firmado de un solo uso, ligado al contenido exacto de la campaña | Route handler + HMAC |
+| Trazas (`/api/traces`) | Entregar al panel de trazas los pasos guardados de un mensaje y el costo acumulado de su conversación, solo del mismo origen y del mismo negocio, con los tokens de aprobación enmascarados | Route handler + Drizzle |
 | Servidor MCP (`/api/mcp` y CLI stdio) | Exponer las herramientas de negocio; mismo código para ambos transportes | SDK oficial de MCP para TypeScript, zod |
 | `@alborada/mcp-server` | Herramientas, cliente HTTP de la API, caché, reintentos, validaciones, cálculo de métricas | TypeScript, `undici`/`fetch`, zod |
 | `@alborada/shared` | Contratos compartidos: bloques visuales, `source`, errores, tipos de dominio | zod |
@@ -525,7 +529,7 @@ flowchart LR
 ```text
 pt_luyoa/
 ├─ apps/
-│  └─ web/                      Next.js: chat, /api/chat, /api/mcp, /api/approvals, /api/cron
+│  └─ web/                      Next.js: chat, /api/chat, /api/mcp, /api/approvals, /api/traces, /api/cron
 │     ├─ app/
 │     ├─ components/blocks/     chart, table, kpis, campaign-card, source, error
 │     ├─ components/chat/       hilo, entrada, panel de trazas
