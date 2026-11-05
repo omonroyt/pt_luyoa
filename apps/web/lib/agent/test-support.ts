@@ -7,12 +7,30 @@
 import { createFixtureServerFactory } from "@alborada/mcp-server/testing";
 import { simulateReadableStream } from "ai";
 import { MockLanguageModelV4 } from "ai/test";
-import type { McpConnection } from "./mcp-tools";
+import { connectMcpClient, type McpConnection } from "./mcp-tools";
+import { payloadFromMcpResult } from "./source-registry";
 
 export const TEST_SERVICE_TOKEN = "t".repeat(40);
 
 export function fixtureMcpConnection(): McpConnection {
   return { serviceToken: TEST_SERVICE_TOKEN, createServer: createFixtureServerFactory() };
+}
+
+/**
+ * ES: source.id que el MCP asigna a una consulta con las fixtures, para no fijarlo a mano.
+ * EN: source.id the MCP assigns to a query with the fixtures, so it is not hardcoded.
+ */
+export async function sourceIdOf(toolName: string, input: object): Promise<string> {
+  const client = await connectMcpClient(fixtureMcpConnection());
+  try {
+    const execute = (await client.tools())[toolName]?.execute;
+    const result: unknown = await execute?.(input, { toolCallId: "id", messages: [], context: {} });
+    const id = payloadFromMcpResult(result)?.source.id;
+    if (!id) throw new Error(`${toolName} no devolvió una fuente`);
+    return id;
+  } finally {
+    await client.close();
+  }
 }
 
 const USAGE = {

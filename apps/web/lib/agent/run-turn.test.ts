@@ -1,27 +1,51 @@
 import type { UIMessage } from "ai";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { PRESENTATION_TOOLS } from "./presentation-tools";
-import { INVALID_BLOCK_MESSAGE, MAX_STEPS, streamAgentTurn } from "./run-turn";
-import { fixtureMcpConnection, scriptedModel } from "./test-support";
+import { MAX_STEPS, streamAgentTurn } from "./run-turn";
+import { INVALID_BLOCK_MESSAGE, UNVERIFIED_BLOCK_MESSAGE } from "./ui-errors";
+import { fixtureMcpConnection, scriptedModel, sourceIdOf } from "./test-support";
 
 const QUESTION: UIMessage[] = [
   { id: "m1", role: "user", parts: [{ type: "text", text: "¿Cómo me fue en octubre?" }] },
 ];
 
-const KPIS = {
-  title: "Octubre vs septiembre 2026",
-  period: { from: "2026-10-01", to: "2026-10-31" },
-  sources: ["src_d9f5b950bf"],
-  items: [
-    { key: "net_sales", label: "Ventas netas", value: 808254, unit: "mxn" },
-    { key: "tickets", label: "Tickets", value: 8680, unit: "count" },
-  ],
-};
-
 const COMPARE = {
   toolName: "compare_periods",
   input: { current: "last_full_month", previous: "previous_full_month" },
 };
+
+const SEGMENTS = { toolName: "customer_segments", input: { segment_ids: ["at_risk", "dormant"] } };
+
+// ES: source.id que el MCP asigna a cada consulta con las fixtures.
+// EN: source.id the MCP assigns to each query with the fixtures.
+let compareId: string;
+let segmentsId: string;
+
+beforeAll(async () => {
+  compareId = await sourceIdOf(COMPARE.toolName, COMPARE.input);
+  segmentsId = await sourceIdOf(SEGMENTS.toolName, SEGMENTS.input);
+});
+
+const kpis = () => ({
+  title: "Octubre vs septiembre 2026",
+  period: { from: "2026-10-01", to: "2026-10-31" },
+  sources: [compareId],
+  items: [
+    { key: "net_sales", label: "Ventas netas", value: 808254, unit: "mxn" },
+    { key: "tickets", label: "Tickets", value: 8680, unit: "count" },
+  ],
+});
+
+const lostCustomers = (total: number) => ({
+  title: "Clientes que estás perdiendo",
+  period: { from: "2026-10-31", to: "2026-10-31" },
+  sources: [segmentsId],
+  items: [
+    { key: "at_risk", label: "En riesgo", value: 483, unit: "count" },
+    { key: "dormant", label: "Dormidos", value: 367, unit: "count" },
+    { key: "total", label: "Total", value: total, unit: "count" },
+  ],
+});
 
 type DoStreamCall = {
   prompt: Array<{ role: string; content: unknown }>;
@@ -61,22 +85,54 @@ describe("streamAgentTurn", () => {
     expect(systemText(first!)).toContain("show_chart");
   });
 
-  it("envía el bloque de indicadores a la interfaz cuando es válido", async () => {
-    const model = scriptedModel((_hasTools, call) =>
-      call === 0 ? { toolName: "show_kpis", input: KPIS } : { text: "Listo." },
-    );
+  it("envía el bloque de indicadores cuando sus cifras salen de la fuente consultada", async () => {
+    const model = scriptedModel((_hasTools, call) => {
+      if (call === 0) return COMPARE;
+      if (call === 1) return { toolName: "show_kpis", input: kpis() };
+      return { text: "Listo." };
+    });
     const body = await (
       await streamAgentTurn(QUESTION, { model, mcp: fixtureMcpConnection() })
     ).text();
     expect(body).toContain('"toolName":"show_kpis"');
     expect(body).toContain("tool-output-available");
+    expect(body).not.toContain(UNVERIFIED_BLOCK_MESSAGE);
+  });
+
+  it("acepta el total que entrega customer_segments en lugar de una suma del modelo", async () => {
+    const model = scriptedModel((_hasTools, call) => {
+      if (call === 0) return SEGMENTS;
+      if (call === 1) return { toolName: "show_kpis", input: lostCustomers(850) };
+      return { text: "Listo." };
+    });
+    const body = await (
+      await streamAgentTurn(QUESTION, { model, mcp: fixtureMcpConnection() })
+    ).text();
+    expect(body).not.toContain(UNVERIFIED_BLOCK_MESSAGE);
+  });
+
+  it("rechaza una cifra sin fuente, la devuelve al modelo y avisa a la interfaz", async () => {
+    const model = scriptedModel((_hasTools, call) => {
+      if (call === 0) return SEGMENTS;
+      if (call === 1) return { toolName: "show_kpis", input: lostCustomers(1000) };
+      return { text: "Listo." };
+    });
+    const body = await (
+      await streamAgentTurn(QUESTION, { model, mcp: fixtureMcpConnection() })
+    ).text();
+    const [, , third] = model.doStreamCalls as unknown as DoStreamCall[];
+    const toolMessages = JSON.stringify(third!.prompt.filter((m) => m.role === "tool"));
+    expect(toolMessages).toContain("Verificación de cifras");
+    expect(toolMessages).toContain("1000");
+    expect(body).toContain(UNVERIFIED_BLOCK_MESSAGE);
+    expect(body).not.toContain("error del servicio");
   });
 
   it("devuelve al modelo el error de un bloque inválido para que lo corrija", async () => {
-    const oneItem = { ...KPIS, items: KPIS.items.slice(0, 1) };
+    const oneItem = { ...kpis(), items: kpis().items.slice(0, 1) };
     const model = scriptedModel((_hasTools, call) => {
       if (call === 0) return { toolName: "show_kpis", input: oneItem };
-      if (call === 1) return { toolName: "show_kpis", input: KPIS };
+      if (call === 1) return { toolName: "show_kpis", input: kpis() };
       return { text: "Listo." };
     });
     const body = await (

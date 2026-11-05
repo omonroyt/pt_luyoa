@@ -17,6 +17,8 @@ import {
   TableBlock,
 } from "@alborada/shared";
 import { tool, type ToolSet } from "ai";
+import { assertVerified } from "./figure-verifier";
+import type { SourceRegistry } from "./source-registry";
 
 export const PRESENTATION_TOOLS = [
   "show_chart",
@@ -44,36 +46,47 @@ const DESCRIPTIONS = {
     "Cita las fuentes (source.id) de las cifras que mencionas en el texto de la respuesta.",
 } satisfies Record<(typeof PRESENTATION_TOOLS)[number], string>;
 
-// ES: El bloque se dibuja en la interfaz a partir de los argumentos de la llamada.
-// EN: The block is drawn in the UI from the call arguments.
-const shown = async () => ({ shown: true });
+/**
+ * ES: El bloque se dibuja en la interfaz a partir de los argumentos de la llamada, pero
+ *     solo si pasa el verificador de cifras (IMP-33); si no, la llamada falla con la lista
+ *     de problemas y el modelo corrige.
+ * EN: The block is drawn in the UI from the call arguments, but only if it passes the
+ *     figure verifier (IMP-33); otherwise the call fails with the list of problems and the
+ *     model corrects it.
+ */
+function verified(name: (typeof PRESENTATION_TOOLS)[number], registry: SourceRegistry) {
+  return async (block: unknown) => {
+    assertVerified(name, block, registry);
+    return { shown: true };
+  };
+}
 
-export function createPresentationTools(): ToolSet {
+export function createPresentationTools(registry: SourceRegistry): ToolSet {
   return {
     show_chart: tool({
       description: DESCRIPTIONS.show_chart,
       inputSchema: ChartBlock,
-      execute: shown,
+      execute: verified("show_chart", registry),
     }),
     show_table: tool({
       description: DESCRIPTIONS.show_table,
       inputSchema: TableBlock,
-      execute: shown,
+      execute: verified("show_table", registry),
     }),
     show_kpis: tool({
       description: DESCRIPTIONS.show_kpis,
       inputSchema: KpisBlock,
-      execute: shown,
+      execute: verified("show_kpis", registry),
     }),
     show_campaign_card: tool({
       description: DESCRIPTIONS.show_campaign_card,
       inputSchema: CampaignCardBlock,
-      execute: shown,
+      execute: verified("show_campaign_card", registry),
     }),
     cite_sources: tool({
       description: DESCRIPTIONS.cite_sources,
       inputSchema: CiteSourcesBlock,
-      execute: shown,
+      execute: verified("cite_sources", registry),
     }),
   };
 }
