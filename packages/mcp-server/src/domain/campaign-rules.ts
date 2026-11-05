@@ -6,11 +6,14 @@
  *     (pitfall T-11): message length per channel, validity after data_as_of and the
  *     offer's required fields.
  */
+import { MESSAGE_LIMITS } from "@alborada/shared";
 import type { Product } from "../api/schemas";
 import { ToolFailure } from "../errors";
 import { resolveOfferProduct } from "./offers";
 
-export const MESSAGE_LIMITS = { push: 140, whatsapp: 1024, email: 5000 } as const;
+// ES: Los límites por canal son un contrato compartido con el agente y la interfaz.
+// EN: Per-channel limits are a contract shared with the agent and the UI.
+export { MESSAGE_LIMITS };
 export type Channel = keyof typeof MESSAGE_LIMITS;
 
 export type CampaignDraft = {

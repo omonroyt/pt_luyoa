@@ -14,6 +14,17 @@ export type CampaignCardState = z.infer<typeof CampaignCardState>;
 export const CampaignChannel = z.enum(["push", "whatsapp", "email"]);
 export type CampaignChannel = z.infer<typeof CampaignChannel>;
 
+/**
+ * ES: Longitud máxima del mensaje por canal (T-11), verificada por el MCP antes de crear y
+ *     por el verificador de bloques antes de mostrar la tarjeta.
+ * EN: Maximum message length per channel (T-11), checked by the MCP before creating and by
+ *     the block verifier before showing the card.
+ */
+export const MESSAGE_LIMITS = { push: 140, whatsapp: 1024, email: 5000 } as const satisfies Record<
+  CampaignChannel,
+  number
+>;
+
 const Range = z.tuple([z.number(), z.number()]).describe("Rango [mínimo, máximo]");
 
 const Reach = z
