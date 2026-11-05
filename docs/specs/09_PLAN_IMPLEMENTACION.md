@@ -30,7 +30,7 @@ gantt
 
     section Agente e interfaz
     M4 Orquestador del agente            :done, m4, 2026-11-04, 1d
-    M5 Interfaz y aprobación             :m5, 2026-11-07, 1d
+    M5 Interfaz y aprobación             :done, m5, 2026-11-04, 1d
 
     section Calidad
     M6 Evaluaciones y modelos            :m6, 2026-11-08, 1d
@@ -110,7 +110,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-34 | Herramientas de aprobación (`request_draft_approval`, `request_send_approval`) | CA-C02 a CA-C05 |
 | IMP-35 | Trazas por paso con razón, latencia, tokens y costo | CA-Q05, CA-Q06 |
 
-### M5 · Interfaz y aprobación — rama sugerida `feat/interfaz`
+### M5 · Interfaz y aprobación (hecho, rama `feat/interfaz`)
 
 | ID | Tarea | Criterio |
 |---|---|---|
