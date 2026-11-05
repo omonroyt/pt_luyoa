@@ -116,6 +116,23 @@ function formatSection(capabilities: AgentCapabilities): string[] {
   ];
 }
 
+// ES: Resumen semanal (X-02, 06 §12.1): informa la semana y deja oportunidades; no arma
+//     campañas ni pide aprobaciones, porque también lo genera el cron sin la persona.
+// EN: Weekly summary (X-02, 06 §12.1): it reports the week and leaves opportunities; it does
+//     not build campaigns or ask for approvals, because the cron also generates it without
+//     the person.
+const WEEKLY_SUMMARY_RULES = [
+  "RESUMEN DE LA SEMANA",
+  '- Si piden "el resumen de la semana": compara last_week contra previous_week con',
+  "  compare_periods y revisa location_health, customer_segments y campaign_performance.",
+  "- Di la semana que cubre (fechas de last_week) y la fecha de corte de los datos.",
+  "- Muestra show_kpis con ventas netas, transacciones y ticket promedio y su variación.",
+  "- Da 2 o 3 oportunidades numeradas. Cada una con su evidencia (métrica, valor, periodo y",
+  "  contra qué se compara), la acción sugerida y la audiencia con su alcance real si aplica.",
+  "- No muestres tarjetas de campaña ni pidas aprobaciones en el resumen. Cierra ofreciendo",
+  '  armar la campaña de la oportunidad que elija ("dime cuál y la preparo").',
+];
+
 const RECOMMENDATION_RULES = [
   "RECOMENDACIONES",
   "- Cada oportunidad: evidencia (métrica, valor, periodo, contra qué se compara),",
@@ -191,6 +208,7 @@ export function buildSystemPrompt(input: PromptInput): string {
     VERACITY_RULES,
     formatSection(input.capabilities),
     RECOMMENDATION_RULES,
+    input.capabilities.presentation ? WEEKLY_SUMMARY_RULES : [],
     campaignSection(input.capabilities),
     ERROR_RULES,
     preferencesSection(input),

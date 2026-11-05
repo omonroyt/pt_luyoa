@@ -72,5 +72,7 @@ describe("buildSystemPrompt", () => {
     expect(prompt).toContain("vuelve a pedirla: sí está disponible");
     expect(prompt).toContain("muéstralo con show_campaign_card en estado draft");
     expect(prompt).toContain("- Tope de descuento: 20%");
+    expect(prompt).toContain("RESUMEN DE LA SEMANA");
+    expect(prompt).toContain("No muestres tarjetas de campaña ni pidas aprobaciones en el resumen");
   });
 });

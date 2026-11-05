@@ -27,6 +27,15 @@ const ServerEnv = z.object({
   DATABASE_URL: z.string().default("file:./data/local.db"),
   DATABASE_AUTH_TOKEN: optionalText,
   BUSINESS_ID: z.string().default("biz_alborada"),
+  // ES: Secreto con el que Vercel Cron llama /api/cron/weekly; sin él, el cron no corre.
+  // EN: Secret Vercel Cron uses to call /api/cron/weekly; without it, the cron does not run.
+  CRON_SECRET: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z
+      .string()
+      .min(MIN_SECRET_LENGTH, `CRON_SECRET requiere ${MIN_SECRET_LENGTH} caracteres o más`)
+      .optional(),
+  ),
 });
 
 export type ServerConfig = {
@@ -37,6 +46,7 @@ export type ServerConfig = {
   databaseUrl: string;
   databaseAuthToken: string | undefined;
   businessId: string;
+  cronSecret: string | undefined;
 };
 
 /**
@@ -84,6 +94,7 @@ export function serverConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig
     databaseUrl: resolveDatabaseUrl(parsed.data.DATABASE_URL),
     databaseAuthToken: parsed.data.DATABASE_AUTH_TOKEN,
     businessId: parsed.data.BUSINESS_ID,
+    cronSecret: parsed.data.CRON_SECRET,
   };
   if (env === process.env) cached = config;
   return config;

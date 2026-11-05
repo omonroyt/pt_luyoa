@@ -23,7 +23,7 @@ import {
 import type { MCPClient } from "@ai-sdk/mcp";
 import { approvalStepPolicy, type StepLike } from "./approval-policy";
 import { createApprovalTools } from "./approval-tools";
-import { loadBusinessContext } from "./business-context";
+import { loadBusinessContext, type BusinessContext } from "./business-context";
 import { createCardGate } from "./card-gate";
 import { createMemoryTools } from "./memory-tools";
 import type { PreferenceStore } from "../memory/preference-store";
@@ -76,6 +76,9 @@ export type TurnDependencies = {
   // ES: Preferencias del negocio (X-04). Sin almacén, el turno no tiene memoria.
   // EN: Business preferences (X-04). Without a store, the turn has no memory.
   memory?: PreferenceStore;
+  // ES: Recibe el contexto del negocio del turno (lo usa el resumen semanal para su fecha).
+  // EN: Receives the turn's business context (the weekly summary uses it for its date).
+  onContext?: (context: BusinessContext) => void;
 };
 
 const modelName = (model: LanguageModel) => (typeof model === "string" ? model : model.modelId);
@@ -203,6 +206,7 @@ export async function streamAgentTurn(
     const registry = createSourceRegistry();
     seedFromMessages(registry, messages);
     const { tools, context } = await buildTools(client, registry, dependencies.memory);
+    dependencies.onContext?.(context);
     const instructions = buildSystemPrompt({
       context,
       capabilities: capabilitiesOf(dependencies.memory),
