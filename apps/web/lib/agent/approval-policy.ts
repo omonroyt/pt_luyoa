@@ -5,12 +5,18 @@
  *     propuesta y request_send_approval para un borrador. Así toda tarjeta llega a la
  *     interfaz con sus botones (07 §3.4) y la aprobación nunca se pide solo en texto, un
  *     error que la regla del prompt no evitó en la corrida de humo con GLM.
+ *     El paso deja activa solo esa herramienta y agrega una instrucción; no usa
+ *     toolChoice, porque el proveedor original de GLM (Z.AI) rechaza forzar una
+ *     herramienta, por nombre o con "required" (verificado en M6).
  * EN: Orchestrator control over approval (ADR-08, CA-C04). If a campaign card was shown in
  *     the turn and the model did not ask for approval with its tool, the next step is
  *     forced to call it: request_draft_approval for a proposal and request_send_approval
  *     for a draft. Every card thus reaches the UI with its buttons (07 §3.4) and approval
  *     is never asked only in text, an error the prompt rule did not prevent in the GLM
  *     smoke run.
+ *     The step leaves only that tool active and adds an instruction; it does not use
+ *     toolChoice, because GLM's original provider (Z.AI) rejects forcing a tool, both by
+ *     name and with "required" (verified in M6).
  */
 import { APPROVAL_TOOLS } from "./approval-tools";
 
@@ -55,11 +61,20 @@ export function missingApproval(steps: ReadonlyArray<StepLike>): ApprovalTool | 
   return missing;
 }
 
-export function approvalStepPolicy() {
+const approvalNote = (toolName: ApprovalTool) =>
+  [
+    "APROBACIÓN PENDIENTE",
+    `Ya mostraste la tarjeta de campaña. Llama ahora ${toolName} con la misma campaña de la`,
+    "tarjeta, sin escribir más texto: la persona decide con los botones.",
+  ].join("\n");
+
+export function approvalStepPolicy(instructions: string) {
   return ({ steps }: { steps: ReadonlyArray<StepLike> }) => {
     const toolName = missingApproval(steps);
-    return toolName
-      ? { activeTools: [toolName], toolChoice: { type: "tool" as const, toolName } }
-      : undefined;
+    if (!toolName) return undefined;
+    return {
+      activeTools: [toolName],
+      instructions: `${instructions}\n\n${approvalNote(toolName)}`,
+    };
   };
 }

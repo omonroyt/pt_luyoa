@@ -36,14 +36,17 @@ describe("control de aprobación del orquestador", () => {
     ).toBe("request_draft_approval");
   });
 
-  it("el paso siguiente solo deja la herramienta de aprobación y la fuerza, aun en el último paso", () => {
+  it("el paso siguiente solo deja la herramienta de aprobación e instruye llamarla, aun en el último paso", () => {
     const policy = turnStepPolicy("PROMPT");
-    expect(policy({ stepNumber: 1, steps: [card("proposal")] })).toEqual({
-      activeTools: ["request_draft_approval"],
-      toolChoice: { type: "tool", toolName: "request_draft_approval" },
-    });
+    const forced = policy({ stepNumber: 1, steps: [card("proposal")] });
+    expect(forced).toMatchObject({ activeTools: ["request_draft_approval"] });
+    expect(forced?.instructions).toContain("PROMPT");
+    expect(forced?.instructions).toContain("Llama ahora request_draft_approval");
+    // ES: Sin toolChoice: Z.AI rechaza forzar una herramienta.
+    // EN: No toolChoice: Z.AI rejects forcing a tool.
+    expect(forced).not.toHaveProperty("toolChoice");
     expect(policy({ stepNumber: MAX_STEPS - 1, steps: [card("draft")] })).toMatchObject({
-      toolChoice: { type: "tool", toolName: "request_send_approval" },
+      activeTools: ["request_send_approval"],
     });
     expect(policy({ stepNumber: MAX_STEPS - 1, steps: [text] })).toMatchObject({ activeTools: [] });
     expect(policy({ stepNumber: 1, steps: [text] })).toBeUndefined();

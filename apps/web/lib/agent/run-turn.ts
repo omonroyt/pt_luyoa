@@ -145,7 +145,7 @@ export function finalStepPolicy(instructions: string) {
  *     approval forces the request, even on the last step) and then the last-step closing.
  */
 export function turnStepPolicy(instructions: string) {
-  const approval = approvalStepPolicy();
+  const approval = approvalStepPolicy(instructions);
   const final = finalStepPolicy(instructions);
   return (options: { stepNumber: number; steps: ReadonlyArray<StepLike> }) =>
     approval(options) ?? final(options);
