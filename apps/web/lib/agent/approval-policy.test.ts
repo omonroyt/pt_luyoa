@@ -16,6 +16,12 @@ const failedCard: StepLike = {
 };
 const ask = (toolName: string): StepLike => ({ content: [{ type: "tool-call", toolName }] });
 const text: StepLike = { content: [{ type: "text" }] };
+const TOOLS = [
+  "compare_periods",
+  "show_campaign_card",
+  "request_draft_approval",
+  "request_send_approval",
+];
 
 describe("control de aprobación del orquestador", () => {
   it("una propuesta mostrada sin pedir aprobación obliga a pedir la del borrador", () => {
@@ -37,7 +43,7 @@ describe("control de aprobación del orquestador", () => {
   });
 
   it("el paso siguiente solo deja la herramienta de aprobación e instruye llamarla, aun en el último paso", () => {
-    const policy = turnStepPolicy("PROMPT");
+    const policy = turnStepPolicy("PROMPT", TOOLS);
     const forced = policy({ stepNumber: 1, steps: [card("proposal")] });
     expect(forced).toMatchObject({ activeTools: ["request_draft_approval"] });
     expect(forced?.instructions).toContain("PROMPT");
@@ -49,6 +55,17 @@ describe("control de aprobación del orquestador", () => {
       activeTools: ["request_send_approval"],
     });
     expect(policy({ stepNumber: MAX_STEPS - 1, steps: [text] })).toMatchObject({ activeTools: [] });
-    expect(policy({ stepNumber: 1, steps: [text] })).toBeUndefined();
+    expect(policy({ stepNumber: 1, steps: [text] })).toEqual({
+      activeTools: ["compare_periods", "show_campaign_card"],
+    });
+  });
+
+  it("sin una tarjeta válida, las herramientas de aprobación no están disponibles", () => {
+    const policy = turnStepPolicy("PROMPT", TOOLS);
+    for (const steps of [[], [failedCard], [card("proposal"), ask("request_draft_approval")]]) {
+      const active = policy({ stepNumber: 1, steps })?.activeTools ?? [];
+      expect(active).not.toContain("request_draft_approval");
+      expect(active).not.toContain("request_send_approval");
+    }
   });
 });

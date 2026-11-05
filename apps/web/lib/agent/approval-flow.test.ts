@@ -9,7 +9,7 @@ import type { UIMessage } from "ai";
 import { describe, expect, it } from "vitest";
 import { parseChatRequest } from "./chat-request";
 import { streamAgentTurn } from "./run-turn";
-import { scriptedModel, TEST_SERVICE_TOKEN } from "./test-support";
+import { cardSteps, fixtureCampaignCard, scriptedModel, TEST_SERVICE_TOKEN } from "./test-support";
 
 const SECRET = "secreto-de-prueba";
 
@@ -86,14 +86,20 @@ const createWith = (campaign: CampaignDraft, token: string) => ({
 describe("flujo de aprobación del agente (ADR-08)", () => {
   it("al pedir aprobación el turno se detiene: nada se ejecuta sin la persona", async () => {
     const { mcp } = approvalsSetup();
-    const model = scriptedModel(() => ({
-      toolName: "request_draft_approval",
-      input: { campaign: DRAFT },
-    }));
+    const steps = cardSteps(await fixtureCampaignCard());
+    const model = scriptedModel(
+      (_hasTools, call) =>
+        steps[call] ?? { toolName: "request_draft_approval", input: { campaign: DRAFT } },
+    );
     const body = await (await streamAgentTurn([ASK], { model, mcp })).text();
-    expect(model.doStreamCalls).toHaveLength(1);
+    expect(model.doStreamCalls).toHaveLength(steps.length + 1);
     expect(body).toContain('"toolName":"request_draft_approval"');
-    expect(body).not.toContain("tool-output-available");
+    expect(body).not.toContain("create_campaign_draft");
+    // ES: La tarjeta pasó el verificador y la aprobación se llamó cuando estaba disponible.
+    // EN: The card passed the verifier and approval was called while it was available.
+    expect(body).not.toContain("tool-output-error");
+    expect(body).not.toContain("tool-input-error");
+    expect(body).not.toMatch(/"type":"error"/);
   });
 
   it("con el token que emitió la aprobación, el MCP crea el borrador", async () => {

@@ -68,6 +68,26 @@ const approvalNote = (toolName: ApprovalTool) =>
     "tarjeta, sin escribir más texto: la persona decide con los botones.",
   ].join("\n");
 
+/**
+ * ES: Sin una tarjeta mostrada con éxito, las herramientas de aprobación no están
+ *     disponibles. En M6, Claude Haiku 5.5 pedía la aprobación en el mismo paso que la
+ *     tarjeta; la tarjeta fallaba el verificador y la persona habría aprobado sin ver la
+ *     evidencia (CA-C03). Así la aprobación siempre llega después de una tarjeta válida.
+ * EN: Without a successfully shown card, the approval tools are not available. In M6,
+ *     Claude Haiku 5.5 asked for approval in the same step as the card; the card failed
+ *     the verifier and the person would have approved without seeing the evidence
+ *     (CA-C03). Approval thus always comes after a valid card.
+ */
+export function withoutApprovalTools(toolNames: ReadonlyArray<string>) {
+  return { activeTools: toolNames.filter((name) => !approvalTools.has(name)) };
+}
+
+/**
+ * ES: Paso con la aprobación pendiente: solo queda activa la herramienta que corresponde a
+ *     la última tarjeta mostrada con éxito, con una instrucción para llamarla.
+ * EN: Step with the approval pending: only the tool matching the last successfully shown
+ *     card stays active, with an instruction to call it.
+ */
 export function approvalStepPolicy(instructions: string) {
   return ({ steps }: { steps: ReadonlyArray<StepLike> }) => {
     const toolName = missingApproval(steps);

@@ -1,6 +1,12 @@
 import { createFakeFetch, TEST_NOW } from "@alborada/mcp-server/testing";
-import { scriptedModel, type ScriptedReply } from "@alborada/web/agent/testing";
-import { describe, expect, it } from "vitest";
+import {
+  cardSteps,
+  fixtureCampaignCard,
+  scriptedModel,
+  type ScriptedReply,
+  type TestCard,
+} from "@alborada/web/agent/testing";
+import { beforeAll, describe, expect, it } from "vitest";
 import { parseCase } from "../cases/load-cases";
 import { runCase, type RunDependencies } from "./run-case";
 
@@ -46,13 +52,36 @@ const deps = (script: (call: number, prompt: unknown) => ScriptedReply): RunDepe
   now: () => TEST_NOW,
 });
 
+// ES: Último source.id del prompt: el del resultado más reciente (aquí, el del borrador).
+// EN: Last source.id in the prompt: the most recent result's (here, the draft's).
+const lastSource = (prompt: unknown) =>
+  [...JSON.stringify(prompt).matchAll(/src_[0-9a-f]{10}/g)].at(-1)?.[0] ?? "";
+
+let card: TestCard;
+beforeAll(async () => {
+  card = await fixtureCampaignCard();
+});
+
+const ask = (): ScriptedReply => ({
+  toolName: "request_draft_approval",
+  input: { campaign: DRAFT },
+});
+
 const fullFlow = (call: number, prompt: unknown): ScriptedReply => {
+  const draftCard = {
+    ...card,
+    state: "draft",
+    campaignId: "cmp_eval_001",
+    sources: [...card.sources, lastSource(prompt)],
+  };
   const steps: ScriptedReply[] = [
-    { toolName: "request_draft_approval", input: { campaign: DRAFT } },
+    ...cardSteps(card),
+    ask(),
     {
       toolName: "create_campaign_draft",
       input: { campaign: DRAFT, approval_token: lastToken(prompt) },
     },
+    { toolName: "show_campaign_card", input: draftCard },
     { toolName: "request_send_approval", input: { campaign_id: "cmp_eval_001", campaign: DRAFT } },
     {
       toolName: "send_campaign",
@@ -71,17 +100,16 @@ describe("corredor de casos", () => {
     expect(transcript.requests.every((request) => request.errors.length === 0)).toBe(true);
     expect(transcript.pendingApproval).toBe(false);
     const steps = transcript.requests.flatMap((request) => request.steps);
-    expect(steps.filter((step) => step.kind === "llm").length).toBeGreaterThan(0);
+    expect(
+      steps.filter((step) => step.name === "show_campaign_card" && !step.errorCode),
+    ).toHaveLength(2);
   });
 
   it("si la persona descarta, no se escribe nada y el agente continúa", async () => {
+    const steps = [...cardSteps(card), ask()];
     const transcript = await runCase(
       caseOf('["discard"]'),
-      deps((call) =>
-        call === 0
-          ? { toolName: "request_draft_approval", input: { campaign: DRAFT } }
-          : { text: "Entendido, no guardé nada." },
-      ),
+      deps((call) => steps[call] ?? { text: "Entendido, no guardé nada." }),
     );
     expect(transcript.writes).toHaveLength(0);
     expect(transcript.requests).toHaveLength(2);
@@ -108,9 +136,10 @@ describe("corredor de casos", () => {
   });
 
   it("si no hay respuesta para la aprobación, el caso termina con ella pendiente", async () => {
+    const steps = cardSteps(card);
     const transcript = await runCase(
       caseOf("[]"),
-      deps(() => ({ toolName: "request_draft_approval", input: { campaign: DRAFT } })),
+      deps((call) => steps[call] ?? ask()),
     );
     expect(transcript.pendingApproval).toBe(true);
     expect(transcript.requests).toHaveLength(1);

@@ -103,3 +103,7 @@ export function scriptedModel(
     },
   });
 }
+
+// ES: Tarjeta válida y pasos para mostrarla (ver test-card.ts).
+// EN: Valid card and steps to show it (see test-card.ts).
+export { cardSteps, fixtureCampaignCard, type TestCard } from "./test-card";

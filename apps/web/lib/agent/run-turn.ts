@@ -21,7 +21,7 @@ import {
   type UIMessage,
 } from "ai";
 import type { MCPClient } from "@ai-sdk/mcp";
-import { approvalStepPolicy, type StepLike } from "./approval-policy";
+import { approvalStepPolicy, withoutApprovalTools, type StepLike } from "./approval-policy";
 import { createApprovalTools } from "./approval-tools";
 import { loadBusinessContext } from "./business-context";
 import { connectMcpClient, type McpConnection } from "./mcp-tools";
@@ -139,16 +139,21 @@ export function finalStepPolicy(instructions: string) {
 
 /**
  * ES: Política de cada paso: primero el control de aprobación (una tarjeta mostrada sin
- *     pedir aprobación obliga a pedirla, incluso en el último paso) y luego el cierre
- *     del último paso.
+ *     pedir aprobación obliga a pedirla, incluso en el último paso), luego el cierre del
+ *     último paso y, en cualquier otro paso, las herramientas sin las de aprobación.
  * EN: Per-step policy: first the approval control (a card shown without asking for
- *     approval forces the request, even on the last step) and then the last-step closing.
+ *     approval forces the request, even on the last step), then the last-step closing
+ *     and, on any other step, the tools without the approval ones.
  */
-export function turnStepPolicy(instructions: string) {
+export function turnStepPolicy(instructions: string, toolNames: ReadonlyArray<string>) {
   const approval = approvalStepPolicy(instructions);
   const final = finalStepPolicy(instructions);
-  return (options: { stepNumber: number; steps: ReadonlyArray<StepLike> }) =>
-    approval(options) ?? final(options);
+  const gated = withoutApprovalTools(toolNames);
+  return (options: {
+    stepNumber: number;
+    steps: ReadonlyArray<StepLike>;
+  }): { activeTools: string[]; instructions?: string } =>
+    approval(options) ?? final(options) ?? gated;
 }
 
 export async function streamAgentTurn(
@@ -174,7 +179,7 @@ export async function streamAgentTurn(
       messages: await convertToModelMessages(messages),
       tools,
       stopWhen: isStepCount(MAX_STEPS),
-      prepareStep: turnStepPolicy(instructions),
+      prepareStep: turnStepPolicy(instructions, Object.keys(tools)),
       ...tracer.callbacks,
       onEnd: close,
       onAbort: close,
