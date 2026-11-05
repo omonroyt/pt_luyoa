@@ -214,7 +214,7 @@
 
 ## ADR-14 · Vercel + Turso para la demo publicada
 
-- **Estado:** Aceptada para el código; se confirma al probar el despliegue.
+- **Estado:** Aceptada y confirmada. La demo está desplegada en https://copiloto-cafe-alborada.vercel.app (Vercel, región `iad1`, con Turso en AWS us-east-1). Se verificó el build, `/api/health`, la puerta de acceso, una respuesta del agente, las migraciones aplicadas en Turso y el cron registrado.
 - **Decisión:** desplegar la app en Vercel (con el Cron del resumen semanal) y la base de datos en Turso, con la demo protegida en capas (IMP-63):
   - **Puerta:** `proxy.ts` (el middleware de Next 16) exige en páginas y rutas de la interfaz una sesión en cookie firmada con HMAC. La llave se deriva de `APPROVAL_SECRET` con una etiqueta propia. La sesión se obtiene en `/acceso` con el código del negocio, comparado en tiempo constante, y fija el negocio de la sesión.
   - **Topes:** turnos por sesión y por IP al día, en contadores de la base con incremento atómico; intentos de código por IP; gasto diario sumado desde las trazas. Todos son configurables con `DEMO_*`.

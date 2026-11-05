@@ -150,7 +150,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 | IMP-60 | Resumen semanal proactivo (hecho) | CA-X02 |
 | IMP-61 | Memoria de preferencias (hecho) | CA-X04 |
 | IMP-62 | Aislamiento de dos negocios probado (hecho) | CA-X05 |
-| IMP-63 | Despliegue en Vercel + Turso con código de acceso y topes (código y topes hechos; despliegue pendiente) | CA-X01, CA-S04 |
+| IMP-63 | Despliegue en Vercel + Turso con código de acceso y topes (hecho: https://copiloto-cafe-alborada.vercel.app) | CA-X01, CA-S04 |
 
 ### M8 · Entrega — rama sugerida `docs/entrega`
 
