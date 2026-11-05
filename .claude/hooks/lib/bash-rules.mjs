@@ -16,7 +16,7 @@ const SECRET_READERS =
 const ENV_FILE_TOKEN = /(?:^|[\s"'=/\\<])(\.env(?:\.[\w.-]+)?)(?=$|[\s"';&|)])/g;
 
 const SECRET_VARIABLE_PRINT =
-  /\b(echo|printf|print|Write-Output|Write-Host)\b[^;&|]*\$\{?(env:)?(LUYOA_API_KEY\w*|OPENROUTER_API_KEY|APPROVAL_SECRET|MCP_SERVICE_TOKEN\w*|CRON_SECRET|DATABASE_AUTH_TOKEN|LANGFUSE_SECRET_KEY)/i;
+  /\b(echo|printf|print|Write-Output|Write-Host)\b[^;&|]*\$\{?(env:)?(LUYOA_API_KEY\w*|OPENROUTER_API_KEY|APPROVAL_SECRET|MCP_SERVICE_TOKEN\w*|CRON_SECRET|DEMO_ACCESS_CODE\w*|DATABASE_AUTH_TOKEN|LANGFUSE_SECRET_KEY)/i;
 
 /**
  * ES: Devuelve los archivos .env mencionados en el comando, excepto la plantilla.
