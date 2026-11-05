@@ -57,6 +57,7 @@ export function registerOfferEconomics(server: McpServer, ctx: ToolContext): voi
               : [],
           source: createSource({
             tool: OFFER_ECONOMICS,
+            params: args,
             endpoints: [products.endpoint, baseline.endpoint],
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,

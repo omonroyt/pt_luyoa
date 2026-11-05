@@ -144,6 +144,7 @@ export function registerComparePeriods(server: McpServer, ctx: ToolContext): voi
           warnings: buildWarnings(current, previous),
           source: createSource({
             tool: COMPARE_PERIODS,
+            params: args,
             endpoints: result.endpoints,
             dataAsOf: snapshot.window.dataAsOf,
             period: { from: previous.from, to: current.to },

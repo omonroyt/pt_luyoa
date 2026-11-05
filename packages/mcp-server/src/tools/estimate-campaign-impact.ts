@@ -136,6 +136,7 @@ export function registerEstimateCampaignImpact(server: McpServer, ctx: ToolConte
           warnings: buildWarnings(estimate.hasReference, estimate.similarCount),
           source: createSource({
             tool: ESTIMATE_CAMPAIGN_IMPACT,
+            params: args,
             endpoints: estimate.endpoints,
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,

@@ -86,6 +86,7 @@ export function registerCustomerSegments(server: McpServer, ctx: ToolContext): v
             : [],
           source: createSource({
             tool: CUSTOMER_SEGMENTS,
+            params: args,
             endpoints: result.endpoints,
             dataAsOf: snapshot.window.dataAsOf,
             now: ctx.now,
