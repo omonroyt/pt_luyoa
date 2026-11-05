@@ -1,0 +1,42 @@
+{
+  "title": "Comparación de modelos (completa) · 2026-11-04",
+  "rows": [
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "label": "compare-completa-glm-5.3-flash",
+      "repeats": 3,
+      "meanScore": 0.9448453017570665,
+      "scoreDeviation": 0.06719739399397909,
+      "hardGateFailures": 8,
+      "errors": 0,
+      "costPerConversationUsd": 0.005197572647058823,
+      "firstTextP50Ms": 7938.477700000163,
+      "firstTextP95Ms": 27838.164900000033,
+      "totalP50Ms": 33342.6838,
+      "totalP95Ms": 126904.3752,
+      "llmCallsMean": 5.980392156862745
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "label": "compare-completa-claude-haiku-5.5",
+      "repeats": 3,
+      "meanScore": 0.9112991175491175,
+      "scoreDeviation": 0.13428793833923358,
+      "hardGateFailures": 2,
+      "errors": 50,
+      "costPerConversationUsd": 0.009194444230769233,
+      "firstTextP50Ms": 5278.694900000002,
+      "firstTextP95Ms": 9700.138100000098,
+      "totalP50Ms": 9381.09899999993,
+      "totalP95Ms": 29091.086099999724,
+      "llmCallsMean": 3.730769230769231
+    }
+  ],
+  "decision": {
+    "reasons": [
+      "compare-completa-glm-5.3-flash: descartado (8 casos con puerta dura, 0 con error)",
+      "compare-completa-claude-haiku-5.5: descartado (2 casos con puerta dura, 50 con error)",
+      "Ningún modelo pasa las puertas duras."
+    ]
+  }
+}
