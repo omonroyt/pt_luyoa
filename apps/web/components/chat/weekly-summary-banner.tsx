@@ -10,6 +10,7 @@
  */
 import type { UIMessage } from "ai";
 import { useEffect, useState } from "react";
+import { Icon } from "@/components/ui/icon";
 import { fetchLatestSummary, type StoredSummary } from "@/lib/ui/weekly-summary";
 
 export function WeeklySummaryBanner({ onOpen }: { onOpen: (messages: UIMessage[]) => void }) {
@@ -27,15 +28,25 @@ export function WeeklySummaryBanner({ onOpen }: { onOpen: (messages: UIMessage[]
   return (
     <section
       aria-label="Resumen de la semana"
-      className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-3"
+      className="flex animate-rise flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/30 bg-accent-soft px-4 py-3"
     >
-      <p className="text-sm">Tu resumen de la semana al {summary.weekEnd} está listo.</p>
+      <div className="flex items-center gap-3">
+        <Icon name="sparkles" className="size-6 shrink-0 text-accent" />
+        <div>
+          <p className="text-sm font-semibold">Tu resumen de la semana está listo</p>
+          <p className="text-xs text-muted">Semana al {summary.weekEnd}</p>
+        </div>
+      </div>
       <button
         type="button"
         onClick={() => onOpen(summary.messages)}
-        className="min-h-11 rounded-lg border border-accent px-3 text-sm"
+        className="group inline-flex min-h-11 items-center gap-2 rounded-xl bg-accent px-4 text-sm font-semibold text-accent-foreground transition hover:bg-accent-strong"
       >
         Ver resumen
+        <Icon
+          name="arrowRight"
+          className="size-4 transition-transform group-hover:translate-x-0.5"
+        />
       </button>
     </section>
   );

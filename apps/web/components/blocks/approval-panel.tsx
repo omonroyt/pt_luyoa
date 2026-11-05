@@ -11,6 +11,7 @@
  *     approved and the person can try again.
  */
 import { useEffect, useRef, useState } from "react";
+import { Icon } from "@/components/ui/icon";
 import {
   approvalOutcomeOf,
   changeRequestOutput,
@@ -34,9 +35,12 @@ const OUTCOME_TEXT = {
   discarded: "Descartaste la campaña. No se guardó nada.",
 };
 
+const OUTCOME_ICON = { approved: "check", changes: "refresh", discarded: "close" } as const;
+
 type Phase = "idle" | "working" | "changing" | "failed";
 
-const buttonClass = "h-11 rounded-xl border border-border px-4 disabled:opacity-50";
+const buttonClass =
+  "h-11 rounded-xl border border-border bg-card px-4 font-medium transition hover:border-accent/50 hover:bg-accent-soft disabled:opacity-50";
 
 function useApprovalActions(tool: ToolView, view: ApprovalView) {
   const bridge = useApprovalBridge();
@@ -57,8 +61,57 @@ function useApprovalActions(tool: ToolView, view: ApprovalView) {
   return { phase, setPhase, approve, reject, locked };
 }
 
+type Actions = ReturnType<typeof useApprovalActions>;
+
+function PanelHeader({ question, campaignId }: { question: string; campaignId?: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <Icon name="shield" className="size-7 shrink-0 text-accent" />
+      <div>
+        <h3 className="font-display text-lg font-semibold">{question}</h3>
+        <p className="text-xs text-muted">
+          {campaignId ? `Borrador ${campaignId} · ` : ""}Requiere tu aprobación
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function PanelButtons({ actions, approveLabel }: { actions: Actions; approveLabel: string }) {
+  const { phase, setPhase, approve, reject, locked } = actions;
+  return (
+    <div className="flex flex-wrap gap-2">
+      <button
+        type="button"
+        disabled={locked}
+        onClick={() => void approve()}
+        className="inline-flex h-11 items-center gap-2 rounded-xl bg-accent px-5 font-semibold text-accent-foreground shadow-soft transition hover:bg-accent-strong disabled:opacity-50"
+      >
+        <Icon name="check" className="size-4" />
+        {phase === "working" ? "Registrando…" : approveLabel}
+      </button>
+      <button
+        type="button"
+        disabled={locked}
+        onClick={() => setPhase("changing")}
+        className={buttonClass}
+      >
+        Cambiar
+      </button>
+      <button
+        type="button"
+        disabled={locked}
+        onClick={() => reject(discardOutput())}
+        className={buttonClass}
+      >
+        Descartar
+      </button>
+    </div>
+  );
+}
+
 function ActivePanel({ tool, view }: { tool: ToolView; view: ApprovalView }) {
-  const { phase, setPhase, approve, reject, locked } = useApprovalActions(tool, view);
+  const actions = useApprovalActions(tool, view);
   const copy = COPY[view.action];
   // ES: La entrada de texto se bloquea al llegar la aprobación; el foco pasa al panel.
   // EN: The text input is locked when the approval arrives; focus moves to the panel.
@@ -69,53 +122,29 @@ function ActivePanel({ tool, view }: { tool: ToolView; view: ApprovalView }) {
       ref={section}
       tabIndex={-1}
       aria-label={copy.question}
-      className="flex flex-col gap-3 rounded-2xl border-2 border-accent bg-card p-4"
+      className="animate-rise rounded-3xl border-2 border-accent bg-card shadow-lift"
     >
-      <h3 className="font-semibold">{copy.question}</h3>
-      {view.campaignId ? <p className="text-sm text-muted">Borrador {view.campaignId}</p> : null}
-      <ApprovalSummary preview={view.preview} />
-      <p className="text-xs text-muted">
-        Se aprueba este contenido exacto; cualquier cambio requiere una nueva aprobación.
-      </p>
-      {phase === "failed" ? (
-        <p role="alert" className="text-sm text-negative">
-          No se pudo registrar la aprobación. Nada quedó aprobado; puedes intentarlo de nuevo.
+      <div className="flex flex-col gap-4 p-4 sm:p-5">
+        <PanelHeader question={copy.question} campaignId={view.campaignId} />
+        <ApprovalSummary preview={view.preview} />
+        <p className="text-xs text-muted">
+          Se aprueba este contenido exacto; cualquier cambio requiere una nueva aprobación.
         </p>
-      ) : null}
-      {phase === "changing" ? (
-        <ChangeRequestForm
-          disabled={locked}
-          onCancel={() => setPhase("idle")}
-          onSubmit={(changes) => reject(changeRequestOutput(changes))}
-        />
-      ) : (
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            disabled={locked}
-            onClick={() => void approve()}
-            className="h-11 rounded-xl bg-accent px-4 text-accent-foreground disabled:opacity-50"
-          >
-            {phase === "working" ? "Registrando…" : copy.approve}
-          </button>
-          <button
-            type="button"
-            disabled={locked}
-            onClick={() => setPhase("changing")}
-            className={buttonClass}
-          >
-            Cambiar
-          </button>
-          <button
-            type="button"
-            disabled={locked}
-            onClick={() => reject(discardOutput())}
-            className={buttonClass}
-          >
-            Descartar
-          </button>
-        </div>
-      )}
+        {actions.phase === "failed" ? (
+          <p role="alert" className="text-sm text-negative">
+            No se pudo registrar la aprobación. Nada quedó aprobado; puedes intentarlo de nuevo.
+          </p>
+        ) : null}
+        {actions.phase === "changing" ? (
+          <ChangeRequestForm
+            disabled={actions.locked}
+            onCancel={() => actions.setPhase("idle")}
+            onSubmit={(changes) => actions.reject(changeRequestOutput(changes))}
+          />
+        ) : (
+          <PanelButtons actions={actions} approveLabel={copy.approve} />
+        )}
+      </div>
     </section>
   );
 }
@@ -123,7 +152,15 @@ function ActivePanel({ tool, view }: { tool: ToolView; view: ApprovalView }) {
 export function ApprovalPanel({ tool, view }: { tool: ToolView; view: ApprovalView }) {
   const outcome = approvalOutcomeOf(tool.output);
   if (tool.state === "output-available" && outcome) {
-    return <p className="text-sm text-muted">{OUTCOME_TEXT[outcome]}</p>;
+    return (
+      <p className="inline-flex animate-fade items-center gap-2 self-start rounded-full border border-border bg-card/70 px-3 py-1.5 text-sm text-muted">
+        <Icon
+          name={OUTCOME_ICON[outcome]}
+          className={`size-4 ${outcome === "approved" ? "text-positive" : ""}`}
+        />
+        {OUTCOME_TEXT[outcome]}
+      </p>
+    );
   }
   return <ActivePanel tool={tool} view={view} />;
 }
