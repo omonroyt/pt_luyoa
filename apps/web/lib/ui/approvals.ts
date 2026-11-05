@@ -14,6 +14,7 @@ import { CampaignChannel } from "@alborada/shared";
 import type { UIMessage } from "ai";
 import { z } from "zod";
 import type { ApprovalOutput } from "@/lib/agent/approval-tools";
+import { DISCARD_REASON } from "../agent/approval-replies";
 import { toolViewOf } from "./tool-parts";
 
 export const APPROVAL_ACTIONS = {
@@ -99,15 +100,7 @@ export async function requestApproval(
   return { approved: true, ...issued.data };
 }
 
-export const DISCARD_REASON = "La persona descartó la campaña.";
-
-export function changeRequestOutput(changes: string): ApprovalOutput {
-  return { approved: false, reason: `La persona pidió cambios: ${changes.trim()}` };
-}
-
-export function discardOutput(): ApprovalOutput {
-  return { approved: false, reason: DISCARD_REASON };
-}
+export { changeRequestOutput, discardOutput } from "../agent/approval-replies";
 
 export type ApprovalOutcome = "approved" | "changes" | "discarded";
 

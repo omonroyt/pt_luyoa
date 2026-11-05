@@ -86,14 +86,18 @@ function replyChunks(reply: ScriptedReply, index: number): StreamPart[] {
 }
 
 /**
- * ES: El guion decide la respuesta de cada llamada a partir de las herramientas activas.
- * EN: The script decides each call's reply from the active tools.
+ * ES: El guion decide la respuesta de cada llamada a partir de las herramientas activas y,
+ *     si lo necesita, del prompt (por ejemplo, para leer un token de aprobación).
+ * EN: The script decides each call's reply from the active tools and, if needed, from the
+ *     prompt (for example, to read an approval token).
  */
-export function scriptedModel(script: (hasTools: boolean, call: number) => ScriptedReply) {
+export function scriptedModel(
+  script: (hasTools: boolean, call: number, prompt: unknown) => ScriptedReply,
+) {
   let call = 0;
   return new MockLanguageModelV4({
     doStream: async (options) => {
-      const reply = script((options.tools?.length ?? 0) > 0, call);
+      const reply = script((options.tools?.length ?? 0) > 0, call, options.prompt);
       call += 1;
       return { stream: simulateReadableStream({ chunks: replyChunks(reply, call) }) };
     },

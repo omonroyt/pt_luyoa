@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "description": "Interfaz de chat, orquestador del agente y endpoint HTTP del servidor MCP.",
+  "exports": {
+    "./agent": "./lib/agent/public-api.ts",
+    "./agent/testing": "./lib/agent/test-support.ts"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
