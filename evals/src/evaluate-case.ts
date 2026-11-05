@@ -27,6 +27,23 @@ export type CaseUsage = {
   streamErrors: string[];
 };
 
+// ES: Extracto de la conversación para auditar el puntaje y al juez desde el reporte.
+// EN: Conversation excerpt to audit the score and the judge from the report.
+export type CaseExcerpt = { text: string; steps: string[]; blocks: string[]; replies: unknown[] };
+
+const EXCERPT_LIMIT = 6000;
+
+function excerptOf(extracted: ReturnType<typeof extract>, replies: unknown[]): CaseExcerpt {
+  return {
+    text: extracted.text.slice(0, EXCERPT_LIMIT),
+    steps: extracted.steps
+      .filter((step) => step.kind !== "llm")
+      .map((step) => (step.errorCode ? `${step.name} (${step.errorCode})` : step.name)),
+    blocks: extracted.blocks.map((block) => block.kind),
+    replies,
+  };
+}
+
 export type CaseResult = {
   caseId: string;
   group: EvalCase["group"];
@@ -41,6 +58,7 @@ export type CaseResult = {
   usage?: CaseUsage;
   writes: number;
   pendingApproval?: boolean;
+  excerpt?: CaseExcerpt;
 };
 
 export type EvaluationDependencies = RunDependencies & {
@@ -99,6 +117,7 @@ export async function evaluateCase(
       usage: usageOf(transcript, judge?.costUsd ?? 0),
       writes: transcript.writes.length,
       pendingApproval: transcript.pendingApproval,
+      excerpt: excerptOf(extracted, transcript.replies),
     };
   } catch (error) {
     return { ...base, error: error instanceof Error ? error.message.slice(0, 300) : String(error) };
