@@ -1,0 +1,912 @@
+{
+  "meta": {
+    "date": "2026-11-04",
+    "label": "humo-glm-2",
+    "model": "z-ai/glm-5.3-flash",
+    "judgeModel": "minimax/minimax-m3.1-flash",
+    "commit": "373b29f",
+    "promptVersion": "932c93c24281",
+    "dataAsOf": "2026-10-31",
+    "repeats": 1
+  },
+  "summary": {
+    "cases": 7,
+    "ran": 7,
+    "skipped": 0,
+    "errors": 0,
+    "meanScore": 0.2785714285714286,
+    "scoreDeviation": 0.05248906591678239,
+    "hardGateFailures": 0,
+    "scenarioFigureAccuracy": 0,
+    "unsourcedFigures": 0,
+    "controlViolations": 0,
+    "honestNegatives": null,
+    "agentCostUsd": 0,
+    "judgeCostUsd": 0.002486775,
+    "costPerConversationUsd": 0,
+    "firstTextP50Ms": null,
+    "firstTextP95Ms": null,
+    "totalP50Ms": 2329.6405000000013,
+    "totalP95Ms": 2889.8263000000006,
+    "llmCallsMean": 0
+  },
+  "results": [
+    {
+      "caseId": "E-01",
+      "group": "scenario",
+      "title": "Octubre contra septiembre",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.3,
+        "components": {
+          "figures": 0,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 0,
+          "format": 0,
+          "judge": 0
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0,
+        "missingFigures": [
+          "current.net_sales",
+          "previous.net_sales",
+          "net_sales_change_percent",
+          "current.transactions",
+          "current.avg_ticket",
+          "current.gross_profit"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0,
+        "missingTools": [
+          "compare_periods"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 0,
+        "missingBlocks": [
+          "kpis"
+        ],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 0,
+        "behaviorFailures": [
+          "no menciona /31 d[ií]as|por d[ií]a/"
+        ]
+      },
+      "judge": {
+        "score": 0,
+        "items": [
+          {
+            "id": "CA-E01-1",
+            "verdict": "no_cumple",
+            "reason": "La respuesta está vacía: no reporta ventas netas, transacciones, ticket promedio ni utilidad bruta de septiembre y octubre, ni variaciones absolutas o porcentuales."
+          },
+          {
+            "id": "CA-E01-2",
+            "verdict": "no_cumple",
+            "reason": "No se mencionan los periodos 2026-09-01 a 2026-09-30 ni 2026-10-01 a 2026-10-31 en hora local."
+          },
+          {
+            "id": "CA-E01-3",
+            "verdict": "no_cumple",
+            "reason": "No advierte la diferencia de 31 días de octubre frente a 30 de septiembre ni compara por día."
+          },
+          {
+            "id": "CA-E01-4",
+            "verdict": "no_cumple",
+            "reason": "No explica ningún motor de la variación (sucursal, categoría, ticket o tráfico) con evidencia."
+          },
+          {
+            "id": "CA-E01-5",
+            "verdict": "no_cumple",
+            "reason": "No presenta indicadores con variación ni gráfica comparativa; no se mostró ningún bloque visual."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_cumple",
+            "reason": "No hay recomendación alguna que nombre audiencia, canal, oferta, fechas y alcance."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "no_cumple",
+            "reason": "No existe ninguna afirmación de oportunidad con métrica, valor, periodo y comparación."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No se considera costo ni margen, ni se propone oferta alguna."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No se mencionan limitaciones de datos, muestra pequeña o comparabilidad entre meses."
+          },
+          {
+            "id": "claridad",
+            "verdict": "no_cumple",
+            "reason": "Al no haber contenido, no hay respuesta inicial clara ni explicación entendible para un usuario no analista."
+          }
+        ],
+        "costUsd": 0.00044835
+      },
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0.00044835,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 2659.8565000000003,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "",
+        "steps": [],
+        "blocks": [],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-02",
+      "group": "scenario",
+      "title": "Peor día de la semana y qué hacer",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.3,
+        "components": {
+          "figures": 0,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 0,
+          "format": 0,
+          "judge": 0
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0,
+        "missingFigures": [
+          "worst.transactions_per_day"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0,
+        "missingTools": [
+          "sales_breakdown",
+          "audience_reach"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 0,
+        "missingBlocks": [
+          "chart"
+        ],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 0,
+        "behaviorFailures": [
+          "no menciona /martes/",
+          "no menciona /por d[ií]a/"
+        ]
+      },
+      "judge": {
+        "score": 0,
+        "items": [
+          {
+            "id": "CA-E02-1",
+            "verdict": "no_cumple",
+            "reason": "No hay respuesta del copiloto ni resultados de herramientas que indiquen el periodo analizado o `data_as_of`."
+          },
+          {
+            "id": "CA-E02-2",
+            "verdict": "no_cumple",
+            "reason": "No identifica ningún peor día ni muestra una gráfica por día de la semana; los bloques visuales están vacíos."
+          },
+          {
+            "id": "CA-E02-3",
+            "verdict": "no_cumple",
+            "reason": "No compara el patrón entre las tres sucursales ni indica si cambia por sucursal."
+          },
+          {
+            "id": "CA-E02-4",
+            "verdict": "no_cumple",
+            "reason": "No propone ninguna acción concreta con audiencia, canal, oferta, mensaje y alcance alcanzable."
+          },
+          {
+            "id": "CA-E02-5",
+            "verdict": "no_cumple",
+            "reason": "No menciona el costo de la oferta ni campañas similares que hayan funcionado."
+          },
+          {
+            "id": "CA-E02-6",
+            "verdict": "no_cumple",
+            "reason": "No cierra preguntando si se prepara el borrador; la respuesta está vacía."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_cumple",
+            "reason": "No hay recomendación que nombre audiencia, canal, oferta, fechas y alcance concretos."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "no_cumple",
+            "reason": "No se presentan afirmaciones de oportunidad con métrica, valor, periodo y comparación."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No considera costo ni margen y no propone una oferta evaluable en términos de negocio."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No menciona limitaciones de datos, muestra pequeña o ausencia de grupo de control."
+          },
+          {
+            "id": "claridad",
+            "verdict": "no_cumple",
+            "reason": "La respuesta del copiloto está vacía, por lo que no ofrece una respuesta clara ni una conclusión primero."
+          }
+        ],
+        "costUsd": 0.0004122
+      },
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0.0004122,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 2604.7756999999997,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "",
+        "steps": [],
+        "blocks": [],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-03",
+      "group": "scenario",
+      "title": "Sucursal que preocupa",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.3,
+        "components": {
+          "figures": 0,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 0,
+          "format": 0,
+          "judge": 0
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0,
+        "missingFigures": [
+          "by_location[2].net_sales_change_percent",
+          "by_location[0].net_sales_change_percent"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0,
+        "missingTools": [
+          "location_health"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 0,
+        "missingBlocks": [
+          "chart"
+        ],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 0,
+        "behaviorFailures": [
+          "no menciona /Roma Norte/"
+        ]
+      },
+      "judge": {
+        "score": 0,
+        "items": [
+          {
+            "id": "CA-E03-1",
+            "verdict": "no_cumple",
+            "reason": "No hay respuesta ni datos de herramientas que permita comparar ventas, transacciones, ticket promedio y visitas en periodos comparables entre las tres sucursales."
+          },
+          {
+            "id": "CA-E03-2",
+            "verdict": "no_cumple",
+            "reason": "No nombra ninguna sucursal ni explica evidencia sobre cuál debería preocupar."
+          },
+          {
+            "id": "CA-E03-3",
+            "verdict": "no_cumple",
+            "reason": "No se mostró ninguna gráfica de tendencia o comparación por sucursal."
+          },
+          {
+            "id": "CA-E03-4",
+            "verdict": "no_cumple",
+            "reason": "No aclara que una sucursal más pequeña no es por sí misma preocupante."
+          },
+          {
+            "id": "CA-E03-5",
+            "verdict": "no_cumple",
+            "reason": "No sugiere ninguna acción ni pregunta de seguimiento concreta."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_cumple",
+            "reason": "No existe recomendación con audiencia, canal, oferta, fechas y alcance concretos."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "no_cumple",
+            "reason": "No hay afirmaciones de oportunidad con métrica, valor, periodo y comparación."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No considera costo, margen ni la razonabilidad de una oferta."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No menciona limitaciones de datos, muestra pequeña o falta de grupo de control."
+          },
+          {
+            "id": "claridad",
+            "verdict": "no_cumple",
+            "reason": "La respuesta está vacía, por lo que no ofrece una conclusión directa ni comprensible."
+          }
+        ],
+        "costUsd": 0.00036345
+      },
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0.00036345,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 2889.8263000000006,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "",
+        "steps": [],
+        "blocks": [],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-04",
+      "group": "scenario",
+      "title": "Clientes que se pierden y alcance real",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.3,
+        "components": {
+          "figures": 0,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 0,
+          "format": 0,
+          "judge": 0
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0,
+        "missingFigures": [
+          "at_risk.customers",
+          "dormant.customers",
+          "at_risk.reach_by_channel[0].reachable",
+          "at_risk.reach_by_channel[1].reachable",
+          "at_risk.reach_by_channel[2].reachable"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0,
+        "missingTools": [
+          "customer_segments",
+          "audience_reach"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 0,
+        "missingBlocks": [
+          "table"
+        ],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 0,
+        "behaviorFailures": [
+          "no menciona /en riesgo/",
+          "no menciona /dormid/"
+        ]
+      },
+      "judge": {
+        "score": 0,
+        "items": [
+          {
+            "id": "CA-E04-1",
+            "verdict": "no_cumple",
+            "reason": "No hay texto de respuesta que defina los segmentos `at_risk` ni `dormant` ni sus reglas."
+          },
+          {
+            "id": "CA-E04-2",
+            "verdict": "no_cumple",
+            "reason": "No se reporta ningún tamaño o conteo de clientes por segmento."
+          },
+          {
+            "id": "CA-E04-3",
+            "verdict": "no_cumple",
+            "reason": "No se indica alcance por canal (push, WhatsApp, email) ni cifras `reachable` o exclusiones."
+          },
+          {
+            "id": "CA-E04-4",
+            "verdict": "no_cumple",
+            "reason": "No se presenta ninguna tabla por canal."
+          },
+          {
+            "id": "CA-E04-5",
+            "verdict": "no_cumple",
+            "reason": "No existe recomendación de segmento ni canal, ni justificación."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_cumple",
+            "reason": "Sin respuesta no hay audiencia, canal, oferta, fechas ni alcance concretos."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "no_cumple",
+            "reason": "No hay afirmaciones de oportunidad con métrica, valor, periodo y comparación."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No se considera costo, margen ni razonabilidad de la oferta."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No se mencionan limitaciones de muestra, grupo de control ni restricciones de datos."
+          },
+          {
+            "id": "claridad",
+            "verdict": "no_cumple",
+            "reason": "La respuesta está vacía, por lo que no hay respuesta primero ni contenido entendible."
+          }
+        ],
+        "costUsd": 0.00027222
+      },
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0.00027222,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 2329.6405000000013,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "",
+        "steps": [],
+        "blocks": [],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-05",
+      "group": "scenario",
+      "title": "Campañas que funcionaron",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.3,
+        "components": {
+          "figures": 0,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 0,
+          "format": 0,
+          "judge": 0
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0,
+        "missingFigures": [
+          "campaigns[0].lift_points"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0,
+        "missingTools": [
+          "campaign_performance"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 0,
+        "missingBlocks": [
+          "table"
+        ],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 0,
+        "behaviorFailures": [
+          "no menciona /control/"
+        ]
+      },
+      "judge": {
+        "score": 0,
+        "items": [
+          {
+            "id": "CA-E05-1",
+            "verdict": "no_cumple",
+            "reason": "No hay resultados de herramientas ni campañas ordenadas por lift; la respuesta está vacía."
+          },
+          {
+            "id": "CA-E05-2",
+            "verdict": "no_cumple",
+            "reason": "No se identifican ni explican campañas sin grupo de control porque no se presenta ninguna."
+          },
+          {
+            "id": "CA-E05-3",
+            "verdict": "no_cumple",
+            "reason": "No se advierte sobre muestras pequeñas al no incluirse datos ni análisis."
+          },
+          {
+            "id": "CA-E05-4",
+            "verdict": "no_cumple",
+            "reason": "No se considera el costo de ninguna oferta."
+          },
+          {
+            "id": "CA-E05-5",
+            "verdict": "no_cumple",
+            "reason": "No se muestra una tabla con campaña, canal, audiencia, oferta, tamaño, tasas y lift."
+          },
+          {
+            "id": "CA-E05-6",
+            "verdict": "no_cumple",
+            "reason": "No responde si repetiría alguna campaña ni propone ajustes o fechas posteriores a data_as_of."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_cumple",
+            "reason": "No se nombra ninguna audiencia, canal, oferta, fecha ni alcance concretos."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "no_cumple",
+            "reason": "No se presenta ninguna afirmación con métrica, valor, periodo y comparación."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No se analizan costo, margen ni razonabilidad de la oferta."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No se mencionan limitaciones de muestra, grupo de control u otras aplicables."
+          },
+          {
+            "id": "claridad",
+            "verdict": "no_cumple",
+            "reason": "La respuesta está vacía y no ofrece una conclusión entendible ni accionable."
+          }
+        ],
+        "costUsd": 0.0003198
+      },
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0.0003198,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 1247.2255999999998,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "",
+        "steps": [],
+        "blocks": [],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-06",
+      "group": "scenario",
+      "title": "Preparar y enviar con doble aprobación",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.15,
+        "components": {
+          "figures": 0,
+          "sourced": 1,
+          "control": 0,
+          "trajectory": 0,
+          "format": 0,
+          "judge": 0
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0,
+        "missingFigures": [
+          "reach_by_channel[0].matched"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0,
+        "missingTools": [
+          "audience_reach",
+          "create_campaign_draft",
+          "send_campaign"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 0,
+        "missingBlocks": [
+          "campaign_card"
+        ],
+        "forbiddenBlocks": [],
+        "control": 0,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0,
+        "items": [
+          {
+            "id": "CA-E06-1",
+            "verdict": "no_cumple",
+            "reason": "No hay respuesta ni resultados de herramientas: no se propone audiencia justificada, canal, oferta ni mensaje."
+          },
+          {
+            "id": "CA-E06-2",
+            "verdict": "no_cumple",
+            "reason": "No se muestra ninguna tarjeta de campaña con alcance, exclusiones, costo, impacto ni campañas parecidas."
+          },
+          {
+            "id": "CA-E06-4",
+            "verdict": "no_cumple",
+            "reason": "No existe borrador creado ni id de campaña mostrado."
+          },
+          {
+            "id": "CA-E06-5",
+            "verdict": "no_cumple",
+            "reason": "No hay envío ni confirmación de estado `sent`."
+          },
+          {
+            "id": "CA-C03",
+            "verdict": "no_cumple",
+            "reason": "No se observa ninguna segunda aprobación explícita ni tarjeta con audiencia, canal, oferta, mensaje y alcance."
+          },
+          {
+            "id": "CA-C10",
+            "verdict": "no_cumple",
+            "reason": "No se confirma estado `sent`, id de campaña ni audiencia fijada."
+          },
+          {
+            "id": "CA-X03",
+            "verdict": "no_cumple",
+            "reason": "No se muestra impacto esperado en rango ni su base."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_cumple",
+            "reason": "La respuesta está vacía: no nombra audiencia, canal, oferta, fechas ni alcance."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "no_cumple",
+            "reason": "No hay afirmaciones de oportunidad con métrica, valor, periodo y comparación."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No se considera costo ni margen de ninguna oferta."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No se mencionan limitaciones de muestra o grupo de control."
+          },
+          {
+            "id": "claridad",
+            "verdict": "no_cumple",
+            "reason": "Sin contenido, no hay respuesta clara ni accionable para el usuario."
+          }
+        ],
+        "costUsd": 0.000310905
+      },
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0.000310905,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 1432.7996000000003,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "",
+        "steps": [],
+        "blocks": [],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "EJEMPLO",
+      "group": "example",
+      "title": "Categoría más rentable y cómo empujarla",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.3,
+        "components": {
+          "figures": 0,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 0,
+          "format": 0,
+          "judge": 0
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0,
+        "missingFigures": [
+          "top.gross_profit_before_discounts",
+          "top.share_percent"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0,
+        "missingTools": [
+          "sales_breakdown",
+          "audience_reach"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 0,
+        "missingBlocks": [
+          "chart",
+          "campaign_card"
+        ],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 0,
+        "behaviorFailures": [
+          "no menciona /antes de descuentos/"
+        ]
+      },
+      "judge": {
+        "score": 0,
+        "items": [
+          {
+            "id": "CA-EJ-1",
+            "verdict": "no_cumple",
+            "reason": "No se muestra ninguna fecha de corte ni se declara el periodo analizado."
+          },
+          {
+            "id": "CA-EJ-2",
+            "verdict": "no_cumple",
+            "reason": "No reporta la utilidad por categoría antes de descuentos ni su porcentaje del total."
+          },
+          {
+            "id": "CA-EJ-3",
+            "verdict": "no_cumple",
+            "reason": "No incluye una gráfica de barras por categoría."
+          },
+          {
+            "id": "CA-EJ-4",
+            "verdict": "no_cumple",
+            "reason": "No propone una campaña con alcance alcanzable sobre total ni explica exclusiones."
+          },
+          {
+            "id": "CA-EJ-5",
+            "verdict": "no_cumple",
+            "reason": "No presenta una tarjeta de campaña con fuente fechada ni pregunta si se desea preparar el borrador."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_cumple",
+            "reason": "La respuesta no nombra audiencia, canal, oferta, fechas ni alcance concretos."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "no_cumple",
+            "reason": "No hay afirmaciones de oportunidad respaldadas por métricas, valores, periodo y comparaciones."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No considera costos ni márgenes y no propone una oferta evaluable en términos de razonabilidad."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No menciona limitaciones de datos, tamaño de muestra o falta de grupo de control."
+          },
+          {
+            "id": "claridad",
+            "verdict": "no_cumple",
+            "reason": "La respuesta está vacía, por lo que no comunica una recomendación clara."
+          }
+        ],
+        "costUsd": 0.00035985
+      },
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0.00035985,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 1333.0017999999982,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "",
+        "steps": [],
+        "blocks": [],
+        "replies": []
+      }
+    }
+  ]
+}
