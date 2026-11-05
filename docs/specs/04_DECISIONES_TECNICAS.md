@@ -136,6 +136,23 @@
 - **Alternativas:** solo Langfuse o LangSmith; solo registros en consola.
 - **Por qué:** el evaluador ve las trazas dentro de la misma interfaz sin cuentas externas (B-03). La salida opcional a Langfuse da una vista profesional sin depender de ella.
 - **Consecuencias:** la "razón" de cada herramienta se obtiene pidiéndole al modelo un campo `reason` breve en las llamadas, lo que cuesta unos pocos tokens.
+- **Implementación (IMP-35):**
+  - **El campo `reason`** (`apps/web/lib/agent/with-reason.ts`) se agrega del lado del agente a las 20 herramientas, como campo opcional.
+    - No cambia los contratos del MCP ni de los bloques.
+    - El esquema original sigue validando el resto de la entrada.
+    - El campo se quita antes de ejecutar.
+  - **El trazador** (`turn-tracer.ts`) registra cada llamada al modelo con tokens, el costo que informa OpenRouter en `providerMetadata` y la latencia de respuesta.
+    - También registra cada herramienta con su tipo (`tool`, `presentation` o `approval`), razón, entrada, resumen del resultado (fuente y número de advertencias, nunca los datos completos), duración y código de error.
+    - Los códigos de error son el del MCP, `figure_verification` o `invalid_input`.
+  - **Al terminar el turno** (`trace-store.ts`) se guardan la conversación, los mensajes y los pasos, y se acumula el costo de la conversación (CA-Q06).
+    - Los tokens de aprobación se enmascaran en los mensajes guardados.
+    - Un id de conversación de otro negocio se rechaza (ADR-16).
+  - **Metadatos para el panel:** los totales del turno (modelo, llamadas, tokens, costo y latencia) viajan como metadatos del mensaje del asistente, para el panel de trazas de la interfaz.
+  - **Si falla al guardar**, el chat continúa y el error se registra sin datos.
+  - **Primera medición real (2026-11-04)**, con GLM-5.3-Flash y la pregunta "octubre contra septiembre":
+    - 4 llamadas al modelo, 3 herramientas y 52,130 tokens de entrada.
+    - 0.00198 USD y 37.7 s de latencia.
+    - Cada llamada al modelo tardó entre 8 y 10 s, contra 1.1 s de la consulta al MCP: la latencia la domina el modelo.
 
 ## ADR-12 · Evaluaciones: verificaciones deterministas + juez con rúbrica
 
