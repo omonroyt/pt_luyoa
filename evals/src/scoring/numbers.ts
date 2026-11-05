@@ -31,26 +31,50 @@ export function stripNonFigures(text: string): string {
   return NOT_FIGURES.reduce((current, pattern) => current.replace(pattern, " "), text);
 }
 
+// ES: "288 mil" es 288,000 redondeado a miles (decimales = −3); "millones" no se toca.
+// EN: "288 mil" is 288,000 rounded to thousands (decimals = −3); "millones" is left alone.
+const THOUSANDS = /^\s+mil(?![a-záéíóú])/i;
+const THOUSAND = 1000;
+const THOUSANDS_DECIMALS = -3;
+
 export function extractNumbers(text: string): ShownNumber[] {
-  return [...stripNonFigures(text).matchAll(NUMBER)].map((match) => {
+  const clean = stripNonFigures(text);
+  return [...clean.matchAll(NUMBER)].map((match) => {
     const raw = match[0];
     const plain = raw.replaceAll(",", "");
     const decimals = plain.includes(".") ? (plain.split(".")[1]?.length ?? 0) : 0;
+    const after = clean.slice((match.index ?? 0) + raw.length);
+    if (THOUSANDS.test(after)) {
+      return {
+        value: Number(plain) * THOUSAND,
+        decimals: decimals + THOUSANDS_DECIMALS,
+        raw: `${raw} mil`,
+      };
+    }
     return { value: Number(plain), decimals, raw };
   });
 }
 
 const PERCENT_SCALE = 100;
 
-function roundTo(value: number, decimals: number): number {
+const TOLERANCE = 1e-9;
+
+// ES: Se acepta el redondeo y también el truncamiento a los decimales mostrados: 1,222.74
+//     escrito como "$1,222" es un descuido de formato, no una cifra inventada.
+// EN: Both rounding and truncation to the shown decimals are accepted: 1,222.74 written as
+//     "$1,222" is a formatting slip, not an invented figure.
+function shownForms(value: number, decimals: number): number[] {
   const factor = 10 ** decimals;
-  return Math.round(Math.abs(value) * factor) / factor;
+  const scaled = Math.abs(value) * factor;
+  return [Math.round(scaled) / factor, Math.trunc(scaled + TOLERANCE) / factor];
 }
 
 export function matchesShown(shown: ShownNumber, reference: number): boolean {
   const target = Math.abs(shown.value);
-  return [reference, reference * PERCENT_SCALE].some(
-    (candidate) => roundTo(candidate, shown.decimals) === target,
+  return [reference, reference * PERCENT_SCALE].some((candidate) =>
+    shownForms(candidate, shown.decimals).some(
+      (form) => Math.abs(form - target) < TOLERANCE * target + TOLERANCE,
+    ),
   );
 }
 

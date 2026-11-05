@@ -9,6 +9,7 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { MESSAGE_LIMITS } from "@alborada/shared";
 import { agentConfig, createAgentModel } from "@alborada/web/agent";
 import type { EvalCase } from "./cases/case-schema";
 import { loadCriteria } from "./cases/criteria";
@@ -73,7 +74,9 @@ async function dependencies(request: RunRequest) {
     },
     businessId: business.id,
     criteria: loadCriteria(),
-    context: [business, segments],
+    // ES: Contexto del prompt y de las descripciones de herramientas (límites por canal).
+    // EN: Prompt and tool-description context (per-channel limits).
+    context: [business, segments, { message_limits: MESSAGE_LIMITS }],
   };
   return { deps, dataAsOf: business.data_as_of };
 }

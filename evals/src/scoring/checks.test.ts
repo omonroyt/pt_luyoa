@@ -94,7 +94,7 @@ describe("cifras", () => {
     expect(matchesShown({ value: 26072.7, decimals: 1, raw: "" }, 26072.71)).toBe(true);
     expect(matchesShown({ value: 31, decimals: 0, raw: "" }, -31)).toBe(true);
     expect(matchesShown({ value: 26.9, decimals: 1, raw: "" }, 0.2687)).toBe(true);
-    expect(matchesShown({ value: 26.8, decimals: 1, raw: "" }, 0.2687)).toBe(false);
+    expect(matchesShown({ value: 26.7, decimals: 1, raw: "" }, 0.2687)).toBe(false);
   });
 });
 
@@ -152,5 +152,21 @@ describe("contexto del negocio como fuente", () => {
     const withSegments = runChecks(caseE01, t, withContext(extract(t), [segments]), golden);
     expect(without.unsourced).toContain("90");
     expect(withSegments.unsourced).not.toContain("90");
+  });
+});
+
+describe("formas de escribir una cifra", () => {
+  it("entiende miles abreviados como 288 mil, pero no millones", () => {
+    const [thousands] = extractNumbers("cayó de 288 mil en julio");
+    expect(thousands).toMatchObject({ value: 288000, decimals: -3 });
+    expect(matchesShown(thousands as NonNullable<typeof thousands>, 288123.4)).toBe(true);
+    expect(extractNumbers("3 millones")[0]?.value).toBe(3);
+  });
+
+  it("acepta el truncamiento a los decimales mostrados, pero no otra cifra", () => {
+    expect(matchesShown({ value: 1222, decimals: 0, raw: "" }, 1222.74)).toBe(true);
+    expect(matchesShown({ value: 1223, decimals: 0, raw: "" }, 1222.74)).toBe(true);
+    expect(matchesShown({ value: 1221, decimals: 0, raw: "" }, 1222.74)).toBe(false);
+    expect(matchesShown({ value: 18000, decimals: 0, raw: "" }, 17943)).toBe(false);
   });
 });
