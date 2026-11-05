@@ -11,7 +11,7 @@ import type { EvalCase } from "./cases/case-schema";
 import { loadGolden } from "./cases/load-cases";
 import { runCase, type RunDependencies } from "./runner/run-case";
 import { runChecks, type Checks } from "./scoring/checks";
-import { extract } from "./scoring/extract";
+import { extract, withContext } from "./scoring/extract";
 import { judgeCase, type JudgeResult } from "./scoring/judge";
 import { hardGateFailures, scoreCase, type CaseScore } from "./scoring/score";
 
@@ -74,6 +74,11 @@ export type CaseResult = {
 export type EvaluationDependencies = RunDependencies & {
   judge?: LanguageModel;
   criteria: Map<string, string>;
+  // ES: Contexto que el agente recibe en el prompt y no por una herramienta: definiciones
+  //     de segmentos y reglas del negocio. Sus cifras cuentan como fuente.
+  // EN: Context the agent receives in the prompt rather than through a tool: segment
+  //     definitions and business rules. Its figures count as a source.
+  context?: unknown[];
 };
 
 function usageOf(transcript: Awaited<ReturnType<typeof runCase>>, judgeCost: number): CaseUsage {
@@ -131,7 +136,7 @@ export async function evaluateCase(
   }
   try {
     const transcript = await runCase(evalCase, deps);
-    const extracted = extract(transcript);
+    const extracted = withContext(extract(transcript), deps.context ?? []);
     const failure = serviceFailure(transcript, extracted);
     if (failure) return { ...base, error: failure, usage: usageOf(transcript, 0) };
     return { ...base, ...(await scoreTranscript(evalCase, transcript, extracted, deps)) };

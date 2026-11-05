@@ -60,7 +60,9 @@ async function pool<T>(tasks: Array<() => Promise<T>>, concurrency: number): Pro
 
 async function dependencies(request: RunRequest) {
   const { openRouterApiKey } = agentConfig({ ...process.env, OPENROUTER_MODEL: request.model });
-  const business = await createGoldenApi().get<{ id: string; data_as_of: string }>("/v1/business");
+  const api = createGoldenApi();
+  const business = await api.get<{ id: string; data_as_of: string }>("/v1/business");
+  const segments = await api.get<unknown>("/v1/segments");
   const model = (modelId: string) => createAgentModel({ apiKey: openRouterApiKey, modelId });
   const deps = {
     model: model(request.model),
@@ -71,6 +73,7 @@ async function dependencies(request: RunRequest) {
     },
     businessId: business.id,
     criteria: loadCriteria(),
+    context: [business, segments],
   };
   return { deps, dataAsOf: business.data_as_of };
 }

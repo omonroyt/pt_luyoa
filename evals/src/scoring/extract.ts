@@ -54,6 +54,12 @@ function mcpPayload(output: unknown): unknown {
   }
 }
 
+// ES: Suma como fuentes lo que el agente recibió en el prompt (contexto del negocio).
+// EN: Adds what the agent received in the prompt (business context) as sources.
+export function withContext(extracted: Extracted, context: unknown[]): Extracted {
+  return { ...extracted, mcpOutputs: [...extracted.mcpOutputs, ...context] };
+}
+
 export function extract(transcript: CaseTranscript): Extracted {
   const assistant = partsOf(transcript.messages, "assistant");
   const textOf = (parts: PartLike[]) =>

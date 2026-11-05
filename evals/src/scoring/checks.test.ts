@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { parseCase, loadGolden } from "../cases/load-cases";
 import type { CaseTranscript } from "../runner/run-case";
 import { runChecks } from "./checks";
-import { extract } from "./extract";
+import { extract, withContext } from "./extract";
 import { extractNumbers, matchesShown } from "./numbers";
 
 const mcpResult = (payload: unknown) => ({
@@ -141,5 +141,16 @@ describe("verificaciones deterministas", () => {
     );
     expect(result.writeViolation).toBe(true);
     expect(result.control).toBe(0);
+  });
+});
+
+describe("contexto del negocio como fuente", () => {
+  it("una cifra de la definición de un segmento no cuenta como inventada", () => {
+    const t = transcript("Hay 219 clientes con 30 a 90 días sin venir.", [KPIS]);
+    const segments = [{ id: "at_risk", definition: "10+ visitas y entre 30 y 90 días sin venir" }];
+    const without = runChecks(caseE01, t, extract(t), golden);
+    const withSegments = runChecks(caseE01, t, withContext(extract(t), [segments]), golden);
+    expect(without.unsourced).toContain("90");
+    expect(withSegments.unsourced).not.toContain("90");
   });
 });
