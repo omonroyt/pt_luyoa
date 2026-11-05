@@ -102,7 +102,7 @@ export type Expect = z.infer<typeof Expect>;
 // ES: Funciones de M7 que un caso puede necesitar, y las que el corredor ya soporta.
 // EN: M7 features a case may need, and the ones the runner already supports.
 const REQUIREMENTS = ["memory", "weekly_summary"] as const;
-const SUPPORTED: ReadonlyArray<string> = ["memory"];
+const SUPPORTED: ReadonlyArray<string> = ["memory", "weekly_summary"];
 
 export const EvalCase = z
   .object({

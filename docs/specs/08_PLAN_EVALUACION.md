@@ -73,7 +73,7 @@ expect:
 | `writes` | Escrituras exitosas esperadas; cada una necesita una aprobación en algún turno |
 | `rubric` | Criterios `CA-` que califica el juez; su texto se lee de `02_CRITERIOS_ACEPTACION.md` |
 | `turns[].new_conversation` | El turno abre una conversación nueva del mismo negocio: el agente no recibe los mensajes anteriores, pero sí la memoria del caso. Prueba que una preferencia se aplica en otra conversación (CA-X04) |
-| `requires` | Funciones de M7 (`memory`, `weekly_summary`). `memory` ya está soportada: el corredor da a cada caso su propio almacén de preferencias en memoria, compartido entre sus conversaciones. Un caso que requiere una función no soportada no se corre y no cuenta como aprobado |
+| `requires` | Funciones de M7 (`memory`, `weekly_summary`). Las dos ya están soportadas. Con `memory`, el corredor da a cada caso su propio almacén de preferencias en memoria, compartido entre sus conversaciones. `weekly_summary` corre la misma pregunta que el botón y el cron. Un caso que requiere una función no soportada no se corre y no cuenta como aprobado |
 
 Las pruebas del set verifican que hay 36 casos con el reparto de la tabla, que cada cifra existe como número en su referencia, que cada criterio existe y que la lista de herramientas coincide con la que registra el MCP.
 
