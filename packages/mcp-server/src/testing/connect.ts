@@ -10,6 +10,9 @@ import type { ApprovalSettings } from "../context";
 import { createServer, createServerFactory } from "../server";
 import { createFakeFetch, type FixtureOverrides } from "./fake-api";
 
+export type { FixtureOverrides } from "./fake-api";
+export { fixtureKey } from "./fixture-key";
+
 export const TEST_NOW = new Date("2026-11-04T12:00:00Z");
 
 /**
