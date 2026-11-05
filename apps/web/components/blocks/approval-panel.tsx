@@ -10,7 +10,7 @@
  *     so there is no double click (07 §3.4). If the token request fails, nothing is
  *     approved and the person can try again.
  */
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   approvalOutcomeOf,
   changeRequestOutput,
@@ -60,8 +60,14 @@ function useApprovalActions(tool: ToolView, view: ApprovalView) {
 function ActivePanel({ tool, view }: { tool: ToolView; view: ApprovalView }) {
   const { phase, setPhase, approve, reject, locked } = useApprovalActions(tool, view);
   const copy = COPY[view.action];
+  // ES: La entrada de texto se bloquea al llegar la aprobación; el foco pasa al panel.
+  // EN: The text input is locked when the approval arrives; focus moves to the panel.
+  const section = useRef<HTMLElement>(null);
+  useEffect(() => section.current?.focus(), []);
   return (
     <section
+      ref={section}
+      tabIndex={-1}
       aria-label={copy.question}
       className="flex flex-col gap-3 rounded-2xl border-2 border-accent bg-card p-4"
     >

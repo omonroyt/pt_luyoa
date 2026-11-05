@@ -29,7 +29,7 @@ export function MessageItem({ message, onShowTrace }: MessageItemProps) {
       <button
         type="button"
         onClick={() => onShowTrace(message.id)}
-        className="self-start text-xs text-muted underline-offset-2 hover:underline"
+        className="min-h-6 self-start py-1 text-xs text-muted underline-offset-2 hover:underline"
       >
         Ver traza de esta respuesta
       </button>

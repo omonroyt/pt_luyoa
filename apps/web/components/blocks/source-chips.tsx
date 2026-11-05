@@ -15,7 +15,7 @@ function SourceChip({ id }: { id: string }) {
   const source = useSource(id);
   return (
     <details className="group rounded-lg border border-border bg-card text-xs">
-      <summary className="cursor-pointer list-none px-2 py-1 text-muted group-open:text-foreground">
+      <summary className="cursor-pointer list-none px-2 py-1.5 text-muted group-open:text-foreground">
         Fuente: {source ? sourceLabel(source.tool) : id}
       </summary>
       <dl className="grid gap-1 border-t border-border px-3 py-2 [&_dt]:text-muted">

@@ -3,12 +3,14 @@
 /**
  * ES: Dibujo de la gráfica con Recharts. Las barras se dibujan horizontales: las etiquetas
  *     (días, sucursales, categorías) se leen completas y la gráfica cabe en 375 px sin
- *     cambiar de forma (07 §4). El elemento resaltado conserva el color pleno y el resto
- *     se atenúa; el motivo también va en texto, así que el color no es la única señal.
+ *     cambiar de forma (07 §4). Todas las barras conservan su color pleno (contraste de al
+ *     menos 3:1 contra el fondo) y la resaltada lleva un contorno del color del texto; el
+ *     motivo también va en texto, así que el color no es la única señal.
  * EN: Chart drawing with Recharts. Bars are drawn horizontally: labels (days, locations,
  *     categories) read in full and the chart fits 375 px without changing shape (07 §4).
- *     The highlighted item keeps full color and the rest is dimmed; the reason is also
- *     given as text, so color is not the only cue.
+ *     Every bar keeps its full color (at least 3:1 contrast against the background) and
+ *     the highlighted one gets an outline in the text color; the reason is also given as
+ *     text, so color is not the only cue.
  */
 import type { ChartBlock } from "@alborada/shared";
 import {
@@ -34,7 +36,7 @@ const BAR_ROW_HEIGHT = 36;
 const MIN_HEIGHT = 200;
 const LINE_HEIGHT = 260;
 const AXIS_WIDTH = 96;
-const DIMMED = 0.45;
+const HIGHLIGHT_STROKE = 2;
 
 const tick = { fill: "var(--muted)", fontSize: 12 };
 
@@ -53,7 +55,8 @@ function BarCanvas({ block, data }: CanvasProps) {
   const shape = (props: BarShapeProps) => (
     <Rectangle
       {...props}
-      fillOpacity={highlightIndex < 0 || props.index === highlightIndex ? 1 : DIMMED}
+      stroke={props.index === highlightIndex ? "var(--foreground)" : undefined}
+      strokeWidth={props.index === highlightIndex ? HIGHLIGHT_STROKE : 0}
     />
   );
   const height = Math.max(MIN_HEIGHT, data.length * BAR_ROW_HEIGHT * block.series.length);

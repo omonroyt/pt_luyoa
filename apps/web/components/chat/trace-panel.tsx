@@ -20,6 +20,7 @@ import {
   type TraceResponse,
 } from "@/lib/ui/trace";
 import { TraceStepItem } from "./trace-step-item";
+import { useDialogFocus } from "./use-dialog-focus";
 
 type TracePanelProps = {
   conversationId: string;
@@ -112,8 +113,11 @@ function TraceBody({ state, onReload }: { state: TraceState; onReload: () => voi
 
 export function TracePanel({ conversationId, messageId, busy, onClose }: TracePanelProps) {
   const { state, reload } = useMessageTrace(conversationId, messageId, busy);
+  const panel = useDialogFocus<HTMLElement>(onClose);
   return (
     <aside
+      ref={panel}
+      tabIndex={-1}
       aria-label="Trazas del turno"
       className="fixed inset-x-0 bottom-0 z-20 flex max-h-[70dvh] flex-col gap-3 overflow-y-auto rounded-t-2xl border-t border-border bg-card p-4 shadow-lg md:inset-y-0 md:left-auto md:right-0 md:max-h-none md:w-96 md:rounded-none md:border-l md:border-t-0"
     >
@@ -122,7 +126,7 @@ export function TracePanel({ conversationId, messageId, busy, onClose }: TracePa
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg border border-border px-3 py-1 text-sm"
+          className="min-h-11 rounded-lg border border-border px-3 text-sm"
         >
           Cerrar
         </button>
