@@ -186,3 +186,21 @@ describe("recalificar una transcripción guardada", () => {
     expect(result.checks?.figureAccuracy).toBe(1);
   });
 });
+
+describe("rangos y aproximaciones", () => {
+  it("aplica los miles a los dos extremos de un rango", () => {
+    const [low, high] = extractNumbers("venía en ~288-330 mil al mes");
+    expect(low).toMatchObject({ value: 288000 });
+    expect(high).toMatchObject({ value: 330000 });
+    expect(extractNumbers("de 276 a 330 mil")[0]?.value).toBe(276000);
+  });
+
+  it("compara una aproximación marcada a sus ceros, pero no un número sin marcar", () => {
+    const [approximate] = extractNumbers("descuentos de ~$8,300 en ambos meses");
+    expect(matchesShown(approximate as NonNullable<typeof approximate>, 8346)).toBe(true);
+    const [plus] = extractNumbers("18,000+ transacciones");
+    expect(matchesShown(plus as NonNullable<typeof plus>, 17943)).toBe(false);
+    const [sum] = extractNumbers("hay 391 clientes en riesgo o dormidos");
+    expect(matchesShown(sum as NonNullable<typeof sum>, 219)).toBe(false);
+  });
+});

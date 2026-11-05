@@ -31,27 +31,39 @@ export function stripNonFigures(text: string): string {
   return NOT_FIGURES.reduce((current, pattern) => current.replace(pattern, " "), text);
 }
 
-// ES: "288 mil" es 288,000 redondeado a miles (decimales = −3); "millones" no se toca.
-// EN: "288 mil" is 288,000 rounded to thousands (decimals = −3); "millones" is left alone.
-const THOUSANDS = /^\s+mil(?![a-záéíóú])/i;
+// ES: "288 mil" es 288,000 redondeado a miles (decimales = −3), también en un rango como
+//     "288-330 mil" o "288 a 330 mil"; "millones" y "miles" no se tocan.
+// EN: "288 mil" is 288,000 rounded to thousands (decimals = −3), also in a range such as
+//     "288-330 mil" or "288 a 330 mil"; "millones" and "miles" are left alone.
+const THOUSANDS = /^(?:\s*[-–]\s*\$?[\d.,]+|\s+(?:a|y)\s+\$?[\d.,]+)?\s+mil(?![a-záéíóú])/i;
 const THOUSAND = 1000;
 const THOUSANDS_DECIMALS = -3;
+
+// ES: Una cifra marcada como aproximada ("~$8,300", "unos 18,000") se compara redondeada a
+//     sus ceros finales: 8,346 cuenta como "~8,300". "18,000+" no está marcada así.
+// EN: A figure marked as approximate ("~$8,300", "unos 18,000") is compared rounded to its
+//     trailing zeros: 8,346 counts as "~8,300". "18,000+" is not marked that way.
+const APPROXIMATE = /(?:~|\bunos?\s|\bunas?\s|alrededor de\s|cerca de\s|aproximadamente\s)\$?$/i;
+
+const decimalsOf = (plain: string) =>
+  plain.includes(".") ? (plain.split(".")[1]?.length ?? 0) : 0;
+
+const trailingZeros = (plain: string) =>
+  plain.includes(".") ? 0 : (/0+$/.exec(plain)?.[0].length ?? 0);
 
 export function extractNumbers(text: string): ShownNumber[] {
   const clean = stripNonFigures(text);
   return [...clean.matchAll(NUMBER)].map((match) => {
     const raw = match[0];
     const plain = raw.replaceAll(",", "");
-    const decimals = plain.includes(".") ? (plain.split(".")[1]?.length ?? 0) : 0;
-    const after = clean.slice((match.index ?? 0) + raw.length);
-    if (THOUSANDS.test(after)) {
-      return {
-        value: Number(plain) * THOUSAND,
-        decimals: decimals + THOUSANDS_DECIMALS,
-        raw: `${raw} mil`,
-      };
-    }
-    return { value: Number(plain), decimals, raw };
+    const start = match.index ?? 0;
+    const thousands = THOUSANDS.test(clean.slice(start + raw.length));
+    const approximate = APPROXIMATE.test(clean.slice(0, start)) ? trailingZeros(plain) : 0;
+    return {
+      value: Number(plain) * (thousands ? THOUSAND : 1),
+      decimals: decimalsOf(plain) - approximate + (thousands ? THOUSANDS_DECIMALS : 0),
+      raw: thousands ? `${raw} mil` : raw,
+    };
   });
 }
 
