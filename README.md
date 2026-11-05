@@ -113,6 +113,9 @@ Con `DEMO_ACCESS_CODE` configurado, `proxy.ts` exige la sesión firmada en todas
 
 ## Despliegue (Vercel + Turso)
 
+Demo publicada: https://copiloto-cafe-alborada.vercel.app (protegida con código de acceso).
+
+
 1. Crear la base en Turso y obtener su URL (`libsql://…`) y un token.
 2. Importar el repositorio en Vercel con **Root Directory** `apps/web`; Vercel detecta Next.js y pnpm.
 3. Definir las variables de entorno del proyecto: las de `.env.example` con `DATABASE_URL` y `DATABASE_AUTH_TOKEN` de Turso, `DEMO_ACCESS_CODE` y `CRON_SECRET`. Para pnpm 12 vía corepack, agregar `ENABLE_EXPERIMENTAL_COREPACK=1`.
