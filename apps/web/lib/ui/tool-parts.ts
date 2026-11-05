@@ -76,3 +76,25 @@ const TOOL_LABELS: Record<string, string> = {
 export function toolLabel(name: string): string {
   return TOOL_LABELS[name] ?? `Consultando ${name}`;
 }
+
+// ES: Nombre de cada fuente en el chip "Fuente: …" (07 §3.5).
+// EN: Name of each source in the "Fuente: …" chip (07 §3.5).
+const SOURCE_LABELS: Record<string, string> = {
+  get_business_context: "contexto del negocio",
+  compare_periods: "comparación de periodos",
+  sales_breakdown: "desglose de ventas",
+  visits_breakdown: "desglose de visitas",
+  location_health: "salud de sucursales",
+  customer_segments: "segmentos de clientes",
+  audience_reach: "alcance de audiencia",
+  campaign_performance: "resultados de campañas",
+  offer_economics: "costo de la oferta",
+  estimate_campaign_impact: "impacto estimado",
+  lookup: "detalle",
+  create_campaign_draft: "borrador creado",
+  send_campaign: "campaña enviada",
+};
+
+export function sourceLabel(tool: string): string {
+  return SOURCE_LABELS[tool] ?? tool;
+}

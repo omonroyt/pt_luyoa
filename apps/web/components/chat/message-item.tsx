@@ -5,6 +5,8 @@
  *     width to leave room for charts and tables.
  */
 import type { UIMessage } from "ai";
+import { SourceChips } from "@/components/blocks/source-chips";
+import { citedSourcesOf } from "@/lib/ui/cited-sources";
 import { PartView } from "./part-view";
 
 export function MessageItem({ message }: { message: UIMessage }) {
@@ -21,6 +23,7 @@ export function MessageItem({ message }: { message: UIMessage }) {
       {message.parts.map((part, index) => (
         <PartView key={`${message.id}-${index}`} part={part} />
       ))}
+      <SourceChips ids={citedSourcesOf(message)} />
     </article>
   );
 }

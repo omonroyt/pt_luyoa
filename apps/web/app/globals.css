@@ -16,6 +16,10 @@
   --accent-foreground: #ffffff;
   --positive: #1f7a4d;
   --negative: #b4372f;
+  --chart-1: #8a4b22;
+  --chart-2: #2f6f8f;
+  --chart-3: #b98a2e;
+  --chart-4: #5b7a3a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,6 +33,10 @@
     --accent-foreground: #17120e;
     --positive: #5cc493;
     --negative: #ef7d73;
+    --chart-1: #d08a52;
+    --chart-2: #6fb3d2;
+    --chart-3: #e0b85a;
+    --chart-4: #9cc46e;
   }
 }
 
