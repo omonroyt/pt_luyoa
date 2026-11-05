@@ -25,6 +25,9 @@ import { approvalStepPolicy, type StepLike } from "./approval-policy";
 import { createApprovalTools } from "./approval-tools";
 import { loadBusinessContext } from "./business-context";
 import { createCardGate } from "./card-gate";
+import { createMemoryTools } from "./memory-tools";
+import type { PreferenceStore } from "../memory/preference-store";
+import { preferenceLine } from "../memory/preferences";
 import { connectMcpClient, type McpConnection } from "./mcp-tools";
 import { createPresentationTools } from "./presentation-tools";
 import {
@@ -46,7 +49,11 @@ export const MAX_STEPS = 12;
 // EN: The MCP writes (create_campaign_draft, send_campaign) are exposed together with the
 //     approval tools: the model only gets the token if the person approves in the UI, and
 //     the MCP rejects any write without it (ADR-08).
-const CAPABILITIES: AgentCapabilities = { presentation: true, approvals: true, memory: false };
+const capabilitiesOf = (memory: PreferenceStore | undefined): AgentCapabilities => ({
+  presentation: true,
+  approvals: true,
+  memory: memory !== undefined,
+});
 
 export const STEP_LIMIT_NOTE = [
   "LÍMITE DE PASOS",
@@ -66,11 +73,14 @@ export type TurnDependencies = {
   // ES: Guarda la traza del turno; si falla, el chat sigue y el error se registra.
   // EN: Stores the turn trace; if it fails, the chat continues and the error is logged.
   persist?: PersistTurn;
+  // ES: Preferencias del negocio (X-04). Sin almacén, el turno no tiene memoria.
+  // EN: Business preferences (X-04). Without a store, the turn has no memory.
+  memory?: PreferenceStore;
 };
 
 const modelName = (model: LanguageModel) => (typeof model === "string" ? model : model.modelId);
 
-async function buildTools(client: MCPClient, registry: SourceRegistry) {
+async function buildTools(client: MCPClient, registry: SourceRegistry, memory?: PreferenceStore) {
   const businessTools = trackSources(await client.tools(), registry);
   const context = await loadBusinessContext(businessTools);
   const gate = createCardGate();
@@ -78,8 +88,24 @@ async function buildTools(client: MCPClient, registry: SourceRegistry) {
     ...businessTools,
     ...createPresentationTools(registry, gate),
     ...createApprovalTools(gate),
+    ...(memory ? createMemoryTools(memory) : {}),
   });
   return { tools, context };
+}
+
+// ES: Si no se pueden leer las preferencias, el turno sigue sin ellas y lo dice el prompt.
+// EN: If preferences cannot be read, the turn goes on without them and the prompt says so.
+async function savedPreferences(memory?: PreferenceStore): Promise<string[] | undefined> {
+  if (!memory) return undefined;
+  try {
+    return (await memory.list()).map(preferenceLine);
+  } catch (error) {
+    console.error(
+      "No se pudieron leer las preferencias:",
+      error instanceof Error ? error.message : "error desconocido",
+    );
+    return ["(no se pudieron leer las preferencias en este turno)"];
+  }
 }
 
 async function persistSafely(persist: PersistTurn, turn: Parameters<PersistTurn>[0]) {
@@ -176,8 +202,12 @@ export async function streamAgentTurn(
   try {
     const registry = createSourceRegistry();
     seedFromMessages(registry, messages);
-    const { tools, context } = await buildTools(client, registry);
-    const instructions = buildSystemPrompt({ context, capabilities: CAPABILITIES });
+    const { tools, context } = await buildTools(client, registry, dependencies.memory);
+    const instructions = buildSystemPrompt({
+      context,
+      capabilities: capabilitiesOf(dependencies.memory),
+      preferences: await savedPreferences(dependencies.memory),
+    });
     const tracer = createTurnTracer(modelName(dependencies.model));
     const result = streamText({
       model: dependencies.model,

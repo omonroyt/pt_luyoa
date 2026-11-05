@@ -14,6 +14,7 @@ import { saveTurn } from "@/lib/agent/trace-store";
 import { isSameOrigin } from "@/lib/auth/service-token";
 import { getDatabase } from "@/lib/db/client";
 import { mcpServerFactory } from "@/lib/mcp/runtime";
+import { createDbPreferenceStore, deferredPreferenceStore } from "@/lib/memory/preference-store";
 import { serverConfig } from "@/lib/server-config";
 
 // ES: Un turno con varias herramientas puede tardar decenas de segundos.
@@ -34,6 +35,9 @@ export async function POST(request: Request): Promise<Response> {
   return streamAgentTurn(parsed.messages, {
     model: createAgentModel({ apiKey: agent.openRouterApiKey, modelId: agent.modelId }),
     mcp: { serviceToken: config.mcpServiceToken, createServer: mcpServerFactory() },
+    memory: deferredPreferenceStore(async () =>
+      createDbPreferenceStore(await getDatabase(), config.businessId),
+    ),
     persist: async (turn) =>
       saveTurn(await getDatabase(), {
         ...turn,

@@ -280,3 +280,9 @@ stateDiagram-v2
 - Se inyectan en el prompt de sistema de cada conversación del mismo negocio.
 - Se pueden ver y borrar desde la interfaz.
 - Claves iniciales: `preferred_channel`, `max_discount_pct`, `message_tone`, `focus_location`, `avoid_products`, `campaign_duration_days`.
+- **Implementación (M7, IMP-61):**
+  - **Claves y valores** (`lib/memory/preferences.ts`): cada clave valida su valor. El canal es `push`, `whatsapp` o `email`; el descuento, un entero de 1 a 100; la duración, de 1 a 60 días; la sucursal, un id `loc_…`; tono y productos, textos breves. Un valor inválido falla en la entrada de la herramienta con el motivo, y el modelo corrige.
+  - **Almacén por negocio** (`lib/memory/preference-store.ts`): el `businessId` se fija al crear el almacén y ninguna operación recibe otro, así que un negocio no puede leer ni borrar las preferencias de otro (CA-X05, ADR-16). Hay una versión en base de datos (tabla `preferences`, una fila por negocio y clave) y otra en memoria para pruebas y evaluaciones.
+  - **Prompt:** al inicio de cada turno se leen las preferencias y entran en la sección "PREFERENCIAS DEL NEGOCIO" como valores entre comillas, marcados como datos y no como instrucciones. Si la petición del turno las contradice, gana la petición y el agente lo dice. Si no se pueden leer, el turno sigue sin ellas y el prompt lo advierte.
+  - **Interfaz:** el botón "Preferencias" abre un panel con lo guardado y un botón "Olvidar" por preferencia (`GET` y `DELETE /api/preferences`, solo del mismo origen y del negocio de la sesión).
+  - **Sin memoria:** si el turno no recibe almacén, no hay herramientas de memoria ni sección de preferencias.

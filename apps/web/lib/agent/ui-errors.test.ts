@@ -4,6 +4,7 @@ import { NoSuchToolError } from "ai";
 import {
   EARLY_STEP_MESSAGE,
   INVALID_BLOCK_MESSAGE,
+  INVALID_PREFERENCE_MESSAGE,
   reportStreamError,
   STREAM_ERROR_MESSAGE,
   UNVERIFIED_BLOCK_MESSAGE,
@@ -31,6 +32,12 @@ describe("reportStreamError", () => {
     expect(reportStreamError("AI_NoSuchToolError: Model tried to call unavailable tool", log)).toBe(
       EARLY_STEP_MESSAGE,
     );
+    expect(
+      reportStreamError(
+        "AI_InvalidToolInputError: Invalid input for tool remember_preference: x",
+        log,
+      ),
+    ).toBe(INVALID_PREFERENCE_MESSAGE);
     expect(log).not.toHaveBeenCalled();
   });
 });
