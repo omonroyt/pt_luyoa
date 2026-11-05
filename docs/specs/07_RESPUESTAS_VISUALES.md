@@ -201,7 +201,7 @@ interface CampaignCardBlock extends BlockBase {
     basis: string;                      // "Lift de 6 pts en 'Te extrañamos' (n=410)"
   };
   history: Array<{ name: string; lift: number | null; n: number; reliable: boolean }>;
-  message: { text: string; length: number; limit: number };
+  message: { text: string };          // longitud y límite los calcula el sistema
   warnings: string[];
   approvalId?: string;                  // cuando hay una aprobación pendiente
 }
@@ -341,5 +341,5 @@ Al recibir una llamada de presentación, el orquestador:
 1. Valida el esquema zod (si falla, devuelve el error al modelo para que corrija).
 2. Verifica que `sources` exista y que cada `source.id` pertenezca a esta conversación.
 3. Corre el **verificador de cifras**: cada número de `data`, `rows`, `items`, `reach` y `economics` debe aparecer en alguna de las fuentes citadas, con tolerancia de redondeo.
-4. Para la tarjeta de campaña, verifica que `reach` coincida con el último `audience_reach` de esa audiencia y canal, y que `message.length ≤ limit`.
+4. Para la tarjeta de campaña, verifica que `reach` coincida con el último `audience_reach` de esa audiencia y canal, y que el mensaje no pase el límite del canal. La longitud la calcula el sistema con `messageLength` (unidades UTF-16), no el modelo: en M6 el modelo contaba mal y el verificador rechazaba la tarjeta.
 5. Solo entonces lo envía a la interfaz y lo registra en la traza.

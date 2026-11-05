@@ -59,7 +59,7 @@ const CARD = {
     totalCostRange: [310, 960],
   },
   history: [{ name: "Te extrañamos", lift: 23.9, n: 410, reliable: true }],
-  message: { text: "¡Te extrañamos!", length: 15, limit: 1024 },
+  message: { text: "¡Te extrañamos!" },
   warnings: [],
 };
 

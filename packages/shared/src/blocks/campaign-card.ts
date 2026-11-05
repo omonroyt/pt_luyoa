@@ -99,7 +99,13 @@ export const CampaignCardBlock = BlockBase.extend({
       reliable: z.boolean(),
     }),
   ),
-  message: z.object({ text: z.string(), length: z.number(), limit: z.number() }),
+  // ES: Solo el texto: la longitud y el límite del canal los calcula el sistema. En M6 el
+  //     modelo contaba mal los caracteres y el verificador rechazaba 25 de 27 tarjetas.
+  // EN: Text only: the length and the channel limit are computed by the system. In M6 the
+  //     model miscounted characters and the verifier rejected 25 of 27 cards.
+  message: z.object({
+    text: z.string().describe("Texto exacto del mensaje; no cuentes sus caracteres"),
+  }),
   warnings: z.array(z.string()),
   approvalId: z.string().optional(),
 });

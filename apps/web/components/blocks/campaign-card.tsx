@@ -6,7 +6,7 @@
  *     buttons of its own: approval lives in the request_*_approval panel, which shows the
  *     exact content being signed.
  */
-import type { CampaignCardBlock } from "@alborada/shared";
+import { MESSAGE_LIMITS, messageLength, type CampaignCardBlock } from "@alborada/shared";
 import { stateBadge } from "@/lib/ui/campaign";
 import { BlockFrame } from "./block-frame";
 import { CampaignDetails, CampaignHistory } from "./campaign-details";
@@ -24,7 +24,7 @@ export function CampaignCard({ block }: { block: CampaignCardBlock }) {
       <CampaignDetails block={block} />
       <div className="text-sm">
         <p className="text-muted">
-          Mensaje ({block.message.length}/{block.message.limit})
+          Mensaje ({messageLength(block.message.text)}/{MESSAGE_LIMITS[block.channel]})
         </p>
         <p className="whitespace-pre-wrap rounded-lg bg-background px-2 py-1">
           {block.message.text}
