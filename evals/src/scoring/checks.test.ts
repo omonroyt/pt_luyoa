@@ -2,6 +2,7 @@ import type { UIMessage } from "ai";
 import { describe, expect, it } from "vitest";
 import { parseCase, loadGolden } from "../cases/load-cases";
 import type { CaseTranscript } from "../runner/run-case";
+import { rescoreCase } from "../evaluate-case";
 import { runChecks } from "./checks";
 import { extract, withContext } from "./extract";
 import { extractNumbers, matchesShown } from "./numbers";
@@ -168,5 +169,20 @@ describe("formas de escribir una cifra", () => {
     expect(matchesShown({ value: 1223, decimals: 0, raw: "" }, 1222.74)).toBe(true);
     expect(matchesShown({ value: 1221, decimals: 0, raw: "" }, 1222.74)).toBe(false);
     expect(matchesShown({ value: 18000, decimals: 0, raw: "" }, 17943)).toBe(false);
+  });
+});
+
+describe("recalificar una transcripción guardada", () => {
+  it("vuelve a calificar con el código actual y conserva al juez original", () => {
+    const judge = { score: 0.5, items: [], costUsd: 0.001 };
+    const result = rescoreCase(
+      caseE01,
+      2,
+      transcript("En octubre (31 días) vendiste $808,254 contra $775,804: +4.2%.", [KPIS]),
+      { context: [], judge },
+    );
+    expect(result).toMatchObject({ caseId: "E-01", repeat: 2, gates: [], judge });
+    expect(result.score?.components.judge).toBe(0.5);
+    expect(result.checks?.figureAccuracy).toBe(1);
   });
 });

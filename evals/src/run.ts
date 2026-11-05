@@ -18,7 +18,7 @@ const options = parseRunOptions(
 );
 const report = await runEvaluation({ ...options, cases: selectCases(loadCases(), options) });
 const base = `${localDate()}-${options.label}`;
-writeReport(base, report);
+writeReport(base, report, report.raw);
 console.log(
   `Puntaje medio ${report.summary.meanScore?.toFixed(2) ?? "—"} · costo ${report.summary.agentCostUsd.toFixed(4)} USD → evals/reports/${base}.md`,
 );

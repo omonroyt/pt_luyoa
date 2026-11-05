@@ -60,7 +60,7 @@ for (const model of models) {
     concurrency: Number(values.concurrency),
     label,
   });
-  writeReport(`${date}-${label}`, report);
+  writeReport(`${date}-${label}`, report, report.raw);
   rows.push(modelRow(report));
 }
 

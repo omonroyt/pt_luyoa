@@ -14,6 +14,7 @@ import { agentConfig, createAgentModel } from "@alborada/web/agent";
 import type { EvalCase } from "./cases/case-schema";
 import { loadCriteria } from "./cases/criteria";
 import { evaluateCase, type CaseResult } from "./evaluate-case";
+import type { CaseTranscript } from "./runner/run-case";
 import { createGoldenApi } from "./golden/api-client";
 import { renderMarkdown, type RunMeta } from "./report/markdown";
 import { summarize, type RunSummary } from "./report/summary";
@@ -32,6 +33,16 @@ export type RunRequest = {
 };
 
 export type RunReport = { meta: RunMeta; summary: RunSummary; results: CaseResult[] };
+
+// ES: Transcripciones completas de una corrida, con el contexto usado para calificarlas.
+//     Se guardan fuera de git (evals/reports/raw/) por su tamaño.
+// EN: Full transcripts of a run, with the context used to score them. They are stored
+//     outside git (evals/reports/raw/) because of their size.
+export type RawRun = {
+  context: unknown[];
+  transcripts: Array<{ caseId: string; repeat: number; transcript: CaseTranscript }>;
+};
+export const RAW_DIR = new URL("raw/", REPORTS_DIR);
 
 function commitOf(): string {
   const head = execFileSync("git", ["rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim();
@@ -81,8 +92,12 @@ async function dependencies(request: RunRequest) {
   return { deps, dataAsOf: business.data_as_of };
 }
 
-export function writeReport(base: string, report: RunReport): void {
+export function writeReport(base: string, report: RunReport, raw?: RawRun): void {
   mkdirSync(REPORTS_DIR, { recursive: true });
+  if (raw) {
+    mkdirSync(RAW_DIR, { recursive: true });
+    writeFileSync(new URL(`${base}.json`, RAW_DIR), JSON.stringify(raw));
+  }
   writeFileSync(new URL(`${base}.json`, REPORTS_DIR), `${JSON.stringify(report, null, 2)}\n`);
   writeFileSync(
     new URL(`${base}.md`, REPORTS_DIR),
@@ -90,8 +105,14 @@ export function writeReport(base: string, report: RunReport): void {
   );
 }
 
-export async function runEvaluation(request: RunRequest): Promise<RunReport> {
-  const { deps, dataAsOf } = await dependencies(request);
+export async function runEvaluation(request: RunRequest): Promise<RunReport & { raw: RawRun }> {
+  const { deps: base, dataAsOf } = await dependencies(request);
+  const raw: RawRun = { context: base.context, transcripts: [] };
+  const deps = {
+    ...base,
+    onTranscript: (caseId: string, repeat: number, transcript: CaseTranscript) =>
+      raw.transcripts.push({ caseId, repeat, transcript }),
+  };
   const runnable = request.cases.filter((item) => item.requires.length === 0).length;
   console.log(
     `Modelo ${request.model} · juez ${request.judge ?? "ninguno"} · ${runnable} casos × ${request.repeats} = ${runnable * request.repeats} conversaciones`,
@@ -116,5 +137,5 @@ export async function runEvaluation(request: RunRequest): Promise<RunReport> {
     dataAsOf,
     repeats: request.repeats,
   };
-  return { meta, summary: summarize(results), results };
+  return { meta, summary: summarize(results), results, raw };
 }

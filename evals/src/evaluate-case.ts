@@ -10,7 +10,7 @@ import type { LanguageModel } from "ai";
 import type { EvalCase } from "./cases/case-schema";
 import { loadGolden } from "./cases/load-cases";
 import { retryRateLimited } from "./runner/retry";
-import { runCase, type RunDependencies } from "./runner/run-case";
+import { runCase, type CaseTranscript, type RunDependencies } from "./runner/run-case";
 import { runChecks, type Checks } from "./scoring/checks";
 import { extract, withContext } from "./scoring/extract";
 import { judgeCase, type JudgeResult } from "./scoring/judge";
@@ -80,6 +80,9 @@ export type EvaluationDependencies = RunDependencies & {
   // EN: Context the agent receives in the prompt rather than through a tool: segment
   //     definitions and business rules. Its figures count as a source.
   context?: unknown[];
+  // ES: Recibe cada transcripción completa, para guardarla y volver a calificarla.
+  // EN: Receives each full transcript, to store it and re-score it later.
+  onTranscript?: (caseId: string, repeat: number, transcript: CaseTranscript) => void;
 };
 
 function usageOf(transcript: Awaited<ReturnType<typeof runCase>>, judgeCost: number): CaseUsage {
@@ -119,44 +122,67 @@ export function serviceFailure(
     : undefined;
 }
 
+const baseOf = (evalCase: EvalCase, repeat: number) => ({
+  caseId: evalCase.id,
+  group: evalCase.group,
+  title: evalCase.title,
+  repeat,
+  gates: [],
+  writes: 0,
+});
+
 export async function evaluateCase(
   evalCase: EvalCase,
   repeat: number,
   deps: EvaluationDependencies,
 ): Promise<CaseResult> {
-  const base = {
-    caseId: evalCase.id,
-    group: evalCase.group,
-    title: evalCase.title,
-    repeat,
-    gates: [],
-    writes: 0,
-  };
+  const base = baseOf(evalCase, repeat);
   if (evalCase.requires.length > 0) {
     return { ...base, skipped: `Requiere ${evalCase.requires.join(", ")} (M7)` };
   }
   try {
     const transcript = await retryRateLimited(() => runCase(evalCase, deps));
+    deps.onTranscript?.(evalCase.id, repeat, transcript);
     const extracted = withContext(extract(transcript), deps.context ?? []);
     const failure = serviceFailure(transcript, extracted);
     if (failure) return { ...base, error: failure, usage: usageOf(transcript, 0) };
-    return { ...base, ...(await scoreTranscript(evalCase, transcript, extracted, deps)) };
+    const judge = deps.judge
+      ? await judgeCase(deps.judge, evalCase, extracted, deps.criteria)
+      : undefined;
+    return { ...base, ...scoreTranscript(evalCase, transcript, extracted, judge) };
   } catch (error) {
     return { ...base, error: error instanceof Error ? error.message.slice(0, 300) : String(error) };
   }
 }
 
-async function scoreTranscript(
+/**
+ * ES: Vuelve a calificar una transcripción guardada con el código actual de las
+ *     verificaciones, conservando la calificación del juez original. Permite corregir el
+ *     verificador sin volver a pagar las conversaciones.
+ * EN: Re-scores a stored transcript with the current checks code, keeping the original
+ *     judge rating. It allows fixing the verifier without paying for the conversations again.
+ */
+export function rescoreCase(
   evalCase: EvalCase,
-  transcript: Awaited<ReturnType<typeof runCase>>,
+  repeat: number,
+  transcript: CaseTranscript,
+  rescore: { context: unknown[]; judge: JudgeResult | undefined },
+): CaseResult {
+  const base = baseOf(evalCase, repeat);
+  const extracted = withContext(extract(transcript), rescore.context);
+  const failure = serviceFailure(transcript, extracted);
+  if (failure) return { ...base, error: failure, usage: usageOf(transcript, 0) };
+  return { ...base, ...scoreTranscript(evalCase, transcript, extracted, rescore.judge) };
+}
+
+function scoreTranscript(
+  evalCase: EvalCase,
+  transcript: CaseTranscript,
   extracted: ReturnType<typeof extract>,
-  deps: EvaluationDependencies,
+  judge: JudgeResult | undefined,
 ) {
   const golden = evalCase.expect.golden ? loadGolden(evalCase.expect.golden) : undefined;
   const checks = runChecks(evalCase, transcript, extracted, golden);
-  const judge = deps.judge
-    ? await judgeCase(deps.judge, evalCase, extracted, deps.criteria)
-    : undefined;
   return {
     score: scoreCase(checks, judge?.score ?? null),
     gates: hardGateFailures(evalCase, checks),
