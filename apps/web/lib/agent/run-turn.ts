@@ -10,20 +10,31 @@
  */
 import {
   convertToModelMessages,
+  createIdGenerator,
   createUIMessageStreamResponse,
   isStepCount,
   streamText,
   toUIMessageStream,
   type LanguageModel,
+  type TextStreamPart,
+  type ToolSet,
   type UIMessage,
 } from "ai";
+import type { MCPClient } from "@ai-sdk/mcp";
 import { createApprovalTools } from "./approval-tools";
 import { loadBusinessContext } from "./business-context";
 import { connectMcpClient, type McpConnection } from "./mcp-tools";
 import { createPresentationTools } from "./presentation-tools";
-import { createSourceRegistry, seedFromMessages, trackSources } from "./source-registry";
+import {
+  createSourceRegistry,
+  seedFromMessages,
+  trackSources,
+  type SourceRegistry,
+} from "./source-registry";
 import { buildSystemPrompt, type AgentCapabilities } from "./system-prompt";
+import { createTurnTracer, type TraceStep, type TurnTotals } from "./turn-tracer";
 import { uiErrorMessage } from "./ui-errors";
+import { withReason } from "./with-reason";
 
 export const MAX_STEPS = 12;
 
@@ -41,10 +52,76 @@ export const STEP_LIMIT_NOTE = [
   "sin llamar herramientas, y di con claridad qué no alcanzaste a revisar.",
 ].join("\n");
 
+export type PersistTurn = (turn: {
+  messages: UIMessage[];
+  steps: TraceStep[];
+  totals: TurnTotals;
+}) => Promise<void>;
+
 export type TurnDependencies = {
   model: LanguageModel;
   mcp: McpConnection;
+  // ES: Guarda la traza del turno; si falla, el chat sigue y el error se registra.
+  // EN: Stores the turn trace; if it fails, the chat continues and the error is logged.
+  persist?: PersistTurn;
 };
+
+const modelName = (model: LanguageModel) => (typeof model === "string" ? model : model.modelId);
+
+async function buildTools(client: MCPClient, registry: SourceRegistry) {
+  const businessTools = trackSources(await client.tools(), registry);
+  const context = await loadBusinessContext(businessTools);
+  const tools = await withReason({
+    ...businessTools,
+    ...createPresentationTools(registry),
+    ...createApprovalTools(),
+  });
+  return { tools, context };
+}
+
+async function persistSafely(persist: PersistTurn, turn: Parameters<PersistTurn>[0]) {
+  try {
+    await persist(turn);
+  } catch (error) {
+    console.error(
+      "No se pudo guardar la traza del turno:",
+      error instanceof Error ? error.message : "error desconocido",
+    );
+  }
+}
+
+/**
+ * ES: Respuesta en el protocolo de la interfaz. El mensaje del asistente lleva un id y, al
+ *     terminar, los totales del turno como metadatos (tokens, costo y latencia) para el
+ *     panel de trazas; el turno completo se guarda con su traza.
+ * EN: Response in the UI protocol. The assistant message carries an id and, when it ends,
+ *     the turn totals as metadata (tokens, cost and latency) for the trace panel; the full
+ *     turn is stored with its trace.
+ */
+function turnResponse(
+  stream: ReadableStream<TextStreamPart<ToolSet>>,
+  messages: UIMessage[],
+  tracer: ReturnType<typeof createTurnTracer>,
+  persist: PersistTurn | undefined,
+) {
+  return createUIMessageStreamResponse({
+    stream: toUIMessageStream({
+      stream,
+      onError: uiErrorMessage,
+      originalMessages: messages,
+      generateMessageId: createIdGenerator({ prefix: "msg", size: 16 }),
+      messageMetadata: ({ part }) => (part.type === "finish" ? tracer.totals() : undefined),
+      onEnd: async ({ messages: all }) => {
+        if (!persist) return;
+        await persistSafely(persist, {
+          messages: all,
+          steps: tracer.steps,
+          totals: tracer.totals(),
+        });
+      },
+    }),
+  });
+}
 
 /**
  * ES: En el último paso permitido se retiran las herramientas y se pide cerrar con lo
@@ -73,14 +150,9 @@ export async function streamAgentTurn(
   try {
     const registry = createSourceRegistry();
     seedFromMessages(registry, messages);
-    const businessTools = trackSources(await client.tools(), registry);
-    const context = await loadBusinessContext(businessTools);
-    const tools = {
-      ...businessTools,
-      ...createPresentationTools(registry),
-      ...createApprovalTools(),
-    };
+    const { tools, context } = await buildTools(client, registry);
     const instructions = buildSystemPrompt({ context, capabilities: CAPABILITIES });
+    const tracer = createTurnTracer(modelName(dependencies.model));
     const result = streamText({
       model: dependencies.model,
       instructions,
@@ -88,13 +160,12 @@ export async function streamAgentTurn(
       tools,
       stopWhen: isStepCount(MAX_STEPS),
       prepareStep: finalStepPolicy(instructions),
+      ...tracer.callbacks,
       onEnd: close,
       onAbort: close,
       onError: close,
     });
-    return createUIMessageStreamResponse({
-      stream: toUIMessageStream({ stream: result.stream, onError: uiErrorMessage }),
-    });
+    return turnResponse(result.stream, messages, tracer, dependencies.persist);
   } catch (error) {
     await close();
     throw error;

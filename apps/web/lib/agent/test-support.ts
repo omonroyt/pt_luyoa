@@ -38,6 +38,11 @@ const USAGE = {
   outputTokens: { total: 5, text: 5, reasoning: undefined },
 };
 
+// ES: Costo por llamada que reporta OpenRouter en providerMetadata.
+// EN: Per-call cost that OpenRouter reports in providerMetadata.
+export const TEST_CALL_COST = 0.001;
+const PROVIDER_METADATA = { openrouter: { usage: { cost: TEST_CALL_COST } } };
+
 export type ScriptedReply = { toolName: string; input: object } | { text: string };
 
 // ES: Tipo de las partes del stream del modelo, derivado del modelo simulado del AI SDK.
@@ -60,6 +65,7 @@ function replyChunks(reply: ScriptedReply, index: number): StreamPart[] {
         type: "finish" as const,
         finishReason: { unified: "stop" as const, raw: undefined },
         usage: USAGE,
+        providerMetadata: PROVIDER_METADATA,
       },
     ];
   }
@@ -74,6 +80,7 @@ function replyChunks(reply: ScriptedReply, index: number): StreamPart[] {
       type: "finish" as const,
       finishReason: { unified: "tool-calls" as const, raw: undefined },
       usage: USAGE,
+      providerMetadata: PROVIDER_METADATA,
     },
   ];
 }

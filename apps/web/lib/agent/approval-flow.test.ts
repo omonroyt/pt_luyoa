@@ -140,4 +140,15 @@ describe("parseChatRequest", () => {
     part.output = { approved: true };
     expect((await parseChatRequest({ messages: [ask, answer] })).ok).toBe(false);
   });
+
+  it("usa el id de conversación de useChat y genera uno si falta", async () => {
+    const withId = await parseChatRequest({ id: "chat_123", messages: [ASK] });
+    const withoutId = await parseChatRequest({ messages: [ASK] });
+    expect(withId).toMatchObject({ ok: true, conversationId: "chat_123" });
+    expect(withoutId.ok && withoutId.conversationId.length > 0).toBe(true);
+  });
+
+  it("rechaza un id de conversación con caracteres no permitidos", async () => {
+    expect((await parseChatRequest({ id: "../otro", messages: [ASK] })).ok).toBe(false);
+  });
 });

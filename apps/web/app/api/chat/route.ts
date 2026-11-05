@@ -10,7 +10,9 @@ import { agentConfig } from "@/lib/agent/agent-config";
 import { parseChatRequest } from "@/lib/agent/chat-request";
 import { createAgentModel } from "@/lib/agent/model";
 import { streamAgentTurn } from "@/lib/agent/run-turn";
+import { saveTurn } from "@/lib/agent/trace-store";
 import { isSameOrigin } from "@/lib/auth/service-token";
+import { getDatabase } from "@/lib/db/client";
 import { mcpServerFactory } from "@/lib/mcp/runtime";
 import { serverConfig } from "@/lib/server-config";
 
@@ -32,5 +34,11 @@ export async function POST(request: Request): Promise<Response> {
   return streamAgentTurn(parsed.messages, {
     model: createAgentModel({ apiKey: agent.openRouterApiKey, modelId: agent.modelId }),
     mcp: { serviceToken: config.mcpServiceToken, createServer: mcpServerFactory() },
+    persist: async (turn) =>
+      saveTurn(await getDatabase(), {
+        ...turn,
+        conversationId: parsed.conversationId,
+        businessId: config.businessId,
+      }),
   });
 }
