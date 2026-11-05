@@ -33,7 +33,7 @@ import {
 } from "./source-registry";
 import { buildSystemPrompt, type AgentCapabilities } from "./system-prompt";
 import { createTurnTracer, type TraceStep, type TurnTotals } from "./turn-tracer";
-import { uiErrorMessage } from "./ui-errors";
+import { reportStreamError } from "./ui-errors";
 import { withReason } from "./with-reason";
 
 export const MAX_STEPS = 12;
@@ -107,7 +107,7 @@ function turnResponse(
   return createUIMessageStreamResponse({
     stream: toUIMessageStream({
       stream,
-      onError: uiErrorMessage,
+      onError: (error) => reportStreamError(error),
       originalMessages: messages,
       generateMessageId: createIdGenerator({ prefix: "msg", size: 16 }),
       messageMetadata: ({ part }) => (part.type === "finish" ? tracer.totals() : undefined),

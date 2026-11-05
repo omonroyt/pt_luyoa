@@ -85,6 +85,19 @@ describe("saveTurn", () => {
     expect(stored).toContain("[enmascarado]");
   });
 
+  it("tampoco guarda el token en la entrada de los pasos de la traza", async () => {
+    const record = turn("msg_1", 0.001);
+    record.steps.push({
+      kind: "tool",
+      name: "create_campaign_draft",
+      input: { campaign: { name: "Te extrañamos" }, approval_token: "abc.firma" },
+    });
+    await saveTurn(db, record);
+    const stored = JSON.stringify(await db.select().from(traceSteps));
+    expect(stored).not.toContain("abc.firma");
+    expect(stored).toContain("Te extrañamos");
+  });
+
   it("no escribe en una conversación de otro negocio", async () => {
     await saveTurn(db, turn("msg_1", 0.001));
     await expect(saveTurn(db, turn("msg_9", 0.001, "biz_otro"))).rejects.toThrow("otro negocio");

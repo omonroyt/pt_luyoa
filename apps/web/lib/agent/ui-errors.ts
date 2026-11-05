@@ -35,3 +35,27 @@ export function uiErrorMessage(error: unknown): string {
   }
   return STREAM_ERROR_MESSAGE;
 }
+
+const LOGGED_LENGTH = 300;
+
+function describeError(error: unknown): string {
+  const text = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+  return text.slice(0, LOGGED_LENGTH);
+}
+
+/**
+ * ES: Traduce el error para la interfaz y, si no es una corrección esperada del modelo,
+ *     lo registra en el servidor con su nombre y mensaje (sin datos del turno), para poder
+ *     diagnosticar fallas del proveedor o del stream.
+ * EN: Translates the error for the UI and, if it is not an expected model correction,
+ *     logs it on the server with its name and message (no turn data), so provider or
+ *     stream failures can be diagnosed.
+ */
+export function reportStreamError(
+  error: unknown,
+  log: (message: string) => void = (message) => console.error(message),
+): string {
+  const message = uiErrorMessage(error);
+  if (message === STREAM_ERROR_MESSAGE) log(`Error del stream del agente: ${describeError(error)}`);
+  return message;
+}
