@@ -1,11 +1,15 @@
 /**
  * ES: Construye el modelo del agente sobre OpenRouter con dos políticas de
- *     ELECCION_DE_MODELO: (1) proveedor original primero y sin versiones de precisión
- *     reducida (fp4, int4, int8), que degradan las llamadas a herramientas; (2) esfuerzo
- *     de razonamiento bajo, adecuado para un chat en vivo.
+ *     ELECCION_DE_MODELO: (1) solo el proveedor original cuando se conoce, sin respaldo de
+ *     otros proveedores, y nunca versiones de precisión reducida (fp4, int4, int8), que
+ *     degradan las llamadas a herramientas; (2) esfuerzo de razonamiento bajo, adecuado
+ *     para un chat en vivo. Sin respaldo porque en la corrida de humo de M6 un proveedor
+ *     de respaldo devolvió una llamada a herramienta incompleta y el turno falló.
  * EN: Builds the agent model on OpenRouter with two policies from ELECCION_DE_MODELO:
- *     (1) original provider first and no reduced-precision builds (fp4, int4, int8),
- *     which degrade tool calls; (2) low reasoning effort, suited to a live chat.
+ *     (1) only the original provider when it is known, with no fallback to other
+ *     providers, and never reduced-precision builds (fp4, int4, int8), which degrade tool
+ *     calls; (2) low reasoning effort, suited to a live chat. No fallback because in the
+ *     M6 smoke run a fallback provider returned an incomplete tool call and the turn failed.
  */
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import type { LanguageModel } from "ai";
@@ -36,7 +40,7 @@ export function providerRouting(modelId: string) {
   const original = ORIGINAL_PROVIDER[modelId.split("/")[0] ?? ""];
   return {
     ...(original ? { order: [original] } : {}),
-    allow_fallbacks: true,
+    allow_fallbacks: !original,
     quantizations: ALLOWED_QUANTIZATIONS,
   };
 }
