@@ -119,14 +119,14 @@ export function TracePanel({ conversationId, messageId, busy, onClose }: TracePa
       ref={panel}
       tabIndex={-1}
       aria-label="Trazas del turno"
-      className="fixed inset-x-0 bottom-0 z-20 flex max-h-[70dvh] flex-col gap-3 overflow-y-auto rounded-t-2xl border-t border-border bg-card p-4 shadow-lg md:inset-y-0 md:left-auto md:right-0 md:max-h-none md:w-96 md:rounded-none md:border-l md:border-t-0"
+      className="fixed inset-x-0 bottom-0 z-20 flex max-h-[75dvh] animate-sheet-up flex-col gap-3 overflow-y-auto rounded-t-3xl border border-border bg-card p-5 shadow-lift md:inset-y-3 md:left-auto md:right-3 md:max-h-none md:w-[400px] md:animate-slide-in md:rounded-3xl"
     >
       <div className="flex items-center justify-between gap-2">
-        <h2 className="font-semibold">Trazas del turno</h2>
+        <h2 className="font-display text-lg font-semibold">Trazas del turno</h2>
         <button
           type="button"
           onClick={onClose}
-          className="min-h-11 rounded-lg border border-border px-3 text-sm"
+          className="min-h-11 rounded-xl border border-border px-3 text-sm transition hover:bg-surface"
         >
           Cerrar
         </button>
