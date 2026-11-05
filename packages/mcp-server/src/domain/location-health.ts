@@ -124,7 +124,11 @@ export function assessLocation(input: LocationInputs) {
       label: monthLabel(String(row.key)),
       net_sales: row.net_sales ?? 0,
     })),
-    risk_customers: input.risk,
+    // ES: El total va calculado (ADR-09): en M6 un modelo lo sumaba por su cuenta y daba
+    //     una cifra sin fuente.
+    // EN: The total comes computed (ADR-09): in M6 a model added it up on its own and gave
+    //     an unsourced figure.
+    risk_customers: { ...input.risk, total: input.risk.at_risk + input.risk.dormant },
     concern: concernOf(changes, trend),
   };
 }

@@ -282,7 +282,7 @@ type Offer =
 - **Propósito:** decidir qué sucursal preocupa, por tendencia y no por tamaño.
 - **Entrada:** `{ recent?: PeriodInput; baseline?: PeriodInput }`. Por defecto, últimas 12 semanas contra las 12 anteriores, más la serie mensual de 12 meses.
 - **Cálculo por sucursal:** variación de ventas netas, tickets, ticket promedio y visitas por día entre `recent` y `baseline`; pendiente de la serie mensual; clientes `at_risk` y `dormant` con esa sucursal de origen (conteos con `/customers?segment=…&home_location_id=…&limit=1`); nivel de preocupación con reglas explícitas (`domain/location-health.ts`): ventas netas ≤ −10% suma 1 punto (≤ −20% suma 2); tickets ≤ −10%, visitas por día ≤ −10% y promedio mensual de los últimos 3 meses ≤ −10% contra los 3 anteriores suman 1 punto cada uno. `alta` ≥ 3 puntos, `media` 1-2, `baja` 0; cada regla activada agrega su razón en texto.
-- **Salida:** `{ recent_period, baseline_period, locations: [{ id, name, recent, baseline, change, quarter_trend, monthly_series, risk_customers, concern: { level, score, reasons } }], most_concerning }`, ordenada por puntaje.
+- **Salida:** `{ recent_period, baseline_period, locations: [{ id, name, recent, baseline, change, quarter_trend, monthly_series, risk_customers: { at_risk, dormant, total }, concern: { level, score, reasons } }], most_concerning }`, ordenada por puntaje. `total` se agregó en M6: un modelo sumaba en riesgo y dormidos por su cuenta y el verificador marcaba la suma como cifra sin fuente (ADR-09).
 - **Avisos:** "Una sucursal más pequeña no es preocupante por sí misma; se compara cada una contra su propio historial".
 
 #### 6. `customer_segments`
