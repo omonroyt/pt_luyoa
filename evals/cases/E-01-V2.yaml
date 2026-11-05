@@ -1,0 +1,22 @@
+id: E-01-V2
+group: variant
+title: "Comparar ventas de dos meses"
+criteria: ["CA-E01-6"]
+turns:
+  - user: "Compárame las ventas de octubre y septiembre."
+expect:
+  tools_required: ["compare_periods"]
+  tools_optional: ["get_business_context", "sales_breakdown", "location_health"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["kpis"]
+  golden: E-01
+  figures:
+    - current.net_sales
+    - previous.net_sales
+    - net_sales_change_percent
+    - current.transactions
+    - current.avg_ticket
+    - current.gross_profit
+  must_mention:
+    - "31 d[ií]as|por d[ií]a"
+  rubric: ["CA-E01-1", "CA-E01-2", "CA-E01-3", "CA-E01-4", "CA-E01-5"]

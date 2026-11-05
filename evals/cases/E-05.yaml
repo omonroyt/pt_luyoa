@@ -1,0 +1,17 @@
+id: E-05
+group: scenario
+title: "Campañas que funcionaron"
+criteria: ["CA-E05-1", "CA-E05-7", "CA-V09"]
+turns:
+  - user: "¿Qué campañas me han funcionado mejor? ¿Repetirías alguna?"
+expect:
+  tools_required: ["campaign_performance"]
+  tools_optional: ["offer_economics", "estimate_campaign_impact"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["table"]
+  golden: E-05
+  figures:
+    - campaigns[0].lift_points
+  must_mention:
+    - "control"
+  rubric: ["CA-E05-1", "CA-E05-2", "CA-E05-3", "CA-E05-4", "CA-E05-5", "CA-E05-6"]

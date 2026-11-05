@@ -9,7 +9,8 @@ import type { UIMessage } from "ai";
 import { describe, expect, it } from "vitest";
 import { parseChatRequest } from "./chat-request";
 import { streamAgentTurn } from "./run-turn";
-import { scriptedModel, TEST_SERVICE_TOKEN } from "./test-support";
+import { cardSteps, fixtureCampaignCard, scriptedModel, TEST_SERVICE_TOKEN } from "./test-support";
+import { EARLY_STEP_MESSAGE } from "./ui-errors";
 
 const SECRET = "secreto-de-prueba";
 
@@ -86,14 +87,88 @@ const createWith = (campaign: CampaignDraft, token: string) => ({
 describe("flujo de aprobación del agente (ADR-08)", () => {
   it("al pedir aprobación el turno se detiene: nada se ejecuta sin la persona", async () => {
     const { mcp } = approvalsSetup();
-    const model = scriptedModel(() => ({
-      toolName: "request_draft_approval",
-      input: { campaign: DRAFT },
-    }));
+    const steps = cardSteps(await fixtureCampaignCard());
+    const model = scriptedModel(
+      (_hasTools, call) =>
+        steps[call] ?? { toolName: "request_draft_approval", input: { campaign: DRAFT } },
+    );
     const body = await (await streamAgentTurn([ASK], { model, mcp })).text();
-    expect(model.doStreamCalls).toHaveLength(1);
+    expect(model.doStreamCalls).toHaveLength(steps.length + 1);
     expect(body).toContain('"toolName":"request_draft_approval"');
-    expect(body).not.toContain("tool-output-available");
+    expect(body).not.toContain("create_campaign_draft");
+    // ES: La tarjeta pasó el verificador y la aprobación se llamó cuando estaba disponible.
+    // EN: The card passed the verifier and approval was called while it was available.
+    expect(body).not.toContain("tool-output-error");
+    expect(body).not.toContain("tool-input-error");
+    expect(body).not.toMatch(/"type":"error"/);
+  });
+
+  it("una aprobación pedida junto con una tarjeta válida sigue hacia la persona", async () => {
+    const { mcp } = approvalsSetup();
+    const [reach, economics, show] = cardSteps(await fixtureCampaignCard());
+    const ask = { toolName: "request_draft_approval", input: { campaign: DRAFT } };
+    const script = [reach!, economics!, { calls: [show as typeof ask, ask] }];
+    const model = scriptedModel((_hasTools, call) => script[call] ?? { text: "No debía seguir." });
+    const body = await (await streamAgentTurn([ASK], { model, mcp })).text();
+    expect(model.doStreamCalls).toHaveLength(script.length);
+    expect(body).toContain('"toolName":"request_draft_approval"');
+    expect(body).not.toContain(EARLY_STEP_MESSAGE);
+    expect(body).not.toContain("tool-output-error");
+  });
+
+  it("la aprobación de envío pedida junto con la tarjeta del borrador sigue hacia la persona", async () => {
+    const { mcp, approve } = approvalsSetup();
+    const token = await approve(DRAFT);
+    const card = await fixtureCampaignCard();
+    const [reach, economics] = cardSteps(card);
+    const send = {
+      toolName: "request_send_approval",
+      input: { campaign_id: "cmp_test01", campaign: DRAFT },
+    };
+    const model = scriptedModel((_hasTools, call, prompt) => {
+      const created = [...JSON.stringify(prompt).matchAll(/src_[0-9a-f]{10}/g)].at(-1)?.[0];
+      const draftCard = {
+        ...card,
+        state: "draft",
+        campaignId: "cmp_test01",
+        sources: [...card.sources, created],
+      };
+      const script = [
+        reach!,
+        economics!,
+        createWith(DRAFT, token),
+        { calls: [{ toolName: "show_campaign_card", input: draftCard }, send] },
+      ];
+      return script[call] ?? { text: "No debía seguir." };
+    });
+    const body = await (await streamAgentTurn([ASK], { model, mcp })).text();
+    expect(body).not.toContain(EARLY_STEP_MESSAGE);
+    expect(body).not.toContain("tool-output-error");
+    expect(model.doStreamCalls).toHaveLength(4);
+  });
+
+  it("una aprobación pedida junto con una tarjeta rechazada no llega a la persona", async () => {
+    const { mcp } = approvalsSetup();
+    const card = await fixtureCampaignCard();
+    const [reach, economics, show] = cardSteps(card);
+    const wrong = { ...card, reach: { ...card.reach, reachable: card.reach.reachable + 1 } };
+    const ask = { toolName: "request_draft_approval", input: { campaign: DRAFT } };
+    const script = [
+      reach!,
+      economics!,
+      { calls: [{ toolName: "show_campaign_card", input: wrong }, ask] },
+      show!,
+    ];
+    const model = scriptedModel((_hasTools, call) => script[call] ?? ask);
+    const body = await (await streamAgentTurn([ASK], { model, mcp })).text();
+    const calls = model.doStreamCalls;
+    // ES: El modelo recibe la instrucción de la compuerta, no "herramienta no disponible".
+    // EN: The model receives the gate's instruction, not "tool not available".
+    expect(JSON.stringify(calls[3]?.prompt)).toContain("La herramienta sí está disponible");
+    expect(calls).toHaveLength(script.length + 1);
+    expect(calls.at(-1)?.tools?.map((tool) => tool.name)).toEqual(["request_draft_approval"]);
+    expect(body).toContain(EARLY_STEP_MESSAGE);
+    expect(body).not.toMatch(/"type":"error"/);
   });
 
   it("con el token que emitió la aprobación, el MCP crea el borrador", async () => {

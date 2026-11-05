@@ -139,13 +139,9 @@ function stateProblems(card: CampaignCardBlock, cited: RegisteredSource[]): stri
 function messageProblems(card: CampaignCardBlock): string[] {
   const limit = MESSAGE_LIMITS[card.channel];
   const length = messageLength(card.message.text);
-  const problems: string[] = [];
-  if (card.message.limit !== limit)
-    problems.push(`message.limit debe ser ${limit} para ${card.channel}.`);
-  if (card.message.length !== length) problems.push(`message.length debe ser ${length}.`);
-  if (length > limit)
-    problems.push(`El mensaje tiene ${length} caracteres; el límite es ${limit}.`);
-  return problems;
+  return length > limit
+    ? [`El mensaje tiene ${length} caracteres; el límite de ${card.channel} es ${limit}. Acórtalo.`]
+    : [];
 }
 
 export function verifyBlock(name: string, block: unknown, registry: SourceRegistry): string[] {

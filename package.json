@@ -22,7 +22,8 @@
     "mcp:stdio": "pnpm --filter @alborada/mcp-server stdio",
     "golden": "pnpm --filter @alborada/evals golden",
     "eval": "pnpm --filter @alborada/evals eval",
-    "compare": "pnpm --filter @alborada/evals compare"
+    "compare": "pnpm --filter @alborada/evals compare",
+    "rescore": "pnpm --filter @alborada/evals rescore"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",

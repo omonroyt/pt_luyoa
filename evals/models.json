@@ -1,0 +1,9 @@
+{
+  "judge": "minimax/minimax-m3.1-flash",
+  "models": [
+    { "id": "z-ai/glm-5.3-flash", "label": "glm-5.3-flash", "repeats": 3 },
+    { "id": "anthropic/claude-haiku-5.5", "label": "claude-haiku-5.5", "repeats": 3 },
+    { "id": "openai/gpt-6.1-terra", "label": "gpt-6.1-terra", "repeats": 3 },
+    { "id": "google/gemini-4-argon", "label": "gemini-4-argon", "repeats": 1 }
+  ]
+}

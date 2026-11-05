@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { FigureVerificationError } from "./figure-verifier";
+import { NoSuchToolError } from "ai";
 import {
+  EARLY_STEP_MESSAGE,
   INVALID_BLOCK_MESSAGE,
   reportStreamError,
   STREAM_ERROR_MESSAGE,
@@ -22,6 +24,12 @@ describe("reportStreamError", () => {
     );
     expect(reportStreamError(new FigureVerificationError(["x"]), log)).toBe(
       UNVERIFIED_BLOCK_MESSAGE,
+    );
+    expect(
+      reportStreamError(new NoSuchToolError({ toolName: "request_draft_approval" }), log),
+    ).toBe(EARLY_STEP_MESSAGE);
+    expect(reportStreamError("AI_NoSuchToolError: Model tried to call unavailable tool", log)).toBe(
+      EARLY_STEP_MESSAGE,
     );
     expect(log).not.toHaveBeenCalled();
   });

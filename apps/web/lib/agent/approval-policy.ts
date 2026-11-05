@@ -1,0 +1,136 @@
+/**
+ * ES: Control del orquestador sobre la aprobación (ADR-08, CA-C04). Si en el turno se
+ *     mostró una tarjeta de campaña y el modelo no pidió la aprobación con su herramienta,
+ *     el siguiente paso queda obligado a llamarla: request_draft_approval para una
+ *     propuesta y request_send_approval para un borrador. Así toda tarjeta llega a la
+ *     interfaz con sus botones (07 §3.4) y la aprobación nunca se pide solo en texto, un
+ *     error que la regla del prompt no evitó en la corrida de humo con GLM.
+ *     El paso deja activa solo esa herramienta y agrega una instrucción; no usa
+ *     toolChoice, porque el proveedor original de GLM (Z.AI) rechaza forzar una
+ *     herramienta, por nombre o con "required" (verificado en M6).
+ * EN: Orchestrator control over approval (ADR-08, CA-C04). If a campaign card was shown in
+ *     the turn and the model did not ask for approval with its tool, the next step is
+ *     forced to call it: request_draft_approval for a proposal and request_send_approval
+ *     for a draft. Every card thus reaches the UI with its buttons (07 §3.4) and approval
+ *     is never asked only in text, an error the prompt rule did not prevent in the GLM
+ *     smoke run.
+ *     The step leaves only that tool active and adds an instruction; it does not use
+ *     toolChoice, because GLM's original provider (Z.AI) rejects forcing a tool, both by
+ *     name and with "required" (verified in M6).
+ */
+import { APPROVAL_TOOLS } from "./approval-tools";
+import { APPROVAL_BY_CARD_STATE as TOOL_BY_STATE, type ApprovalToolName } from "./card-gate";
+
+type ApprovalTool = ApprovalToolName;
+
+const approvalTools = new Set<string>(APPROVAL_TOOLS);
+
+type StepPart = {
+  type: string;
+  toolName?: string;
+  input?: unknown;
+  output?: unknown;
+  invalid?: boolean;
+};
+export type StepLike = { content: ReadonlyArray<StepPart> };
+
+function cardState(part: StepPart): string | undefined {
+  if (part.type !== "tool-result" || part.toolName !== "show_campaign_card") return undefined;
+  return (part.input as { state?: unknown } | undefined)?.state as string | undefined;
+}
+
+// ES: Una llamada rechazada (entrada inválida, por ejemplo antes de una tarjeta verificada,
+//     o herramienta inactiva) llega marcada como inválida y no cuenta como aprobación
+//     pedida (en M6, Haiku la llamaba junto con la tarjeta).
+// EN: A rejected call (invalid input, for example before a verified card, or an inactive
+//     tool) arrives marked as invalid and does not count as a requested approval (in M6,
+//     Haiku called it together with the card).
+const isApprovalCall = (part: StepPart) =>
+  part.type === "tool-call" && part.invalid !== true && approvalTools.has(part.toolName ?? "");
+
+const isDraftCreated = (part: StepPart) =>
+  part.type === "tool-result" &&
+  part.toolName === "create_campaign_draft" &&
+  (part.output as { isError?: unknown } | undefined)?.isError !== true;
+
+const DRAFT_STATES = new Set(["draft", "awaiting_send_approval"]);
+
+/**
+ * ES: Herramienta de aprobación que falta, según la última tarjeta mostrada con éxito
+ *     (tool-result) y si después hubo una llamada de aprobación.
+ * EN: Missing approval tool, according to the last successfully shown card (tool-result)
+ *     and whether an approval call followed it.
+ */
+export function missingApproval(steps: ReadonlyArray<StepLike>): ApprovalTool | undefined {
+  let missing: ApprovalTool | undefined;
+  for (const step of steps) {
+    const asked = step.content.some(isApprovalCall);
+    const shown = step.content
+      .map(cardState)
+      .filter((state) => state !== undefined)
+      .at(-1);
+    if (asked) missing = undefined;
+    else if (shown) missing = TOOL_BY_STATE[shown];
+  }
+  return missing;
+}
+
+/**
+ * ES: Indica si se creó un borrador en el turno y después no se mostró su tarjeta. Sin
+ *     esa tarjeta no hay aprobación de envío: en M6, Haiku creaba el borrador y pedía el
+ *     envío solo en texto.
+ * EN: Tells whether a draft was created in the turn and its card was not shown after.
+ *     Without that card there is no send approval: in M6, Haiku created the draft and
+ *     asked for sending only in text.
+ */
+export function missingDraftCard(steps: ReadonlyArray<StepLike>): boolean {
+  let missing = false;
+  for (const part of steps.flatMap((step) => step.content)) {
+    if (isDraftCreated(part)) missing = true;
+    else if (DRAFT_STATES.has(cardState(part) ?? "")) missing = false;
+  }
+  return missing;
+}
+
+const DRAFT_CARD_NOTE = [
+  "TARJETA DEL BORRADOR PENDIENTE",
+  "Ya creaste el borrador. Muéstralo ahora con show_campaign_card en estado draft, con el",
+  "campaignId que devolvió create_campaign_draft y su source.id; después pide el envío.",
+].join("\n");
+
+const approvalNote = (toolName: ApprovalTool) =>
+  [
+    "APROBACIÓN PENDIENTE",
+    `Ya mostraste la tarjeta de campaña. Llama ahora ${toolName} con la misma campaña de la`,
+    "tarjeta, sin escribir más texto: la persona decide con los botones.",
+  ].join("\n");
+
+/**
+ * ES: Paso con la aprobación pendiente: solo queda activa la herramienta que corresponde a
+ *     la última tarjeta mostrada con éxito, con una instrucción para llamarla. Si lo que
+ *     falta es la tarjeta del borrador recién creado, quedan activas show_campaign_card y
+ *     la aprobación de envío.
+ * EN: Step with the approval pending: only the tool matching the last successfully shown
+ *     card stays active, with an instruction to call it. If what is missing is the card of
+ *     the draft just created, show_campaign_card and the send approval stay active.
+ */
+export function approvalStepPolicy(instructions: string) {
+  return ({ steps }: { steps: ReadonlyArray<StepLike> }) => {
+    const toolName = missingApproval(steps);
+    if (toolName) {
+      return {
+        activeTools: [toolName],
+        instructions: `${instructions}\n\n${approvalNote(toolName)}`,
+      };
+    }
+    if (!missingDraftCard(steps)) return undefined;
+    // ES: La aprobación de envío sigue activa: el modelo suele pedirla junto con la tarjeta
+    //     del borrador, y la compuerta solo la acepta si esa tarjeta pasa (card-gate.ts).
+    // EN: Send approval stays active: the model usually asks for it together with the draft
+    //     card, and the gate only accepts it if that card passes (card-gate.ts).
+    return {
+      activeTools: ["show_campaign_card", "request_send_approval"],
+      instructions: `${instructions}\n\n${DRAFT_CARD_NOTE}`,
+    };
+  };
+}

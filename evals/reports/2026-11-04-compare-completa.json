@@ -1,0 +1,56 @@
+{
+  "title": "Comparación de modelos (completa) · 2026-11-04",
+  "rows": [
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "label": "compare-completa-glm-5.3-flash",
+      "repeats": 2,
+      "meanScore": 0.9313159430438843,
+      "scoreDeviation": 0.08346233174318161,
+      "hardGateFailures": 7,
+      "errors": 0,
+      "costPerConversationUsd": 0.004989068676470586,
+      "firstTextP50Ms": 4113.207500000019,
+      "firstTextP95Ms": 16485.48139999999,
+      "totalP50Ms": 20185.46039999998,
+      "totalP95Ms": 83289.57630000007,
+      "llmCallsMean": 5.970588235294118
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "label": "compare-completa-claude-haiku-5.5",
+      "repeats": 2,
+      "meanScore": 0.9247307104660046,
+      "scoreDeviation": 0.08019489865006826,
+      "hardGateFailures": 0,
+      "errors": 0,
+      "costPerConversationUsd": 0.010677217647058824,
+      "firstTextP50Ms": 6315.188599999994,
+      "firstTextP95Ms": 13240.86260000011,
+      "totalP50Ms": 10078.002300000051,
+      "totalP95Ms": 34771.67729999963,
+      "llmCallsMean": 4.205882352941177
+    }
+  ],
+  "decision": {
+    "winner": {
+      "model": "anthropic/claude-haiku-5.5",
+      "label": "compare-completa-claude-haiku-5.5",
+      "repeats": 2,
+      "meanScore": 0.9247307104660046,
+      "scoreDeviation": 0.08019489865006826,
+      "hardGateFailures": 0,
+      "errors": 0,
+      "costPerConversationUsd": 0.010677217647058824,
+      "firstTextP50Ms": 6315.188599999994,
+      "firstTextP95Ms": 13240.86260000011,
+      "totalP50Ms": 10078.002300000051,
+      "totalP95Ms": 34771.67729999963,
+      "llmCallsMean": 4.205882352941177
+    },
+    "reasons": [
+      "compare-completa-glm-5.3-flash: descartado (7 casos con puerta dura, 0 con error)",
+      "compare-completa-claude-haiku-5.5 tiene el mejor puntaje entre los que pasan las puertas duras"
+    ]
+  }
+}

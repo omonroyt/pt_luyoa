@@ -43,7 +43,10 @@ const USAGE = {
 export const TEST_CALL_COST = 0.001;
 const PROVIDER_METADATA = { openrouter: { usage: { cost: TEST_CALL_COST } } };
 
-export type ScriptedReply = { toolName: string; input: object } | { text: string };
+type ScriptedCall = { toolName: string; input: object };
+// ES: Una respuesta es texto, una llamada o varias llamadas en el mismo paso.
+// EN: A reply is text, one call or several calls in the same step.
+export type ScriptedReply = ScriptedCall | { calls: ScriptedCall[] } | { text: string };
 
 // ES: Tipo de las partes del stream del modelo, derivado del modelo simulado del AI SDK.
 // EN: Type of the model stream parts, derived from the AI SDK mock model.
@@ -69,13 +72,14 @@ function replyChunks(reply: ScriptedReply, index: number): StreamPart[] {
       },
     ];
   }
+  const calls = "calls" in reply ? reply.calls : [reply];
   return [
-    {
+    ...calls.map((call, position) => ({
       type: "tool-call" as const,
-      toolCallId: `call_${index}`,
-      toolName: reply.toolName,
-      input: JSON.stringify(reply.input),
-    },
+      toolCallId: `call_${index}_${position}`,
+      toolName: call.toolName,
+      input: JSON.stringify(call.input),
+    })),
     {
       type: "finish" as const,
       finishReason: { unified: "tool-calls" as const, raw: undefined },
@@ -86,16 +90,24 @@ function replyChunks(reply: ScriptedReply, index: number): StreamPart[] {
 }
 
 /**
- * ES: El guion decide la respuesta de cada llamada a partir de las herramientas activas.
- * EN: The script decides each call's reply from the active tools.
+ * ES: El guion decide la respuesta de cada llamada a partir de las herramientas activas y,
+ *     si lo necesita, del prompt (por ejemplo, para leer un token de aprobación).
+ * EN: The script decides each call's reply from the active tools and, if needed, from the
+ *     prompt (for example, to read an approval token).
  */
-export function scriptedModel(script: (hasTools: boolean, call: number) => ScriptedReply) {
+export function scriptedModel(
+  script: (hasTools: boolean, call: number, prompt: unknown) => ScriptedReply,
+) {
   let call = 0;
   return new MockLanguageModelV4({
     doStream: async (options) => {
-      const reply = script((options.tools?.length ?? 0) > 0, call);
+      const reply = script((options.tools?.length ?? 0) > 0, call, options.prompt);
       call += 1;
       return { stream: simulateReadableStream({ chunks: replyChunks(reply, call) }) };
     },
   });
 }
+
+// ES: Tarjeta válida y pasos para mostrarla (ver test-card.ts).
+// EN: Valid card and steps to show it (see test-card.ts).
+export { cardSteps, fixtureCampaignCard, type TestCard } from "./test-card";

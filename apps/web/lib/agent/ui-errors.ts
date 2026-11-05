@@ -7,7 +7,7 @@
  *     verifier are corrections the model makes in the next step (it receives the details),
  *     not service failures. Internal details never reach the browser.
  */
-import { InvalidToolInputError } from "ai";
+import { InvalidToolInputError, NoSuchToolError } from "ai";
 import { FigureVerificationError } from "./figure-verifier";
 
 export const STREAM_ERROR_MESSAGE =
@@ -16,6 +16,11 @@ export const INVALID_BLOCK_MESSAGE =
   "El agente armó un bloque con datos inválidos y lo está corrigiendo.";
 export const UNVERIFIED_BLOCK_MESSAGE =
   "El agente está corrigiendo un bloque cuyas cifras no coincidían con sus fuentes.";
+// ES: El modelo pidió la aprobación antes de que una tarjeta pasara el verificador
+//     (card-gate.ts), o llamó una herramienta que el paso no ofrece (ADR-08).
+// EN: The model asked for approval before a card passed the verifier (card-gate.ts), or
+//     called a tool the step does not offer (ADR-08).
+export const EARLY_STEP_MESSAGE = "El agente pidió un paso antes de tiempo y lo está corrigiendo.";
 
 // ES: El AI SDK reporta un mismo error dos veces: como objeto (tool-input-error o
 //     tool-output-error) y como texto "Nombre: mensaje". Las pruebas de run-turn detectan
@@ -26,7 +31,20 @@ export const UNVERIFIED_BLOCK_MESSAGE =
 const isNamed = (error: unknown, name: string) =>
   typeof error === "string" && error.startsWith(name);
 
+const APPROVAL_INPUT =
+  /^AI_InvalidToolInputError: Invalid input for tool request_(draft|send)_approval/;
+
+function isEarlyApproval(error: unknown): boolean {
+  if (InvalidToolInputError.isInstance(error)) return error.toolName.endsWith("_approval");
+  if (NoSuchToolError.isInstance(error)) return true;
+  return (
+    isNamed(error, "AI_NoSuchToolError") ||
+    (typeof error === "string" && APPROVAL_INPUT.test(error))
+  );
+}
+
 export function uiErrorMessage(error: unknown): string {
+  if (isEarlyApproval(error)) return EARLY_STEP_MESSAGE;
   if (InvalidToolInputError.isInstance(error) || isNamed(error, "AI_InvalidToolInputError")) {
     return INVALID_BLOCK_MESSAGE;
   }

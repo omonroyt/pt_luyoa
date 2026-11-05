@@ -18,6 +18,7 @@ import {
 } from "@alborada/shared";
 import { tool, type ToolSet } from "ai";
 import { assertVerified } from "./figure-verifier";
+import type { CardGate } from "./card-gate";
 import type { SourceRegistry } from "./source-registry";
 
 export const PRESENTATION_TOOLS = [
@@ -61,7 +62,27 @@ function verified(name: (typeof PRESENTATION_TOOLS)[number], registry: SourceReg
   };
 }
 
-export function createPresentationTools(registry: SourceRegistry): ToolSet {
+// ES: Al validar la entrada de la tarjeta se corre el verificador y, si pasa, se registra
+//     su estado en la compuerta (card-gate.ts). La validación no rechaza la tarjeta: la
+//     ejecución vuelve a verificar y es la que devuelve el detalle de los problemas.
+// EN: When the card input is validated, the verifier runs and, if it passes, the state is
+//     recorded in the gate (card-gate.ts). Validation does not reject the card: execution
+//     verifies again and is the one that returns the problems' details.
+function cardSchema(registry: SourceRegistry, gate?: CardGate) {
+  if (!gate) return CampaignCardBlock;
+  return CampaignCardBlock.refine((block) => {
+    try {
+      assertVerified("show_campaign_card", block, registry);
+      gate.record(block.state);
+    } catch {
+      // ES: El rechazo y su detalle llegan en la ejecución.
+      // EN: The rejection and its details arrive at execution.
+    }
+    return true;
+  });
+}
+
+export function createPresentationTools(registry: SourceRegistry, gate?: CardGate): ToolSet {
   return {
     show_chart: tool({
       description: DESCRIPTIONS.show_chart,
@@ -80,7 +101,7 @@ export function createPresentationTools(registry: SourceRegistry): ToolSet {
     }),
     show_campaign_card: tool({
       description: DESCRIPTIONS.show_campaign_card,
-      inputSchema: CampaignCardBlock,
+      inputSchema: cardSchema(registry, gate),
       execute: verified("show_campaign_card", registry),
     }),
     cite_sources: tool({

@@ -14,6 +14,7 @@
 import { campaignDraftSchema } from "@alborada/mcp-server";
 import { tool, type ToolSet } from "ai";
 import { z } from "zod";
+import { cardFirstMessage, type ApprovalToolName, type CardGate } from "./card-gate";
 
 export const APPROVAL_TOOLS = ["request_draft_approval", "request_send_approval"] as const;
 
@@ -47,16 +48,35 @@ const SEND_DESCRIPTION = [
   "no envíes nada.",
 ].join(" ");
 
-export function createApprovalTools(): ToolSet {
+// ES: Con compuerta, la entrada solo es válida si ya se mostró una tarjeta verificada del
+//     estado que corresponde (card-gate.ts). Sin compuerta (validar el historial de la
+//     conversación en chat-request.ts), solo se revisa la forma.
+// EN: With a gate, the input is only valid once a verified card of the matching state was
+//     shown (card-gate.ts). Without a gate (validating the conversation history in
+//     chat-request.ts), only the shape is checked.
+function gated<T extends z.ZodObject>(schema: T, toolName: ApprovalToolName, gate?: CardGate) {
+  if (!gate) return schema;
+  return schema.refine(() => gate.allows(toolName), { message: cardFirstMessage(toolName) });
+}
+
+export function createApprovalTools(gate?: CardGate): ToolSet {
   return {
     request_draft_approval: tool({
       description: DRAFT_DESCRIPTION,
-      inputSchema: z.object({ campaign: campaignDraftSchema }),
+      inputSchema: gated(
+        z.object({ campaign: campaignDraftSchema }),
+        "request_draft_approval",
+        gate,
+      ),
       outputSchema: ApprovalOutput,
     }),
     request_send_approval: tool({
       description: SEND_DESCRIPTION,
-      inputSchema: z.object({ campaign_id: z.string().min(1), campaign: campaignDraftSchema }),
+      inputSchema: gated(
+        z.object({ campaign_id: z.string().min(1), campaign: campaignDraftSchema }),
+        "request_send_approval",
+        gate,
+      ),
       outputSchema: ApprovalOutput,
     }),
   };

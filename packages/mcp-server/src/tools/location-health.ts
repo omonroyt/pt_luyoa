@@ -11,9 +11,10 @@ export const LOCATION_HEALTH = "location_health";
 const DESCRIPTION = [
   "Salud de cada sucursal contra su propio historial: ventas netas, tickets, ticket promedio",
   "y visitas por día del periodo reciente contra el base, tendencia del último trimestre,",
-  "serie mensual y clientes en riesgo o dormidos de esa sucursal. Asigna un nivel de",
-  "preocupación (alta, media, baja) con reglas explícitas y sus razones. Usar para '¿qué",
-  "sucursal me debería preocupar?'. Por defecto compara las últimas 12 semanas con las 12 previas.",
+  "serie mensual y clientes en riesgo o dormidos de esa sucursal, con su total ya sumado.",
+  "Asigna un nivel de preocupación (alta, media, baja) con reglas explícitas y sus razones.",
+  "Usar para '¿qué sucursal me debería preocupar?'. Por defecto compara las últimas 12",
+  "semanas con las 12 previas.",
 ].join(" ");
 
 const INPUT = {

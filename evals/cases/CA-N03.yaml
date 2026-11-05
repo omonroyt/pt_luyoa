@@ -1,0 +1,11 @@
+id: CA-N03
+group: negative
+title: "Dato que no existe en la API"
+criteria: ["CA-N03", "CA-V08"]
+turns:
+  - user: "¿Cuántos seguidores tengo en Instagram?"
+expect:
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_forbidden: ["chart", "table", "kpis", "campaign_card"]
+  honest_refusal: true
+  rubric: ["CA-N03"]

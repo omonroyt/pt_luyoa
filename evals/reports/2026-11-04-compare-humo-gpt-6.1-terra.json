@@ -1,0 +1,952 @@
+{
+  "meta": {
+    "date": "2026-11-04",
+    "label": "compare-humo-gpt-6.1-terra",
+    "model": "openai/gpt-6.1-terra",
+    "judgeModel": "minimax/minimax-m3.1-flash",
+    "commit": "08a6792+cambios",
+    "promptVersion": "932c93c24281",
+    "dataAsOf": "2026-10-31",
+    "repeats": 1
+  },
+  "summary": {
+    "cases": 7,
+    "ran": 7,
+    "skipped": 0,
+    "errors": 0,
+    "meanScore": 0.8115404040404041,
+    "scoreDeviation": 0.25756868358845647,
+    "hardGateFailures": 0,
+    "scenarioFigureAccuracy": 0.75,
+    "unsourcedFigures": 0,
+    "controlViolations": 0,
+    "honestNegatives": null,
+    "agentCostUsd": 0.13983465,
+    "judgeCostUsd": 0.00499989,
+    "costPerConversationUsd": 0.01997637857142857,
+    "firstTextP50Ms": 14166.156399999978,
+    "firstTextP95Ms": 21861.281699999992,
+    "totalP50Ms": 22992.671499999997,
+    "totalP95Ms": 32647.72039999999,
+    "llmCallsMean": 5.571428571428571
+  },
+  "results": [
+    {
+      "caseId": "E-01",
+      "group": "scenario",
+      "title": "Octubre contra septiembre",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.9722222222222222,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.7222222222222222
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.7222222222222222,
+        "items": [
+          {
+            "id": "CA-E01-1",
+            "verdict": "cumple",
+            "reason": "El bloque de KPIs muestra ventas netas, tickets, ticket promedio y utilidad bruta con delta absoluto y porcentual para ambos meses, y el texto confirma las cifras clave."
+          },
+          {
+            "id": "CA-E01-2",
+            "verdict": "cumple",
+            "reason": "Los periodos usados son 2026-09-01 a 2026-09-30 y 2026-10-01 a 2026-10-31, coincidentes con los datos de la herramienta en zona America/Mexico_City."
+          },
+          {
+            "id": "CA-E01-3",
+            "verdict": "cumple",
+            "reason": "Indica explícitamente que octubre tuvo un día más que septiembre y añade la comparación por día (de $25,860.13 a $26,072.71, +0.8%)."
+          },
+          {
+            "id": "CA-E01-4",
+            "verdict": "cumple",
+            "reason": "Identifica a Polanco como principal impulso (de $364,776 a $396,598) y a Roma Norte como la sucursal a la baja, con evidencia de la gráfica por sucursal."
+          },
+          {
+            "id": "CA-E01-5",
+            "verdict": "cumple",
+            "reason": "Incluye KPIs con variación absoluta y porcentual y una gráfica de barras comparativa de ventas por sucursal entre ambos meses."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_cumple",
+            "reason": "No hay recomendación con audiencia, canal, oferta, fechas y alcance concretos; solo se sugiere revisar qué pasó en Roma Norte."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "Las afirmaciones sobre ventas, utilidad, ticket y sucursales llevan métrica, valor y periodo, pero la sugerencia de revisar Roma Norte no incluye cifras propias ni comparación."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No se considera costo, margen ni razonabilidad de ninguna oferta; solo se reporta la utilidad bruta sin analizar su relación con costos o promociones."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_aplica",
+            "reason": "La pregunta es una comparación histórica entre dos meses completos con datos de negocio agregados, donde no aplica hablar de muestra pequeña o grupo de control."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Abre con la respuesta directa (4.2% más en octubre) y sigue con el ajuste por día y el detalle por sucursal, sin relleno."
+          }
+        ],
+        "costUsd": 0.00064464
+      },
+      "usage": {
+        "agentCostUsd": 0.0085774,
+        "judgeCostUsd": 0.00064464,
+        "tokensIn": 37800,
+        "tokensOut": 770,
+        "llmCalls": 4,
+        "requests": 1,
+        "firstTextMs": 13841.256300000008,
+        "totalMs": 15596.1054,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "**En octubre de 2026 vendiste $808,254 netos, 4.2% más que en septiembre.** La utilidad bruta también subió, aunque el ticket promedio bajó.\n\nOctubre tuvo un día más que septiembre. Al ajustar por duración, las ventas por día crecieron **0.8%**: pasaron de $25,860.13 en septiembre a $26,072.71 en octubre.\n\nPolanco fue el principal impulso del aumento; Roma Norte, en cambio, vendió menos que en septiembre. Vale la pena revisar qué pasó en Roma Norte antes de decidir cómo apoyarla.",
+        "steps": [
+          "get_business_context",
+          "compare_periods",
+          "show_kpis",
+          "show_chart",
+          "cite_sources"
+        ],
+        "blocks": [
+          "kpis",
+          "chart"
+        ],
+        "replies": [],
+        "toolResults": [
+          "{\"data\":{\"business\":{\"name\":\"Café Alborada\",\"timezone\":\"America/Mexico_City\",\"currency\":\"MXN\",\"points_rule\":\"1 punto por cada $10 MXN pagados\",\"reward_rule\":\"150 puntos = una bebida gratis (hasta $68 MXN)\"},\"locations\":[{\"id\":\"loc_coyoacan\",\"name\":\"Coyoacán\",\"opened_at\":\"2022-02-10\"},{\"id\":\"loc_polanco\",\"name\":\"Polanco\",\"opened_at\":\"2023-06-01\"},{\"id\":\"loc_roma\",\"name\":\"Roma Norte\",\"opened_at\":\"2021-03-15\"}],\"segments\":[{\"id\":\"champions\",\"definition\":\"8 o más visitas en los últimos 60 días\",\"customers\":216},{\"id\":\"regulars\",\"definition\":\"3 a 7 visitas en los últimos 60 días\",\"customers\":337},{\"id\":\"occasional\",\"definition\":\"Clientes activos con menos de 3 visitas en los últimos 60 días\",\"customers\":456},{\"id\":\"new\",\"definition\":\"Se inscribieron en los últimos 45 días\",\"customers\":171},{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483},{\"id\":\"dormant\",\"definition\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367}],\"calendar\":{\"dataFrom\":\"2025-11-01\",\"dataAsOf\":\"2026-10-31\",\"presets\":{\"last_full_month\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-31\",\"days\":31,\"label\":\"octubre 2026\"},\"previous_full_month\":{\"from\":\"2026-09-01\",\"to\":\"2026-09-30\",\"days\":30,\"label\":\"septiembre 2026\"},\"last_week\":{\"from\":\"2026-10-25\",\"to\":\"2026-10-31\",\"days\":7,\"label\":\"2026-10-25 a 2026-10-31\"},\"previous_week\":{\"from\":\"2026-10-18\",\"to\":\"2026-10-24\",\"days\":7,\"label\":\"2026-10-18 a 2026-10-24\"},\"last_12_weeks\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"previous_12_weeks\":{\"from\":\"2026-05-17\",\"to\":\"2026-08-08\",\"days\":84,\"label\":\"2026-05-17 a 2026-08-08\"},\"last_3_months\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\"},\"previous_3_months\":{\"from\":\"2026-05-01\",\"to\":\"2026-07-31\",\"days\":92,\"label\":\"2026-05-01 a 2026-07-31\"},\"all_data\":{\"from\":\"2025-11-01\",\"to\":\"2026-10-31\",\"days\":365,\"label\":\"2025-11-01 a 2026-10-31\"}},\"firstOfferDate\":\"2026-11",
+          "{\"data\":{\"current\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-31\",\"days\":31,\"label\":\"octubre 2026\",\"net_sales\":808254,\"transactions\":8680,\"avg_ticket\":93.12,\"gross_profit\":575646,\"discounts\":8346,\"visits\":3208,\"purchase_rate\":0.9296,\"per_day\":{\"net_sales\":26072.71,\"transactions\":280,\"visits\":103.48}},\"previous\":{\"from\":\"2026-09-01\",\"to\":\"2026-09-30\",\"days\":30,\"label\":\"septiembre 2026\",\"net_sales\":775804,\"transactions\":8221,\"avg_ticket\":94.37,\"gross_profit\":550130,\"discounts\":8286,\"visits\":3074,\"purchase_rate\":0.9242,\"per_day\":{\"net_sales\":25860.13,\"transactions\":274.03,\"visits\":102.47}},\"delta\":{\"net_sales\":{\"absolute\":32450,\"percent\":4.2},\"transactions\":{\"absolute\":459,\"percent\":5.6},\"avg_ticket\":{\"absolute\":-1.25,\"percent\":-1.3},\"gross_profit\":{\"absolute\":25516,\"percent\":4.6},\"discounts\":{\"absolute\":60,\"percent\":0.7},\"visits\":{\"absolute\":134,\"percent\":4.4}},\"per_day_delta\":{\"net_sales\":{\"absolute\":212.58,\"percent\":0.8},\"transactions\":{\"absolute\":5.97,\"percent\":2.2},\"visits\":{\"absolute\":1.01,\"percent\":1}},\"breakdown\":{\"dimension\":\"location\",\"metric\":\"net_sales\",\"groups\":[{\"key\":\"loc_polanco\",\"label\":\"Polanco\",\"current\":396598,\"previous\":364776,\"delta\":{\"absolute\":31822,\"percent\":8.7},\"share_of_change\":98.1},{\"key\":\"loc_coyoacan\",\"label\":\"Coyoacán\",\"current\":229158,\"previous\":218632,\"delta\":{\"absolute\":10526,\"percent\":4.8},\"share_of_change\":32.4},{\"key\":\"loc_roma\",\"label\":\"Roma Norte\",\"current\":182498,\"previous\":192396,\"delta\":{\"absolute\":-9898,\"percent\":-5.1},\"share_of_change\":-30.5}]},\"main_driver\":{\"key\":\"loc_polanco\",\"label\":\"Polanco\",\"current\":396598,\"previous\":364776,\"delta\":{\"absolute\":31822,\"percent\":8.7},\"share_of_change\":98.1}},\"notes\":[\"Ventas netas sin tickets reembolsados (los analytics de la API ya los excluyen).\",\"Las visitas cuentan solo clientes que escanearon su tarjeta de lealtad.\"],\"warnings\":[\"Los periodos tienen distinta duración (31 vs 30 días); comparar también los promedios por día.\"],\"source\":{\"id\":\"src_cd9b118173\",\"tool\":\"compare_periods\",\"endpoin"
+        ]
+      }
+    },
+    {
+      "caseId": "E-02",
+      "group": "scenario",
+      "title": "Peor día de la semana y qué hacer",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.9818181818181818,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.8181818181818182
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.8181818181818182,
+        "items": [
+          {
+            "id": "CA-E02-1",
+            "verdict": "cumple",
+            "reason": "Declara el periodo analizado (9 de agosto a 31 de octubre de 2026) y el gráfico lo ancla a la ventana de 12 semanas con datos al 31 de octubre."
+          },
+          {
+            "id": "CA-E02-2",
+            "verdict": "cumple",
+            "reason": "Identifica el martes como el día más flojo con 181.67 transacciones/día, valor que coincide con la herramienta, y lo muestra en un gráfico de barras por día de la semana con ese día resaltado."
+          },
+          {
+            "id": "CA-E02-3",
+            "verdict": "no_cumple",
+            "reason": "No menciona en absoluto si el patrón se mantiene en Coyoacán, Polanco y Roma Norte ni si cambia por sucursal."
+          },
+          {
+            "id": "CA-E02-4",
+            "verdict": "cumple",
+            "reason": "La tarjeta de campaña define audiencia (segmento ocasional, 456 clientes), canal push, oferta de puntos dobles x2, mensaje y alcance real de 213 alcanzables en push."
+          },
+          {
+            "id": "CA-E02-5",
+            "verdict": "cumple",
+            "reason": "Incluye costo por canje de $4.25, margen de $62.29 por visita y rango de costo total, y reconoce que las campañas previas (Día de las Madres y 2x1 de martes) no tuvieron grupo de control."
+          },
+          {
+            "id": "CA-E02-6",
+            "verdict": "parcial",
+            "reason": "No cierra preguntando explícitamente si se prepara el borrador; solo presenta la propuesta como estado 'proposal' sin una pregunta de aprobación."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "cumple",
+            "reason": "Nombra audiencia (ocasionales), canal (push), oferta (puntos x2), fechas (2026-11-03) y alcance (213 alcanzables de 456)."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "La afirmación principal (martes con 181.67 trans/día) trae métrica, valor y periodo, pero no compara con el resto de días ni con otras sucursales en el texto."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Considera costo y margen (costo 6.4% de la utilidad por visita, $62.29 netos) y la oferta es proporcionada frente al ticket promedio."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Advierte explícitamente la falta de grupo de control, la confianza baja y que la estimación cubre canjes y no visitas adicionales."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde de inmediato con el peor día y la acción, sin relleno, en lenguaje comprensible."
+          }
+        ],
+        "costUsd": 0.00079884
+      },
+      "usage": {
+        "agentCostUsd": 0.03456305,
+        "judgeCostUsd": 0.00079884,
+        "tokensIn": 62967,
+        "tokensOut": 1384,
+        "llmCalls": 6,
+        "requests": 1,
+        "firstTextMs": 14166.156399999978,
+        "totalMs": 22992.671499999997,
+        "streamErrors": []
+      },
+      "pendingApproval": true,
+      "excerpt": {
+        "text": "El **martes fue tu día más flojo**, con 181.67 transacciones por día entre el 9 de agosto y el 31 de octubre de 2026, considerando todas las sucursales.\n\nHaría una prueba de puntos dobles para clientes ocasionales el próximo martes. La campaña anterior de puntos dobles no tuvo grupo de control, así que no sabemos cuántas visitas provocó; conviene medir esta prueba contra un grupo que no reciba la oferta. La estimación disponible cubre canjes, no visitas adicionales.",
+        "steps": [
+          "get_business_context",
+          "sales_breakdown",
+          "campaign_performance",
+          "audience_reach",
+          "offer_economics",
+          "estimate_campaign_impact",
+          "show_chart",
+          "cite_sources",
+          "show_campaign_card",
+          "request_draft_approval"
+        ],
+        "blocks": [
+          "chart",
+          "campaign_card"
+        ],
+        "replies": [],
+        "toolResults": [
+          "{\"data\":{\"business\":{\"name\":\"Café Alborada\",\"timezone\":\"America/Mexico_City\",\"currency\":\"MXN\",\"points_rule\":\"1 punto por cada $10 MXN pagados\",\"reward_rule\":\"150 puntos = una bebida gratis (hasta $68 MXN)\"},\"locations\":[{\"id\":\"loc_coyoacan\",\"name\":\"Coyoacán\",\"opened_at\":\"2022-02-10\"},{\"id\":\"loc_polanco\",\"name\":\"Polanco\",\"opened_at\":\"2023-06-01\"},{\"id\":\"loc_roma\",\"name\":\"Roma Norte\",\"opened_at\":\"2021-03-15\"}],\"segments\":[{\"id\":\"champions\",\"definition\":\"8 o más visitas en los últimos 60 días\",\"customers\":216},{\"id\":\"regulars\",\"definition\":\"3 a 7 visitas en los últimos 60 días\",\"customers\":337},{\"id\":\"occasional\",\"definition\":\"Clientes activos con menos de 3 visitas en los últimos 60 días\",\"customers\":456},{\"id\":\"new\",\"definition\":\"Se inscribieron en los últimos 45 días\",\"customers\":171},{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483},{\"id\":\"dormant\",\"definition\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367}],\"calendar\":{\"dataFrom\":\"2025-11-01\",\"dataAsOf\":\"2026-10-31\",\"presets\":{\"last_full_month\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-31\",\"days\":31,\"label\":\"octubre 2026\"},\"previous_full_month\":{\"from\":\"2026-09-01\",\"to\":\"2026-09-30\",\"days\":30,\"label\":\"septiembre 2026\"},\"last_week\":{\"from\":\"2026-10-25\",\"to\":\"2026-10-31\",\"days\":7,\"label\":\"2026-10-25 a 2026-10-31\"},\"previous_week\":{\"from\":\"2026-10-18\",\"to\":\"2026-10-24\",\"days\":7,\"label\":\"2026-10-18 a 2026-10-24\"},\"last_12_weeks\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"previous_12_weeks\":{\"from\":\"2026-05-17\",\"to\":\"2026-08-08\",\"days\":84,\"label\":\"2026-05-17 a 2026-08-08\"},\"last_3_months\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\"},\"previous_3_months\":{\"from\":\"2026-05-01\",\"to\":\"2026-07-31\",\"days\":92,\"label\":\"2026-05-01 a 2026-07-31\"},\"all_data\":{\"from\":\"2025-11-01\",\"to\":\"2026-10-31\",\"days\":365,\"label\":\"2025-11-01 a 2026-10-31\"}},\"firstOfferDate\":\"2026-11",
+          "{\"data\":{\"dimension\":\"weekday\",\"metric\":\"transactions_per_day\",\"period\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"rows\":[{\"key\":1,\"label\":\"lunes\",\"transactions\":3269,\"net_sales\":303830,\"avg_ticket\":92.94,\"discounts\":3802,\"gross_profit\":215572,\"member_share\":0.3732,\"active_days\":12,\"transactions_per_day\":272.42,\"value\":272.42},{\"key\":2,\"label\":\"martes\",\"transactions\":2180,\"net_sales\":205814,\"avg_ticket\":94.41,\"discounts\":2426,\"gross_profit\":146188,\"member_share\":0.3954,\"active_days\":12,\"transactions_per_day\":181.67,\"value\":181.67},{\"key\":3,\"label\":\"miércoles\",\"transactions\":3315,\"net_sales\":313708,\"avg_ticket\":94.63,\"discounts\":3920,\"gross_profit\":222430,\"member_share\":0.3762,\"active_days\":12,\"transactions_per_day\":276.25,\"value\":276.25},{\"key\":4,\"label\":\"jueves\",\"transactions\":3476,\"net_sales\":326646,\"avg_ticket\":93.97,\"discounts\":4420,\"gross_profit\":231529,\"member_share\":0.3688,\"active_days\":12,\"transactions_per_day\":289.67,\"value\":289.67},{\"key\":5,\"label\":\"viernes\",\"transactions\":3845,\"net_sales\":357660,\"avg_ticket\":93.02,\"discounts\":3872,\"gross_profit\":254049,\"member_share\":0.3555,\"active_days\":12,\"transactions_per_day\":320.42,\"value\":320.42},{\"key\":6,\"label\":\"sábado\",\"transactions\":4204,\"net_sales\":395680,\"avg_ticket\":94.12,\"discounts\":4302,\"gross_profit\":281217,\"member_share\":0.3275,\"active_days\":12,\"transactions_per_day\":350.33,\"value\":350.33},{\"key\":7,\"label\":\"domingo\",\"transactions\":3557,\"net_sales\":331624,\"avg_ticket\":93.23,\"discounts\":3116,\"gross_profit\":235936,\"member_share\":0.3241,\"active_days\":12,\"transactions_per_day\":296.42,\"value\":296.42}],\"highest\":{\"key\":6,\"label\":\"sábado\",\"transactions\":4204,\"net_sales\":395680,\"avg_ticket\":94.12,\"discounts\":4302,\"gross_profit\":281217,\"member_share\":0.3275,\"active_days\":12,\"transactions_per_day\":350.33,\"value\":350.33},\"lowest\":{\"key\":2,\"label\":\"martes\",\"transactions\":2180,\"net_sales\":205814,\"avg_ticket\":94.41,\"discounts\":2426,\"gross_profit\":146188,\"member_share\":0.3954,\"ac",
+          "{\"data\":{\"campaigns\":[{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"objective\":\"Recuperar clientes inactivos\",\"status\":\"completed\",\"channel\":\"whatsapp\",\"audience_description\":\"Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp\",\"offer\":{\"type\":\"free_item\",\"value\":null,\"product_id\":\"prd_concha\",\"product_name\":\"Concha\"},\"valid_from\":\"2026-06-08\",\"valid_to\":\"2026-06-21\",\"results\":{\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"}},{\"id\":\"cmp_0002\",\"name\":\"Martes de 2x1 en Americano\",\"objective\":\"Piloto para mover tráfico de martes\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes de Coyoacán con wallet y consentimiento de push\",\"offer\":{\"type\":\"two_for_one\",\"value\":null,\"product_id\":\"prd_americano\",\"product_name\":\"Americano\"},\"valid_from\":\"2026-02-03\",\"valid_to\":\"2026-02-24\",\"results\":{\"sent\":383,\"delivered\":372,\"redeemed\":153,\"control_size\":0,\"open_rate_percent\":61,\"redemption_rate_percent\":39.9,\"treatment_visit_rate_percent\":76,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":13296,\"discount_cost\":9984,\"attributed_gross_profit\":7899,\"cost_per_redemption\":65.25,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0001\",\"name\":\"20% en todo por Buen Fin\",\"objective\":\"Subir ventas en Buen Fin\",\"status\":\"completed\",\"channel\":\"email\",\"audience_description\":\"Todos los clientes con consentimiento de email\",\"offer\":{\"type\":\"percent_off\",\"value\":20,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2025-11-14\",\"valid_to\":\"2025-",
+          "{\"data\":{\"audience\":{\"segment_id\":\"occasional\"},\"matched\":456,\"by_channel\":[{\"channel\":\"email\",\"matched\":456,\"excluded_suspended\":5,\"excluded_no_consent\":153,\"excluded_duplicates\":0,\"reachable\":298},{\"channel\":\"whatsapp\",\"matched\":456,\"excluded_suspended\":5,\"excluded_no_consent\":201,\"excluded_duplicates\":1,\"reachable\":249},{\"channel\":\"push\",\"matched\":456,\"excluded_suspended\":5,\"excluded_no_consent\":237,\"excluded_duplicates\":1,\"reachable\":213}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_3ed7efc487\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:36:56.380Z\"}}",
+          "{\"data\":{\"offer\":{\"type\":\"points_multiplier\",\"value\":2},\"product_name\":null,\"cost_per_redemption\":4.25,\"visit_gross_profit\":66.54,\"margin_after_offer\":62.29,\"cost_share_of_visit_profit\":6.4,\"basis\":\"9.37 puntos extra por ticket promedio de $93.72.\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"],\"total_cost\":null},\"notes\":[\"9.37 puntos extra por ticket promedio de $93.72.\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"],\"warnings\":[],\"source\":{\"id\":\"src_afbb13f410\",\"tool\":\"offer_economics\",\"endpoints\":[\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:36:56.452Z\"}}",
+          "{\"data\":{\"reach\":{\"channel\":\"push\",\"matched\":456,\"excluded_suspended\":5,\"excluded_no_consent\":237,\"excluded_duplicates\":1,\"reachable\":213},\"offer_economics\":{\"cost_per_redemption\":4.25,\"visit_gross_profit\":66.54,\"margin_after_offer\":62.29,\"cost_share_of_visit_profit\":6.4,\"basis\":\"9.37 puntos extra por ticket promedio de $93.72.\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"]},\"reference_campaign\":null,\"similar_campaigns\":[\"cmp_0003\",\"cmp_0002\"],\"impact\":{\"kind\":\"redemptions_only\",\"expected_redemptions\":[21,53,85],\"offer_cost\":[89.25,225.25,361.25],\"confidence\":\"baja\"}},\"notes\":[\"Rangos en orden [bajo, central, alto]; la utilidad neta es conservadora (bajo = menor utilidad con mayor costo).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\",\"Supuesto: las visitas adicionales tienen el ticket promedio del negocio.\"],\"warnings\":[\"No hay campaña parecida con grupo de control: solo se estiman canjes, no visitas incrementales.\"],\"source\":{\"id\":\"src_fee7ebf322\",\"tool\":\"estimate_campaign_impact\",\"endpoints\":[\"POST /v1/campaigns/preview\",\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:36:56.642Z\"}}"
+        ]
+      }
+    },
+    {
+      "caseId": "E-03",
+      "group": "scenario",
+      "title": "Sucursal que preocupa",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.76,
+        "components": {
+          "figures": 0.5,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.6
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0.5,
+        "missingFigures": [
+          "by_location[0].net_sales_change_percent"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.6,
+        "items": [
+          {
+            "id": "CA-E03-1",
+            "verdict": "parcial",
+            "reason": "Compara Roma Norte y Coyoacán con sus periodos base y da ticket promedio y visitas por día, pero no presenta las métricas completas de las tres sucursales (Polanco queda solo en la gráfica)."
+          },
+          {
+            "id": "CA-E03-2",
+            "verdict": "cumple",
+            "reason": "Nombra Roma Norte como la sucursal a vigilar y respalda con ventas netas -31%, transacciones -31%, ticket promedio -0.1% y visitas por día -38.4% frente a las 12 semanas previas."
+          },
+          {
+            "id": "CA-E03-3",
+            "verdict": "cumple",
+            "reason": "Incluye una gráfica de barras agrupadas de ventas netas por sucursal contra su periodo base, con Roma Norte resaltada."
+          },
+          {
+            "id": "CA-E03-4",
+            "verdict": "no_cumple",
+            "reason": "No explica que el tamaño absoluto de una sucursal no la hace preocupante; solo señala la caída porcentual de Roma Norte."
+          },
+          {
+            "id": "CA-E03-5",
+            "verdict": "cumple",
+            "reason": "Propone revisar qué cambió en Roma Norte (horarios, operación y afluencia) antes de decidir cómo recuperar visitas."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "parcial",
+            "reason": "Sugiere revisar horarios, operación y afluencia en Roma Norte, pero sin audiencia, canal, oferta ni fechas concretas."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "cumple",
+            "reason": "Las afirmaciones principales traen métrica, valor, periodo (9 ago–31 oct 2026 vs. 12 semanas previas) y comparación."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No considera costo, margen ni la razonabilidad de una oferta concreta de recuperación."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No menciona limitaciones del análisis (ausencia de grupo de control, posible estacionalidad o datos parciales) ni cautions sobre el periodo comparado."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Abre con la respuesta directa (Roma Norte) y explica en lenguaje sencillo el desglose caída de compras vs. ticket promedio."
+          }
+        ],
+        "costUsd": 0.00059427
+      },
+      "usage": {
+        "agentCostUsd": 0.02012705,
+        "judgeCostUsd": 0.00059427,
+        "tokensIn": 51712,
+        "tokensOut": 504,
+        "llmCalls": 5,
+        "requests": 1,
+        "firstTextMs": 12254.837200000009,
+        "totalMs": 14473.295700000017,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "**Roma Norte es la sucursal que más debería preocuparte:** sus ventas netas bajaron **31%** del 9 de agosto al 31 de octubre de 2026, frente a las 12 semanas previas.\n\nLa caída parece estar en la cantidad de compras más que en su valor: los tickets también bajaron 31%, mientras que el ticket promedio se mantuvo casi igual, con una baja de 0.1%. Las visitas registradas con tarjeta de lealtad por día bajaron 38.4%.\n\nCoyoacán también tiene un nivel de preocupación **alto**, aunque su caída de ventas fue menor. Empezaría por revisar qué cambió en Roma Norte —horarios, operación y afluencia— antes de decidir cómo recuperar visitas.",
+        "steps": [
+          "get_business_context",
+          "location_health",
+          "show_chart",
+          "cite_sources"
+        ],
+        "blocks": [
+          "chart"
+        ],
+        "replies": [],
+        "toolResults": [
+          "{\"data\":{\"business\":{\"name\":\"Café Alborada\",\"timezone\":\"America/Mexico_City\",\"currency\":\"MXN\",\"points_rule\":\"1 punto por cada $10 MXN pagados\",\"reward_rule\":\"150 puntos = una bebida gratis (hasta $68 MXN)\"},\"locations\":[{\"id\":\"loc_coyoacan\",\"name\":\"Coyoacán\",\"opened_at\":\"2022-02-10\"},{\"id\":\"loc_polanco\",\"name\":\"Polanco\",\"opened_at\":\"2023-06-01\"},{\"id\":\"loc_roma\",\"name\":\"Roma Norte\",\"opened_at\":\"2021-03-15\"}],\"segments\":[{\"id\":\"champions\",\"definition\":\"8 o más visitas en los últimos 60 días\",\"customers\":216},{\"id\":\"regulars\",\"definition\":\"3 a 7 visitas en los últimos 60 días\",\"customers\":337},{\"id\":\"occasional\",\"definition\":\"Clientes activos con menos de 3 visitas en los últimos 60 días\",\"customers\":456},{\"id\":\"new\",\"definition\":\"Se inscribieron en los últimos 45 días\",\"customers\":171},{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483},{\"id\":\"dormant\",\"definition\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367}],\"calendar\":{\"dataFrom\":\"2025-11-01\",\"dataAsOf\":\"2026-10-31\",\"presets\":{\"last_full_month\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-31\",\"days\":31,\"label\":\"octubre 2026\"},\"previous_full_month\":{\"from\":\"2026-09-01\",\"to\":\"2026-09-30\",\"days\":30,\"label\":\"septiembre 2026\"},\"last_week\":{\"from\":\"2026-10-25\",\"to\":\"2026-10-31\",\"days\":7,\"label\":\"2026-10-25 a 2026-10-31\"},\"previous_week\":{\"from\":\"2026-10-18\",\"to\":\"2026-10-24\",\"days\":7,\"label\":\"2026-10-18 a 2026-10-24\"},\"last_12_weeks\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"previous_12_weeks\":{\"from\":\"2026-05-17\",\"to\":\"2026-08-08\",\"days\":84,\"label\":\"2026-05-17 a 2026-08-08\"},\"last_3_months\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\"},\"previous_3_months\":{\"from\":\"2026-05-01\",\"to\":\"2026-07-31\",\"days\":92,\"label\":\"2026-05-01 a 2026-07-31\"},\"all_data\":{\"from\":\"2025-11-01\",\"to\":\"2026-10-31\",\"days\":365,\"label\":\"2025-11-01 a 2026-10-31\"}},\"firstOfferDate\":\"2026-11",
+          "{\"data\":{\"recent_period\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"baseline_period\":{\"from\":\"2026-05-17\",\"to\":\"2026-08-08\",\"days\":84,\"label\":\"2026-05-17 a 2026-08-08\"},\"locations\":[{\"id\":\"loc_roma\",\"name\":\"Roma Norte\",\"recent\":{\"net_sales\":558080,\"transactions\":5965,\"avg_ticket\":93.56,\"visits_per_day\":40.04},\"baseline\":{\"net_sales\":809334,\"transactions\":8643,\"avg_ticket\":93.64,\"visits_per_day\":65.02},\"change\":{\"net_sales\":{\"absolute\":-251254,\"percent\":-31},\"transactions\":{\"absolute\":-2678,\"percent\":-31},\"avg_ticket\":{\"absolute\":-0.08,\"percent\":-0.1},\"visits_per_day\":{\"absolute\":-24.98,\"percent\":-38.4}},\"quarter_trend\":{\"absolute\":-94783.33,\"percent\":-31.2},\"monthly_series\":[{\"month\":\"2025-11\",\"label\":\"noviembre 2025\",\"net_sales\":308496.8},{\"month\":\"2025-12\",\"label\":\"diciembre 2025\",\"net_sales\":334344},{\"month\":\"2026-01\",\"label\":\"enero 2026\",\"net_sales\":298212},{\"month\":\"2026-02\",\"label\":\"febrero 2026\",\"net_sales\":276250},{\"month\":\"2026-03\",\"label\":\"marzo 2026\",\"net_sales\":315860},{\"month\":\"2026-04\",\"label\":\"abril 2026\",\"net_sales\":300060},{\"month\":\"2026-05\",\"label\":\"mayo 2026\",\"net_sales\":329852},{\"month\":\"2026-06\",\"label\":\"junio 2026\",\"net_sales\":293054},{\"month\":\"2026-07\",\"label\":\"julio 2026\",\"net_sales\":288818},{\"month\":\"2026-08\",\"label\":\"agosto 2026\",\"net_sales\":252480},{\"month\":\"2026-09\",\"label\":\"septiembre 2026\",\"net_sales\":192396},{\"month\":\"2026-10\",\"label\":\"octubre 2026\",\"net_sales\":182498}],\"risk_customers\":{\"at_risk\":219,\"dormant\":172},\"concern\":{\"level\":\"alta\",\"score\":5,\"reasons\":[\"Ventas netas -31% contra el periodo base.\",\"Tickets -31% contra el periodo base.\",\"Visitas con tarjeta por día -38.4% contra el periodo base.\",\"Promedio mensual de los últimos 3 meses -31.2% contra los 3 anteriores.\"]}},{\"id\":\"loc_coyoacan\",\"name\":\"Coyoacán\",\"recent\":{\"net_sales\":629976,\"transactions\":6831,\"avg_ticket\":92.22,\"visits_per_day\":45.87},\"baseline\":{\"net_sales\":754696,\"transactions\":8092,\"avg_ticket\":93.26,\"visits_per_day\":6"
+        ]
+      }
+    },
+    {
+      "caseId": "E-04",
+      "group": "scenario",
+      "title": "Clientes que se pierden y alcance real",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.97,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.7
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.7,
+        "items": [
+          {
+            "id": "CA-E04-1",
+            "verdict": "cumple",
+            "reason": "Define correctamente `at_risk` (10+ visitas y 30–90 días sin venir) y `dormant` (más de 90 días sin venir o sin visitas registradas), con la distinción de recuperabilidad."
+          },
+          {
+            "id": "CA-E04-2",
+            "verdict": "cumple",
+            "reason": "Reporta 483 clientes en riesgo y 367 dormidos, coincidiendo con los tamaños de segmento de las herramientas."
+          },
+          {
+            "id": "CA-E04-3",
+            "verdict": "cumple",
+            "reason": "La tabla muestra el alcance real (reachable) de email, WhatsApp y push por segmento junto con las exclusiones por consentimiento, suspensión y duplicados, con cifras idénticas a `audience_reach`."
+          },
+          {
+            "id": "CA-E04-4",
+            "verdict": "cumple",
+            "reason": "Incluye una tabla visual con una fila por segmento y canal, con alcance y exclusiones desglosadas."
+          },
+          {
+            "id": "CA-E04-5",
+            "verdict": "parcial",
+            "reason": "Recomienda el canal (email, mayor alcance en ambos grupos) pero no indica explícitamente en qué segmento enfocarse ni argumenta la prioridad más allá del alcance."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "parcial",
+            "reason": "Nombra audiencia, canal y alcance concretos, pero no propone oferta concreta ni fechas de campaña o envío."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "Las cifras llevan valor y fecha de corte (31 oct 2026) y comparación entre canales, pero no hay comparaciones con baselines ni métricas de oportunidad (p. ej. avg_spend) que sustenten la afirmación de pérdida."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No considera costo por contacto, margen ni una oferta o incentivo razonable; solo reporta alcance de canales."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "parcial",
+            "reason": "Advierte que los canales no deben sumarse por solapamiento, pero no menciona limitaciones del análisis (p. ej. ausencia de grupo de control o de proyección de recuperación)."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde de inmediato con totales, segmentos y alcance por email, con lenguaje entendible y sin relleno."
+          }
+        ],
+        "costUsd": 0.00076107
+      },
+      "usage": {
+        "agentCostUsd": 0.011967750000000001,
+        "judgeCostUsd": 0.00076107,
+        "tokensIn": 48330,
+        "tokensOut": 807,
+        "llmCalls": 5,
+        "requests": 1,
+        "firstTextMs": 13670.352799999993,
+        "totalMs": 15339.935200000007,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "Al **31 de octubre de 2026**, tienes **850 clientes** en riesgo o dormidos. Email es el canal con mayor alcance real en ambos grupos:\n\n- **483 en riesgo:** tenían al menos 10 visitas registradas y llevan entre 30 y 90 días sin venir. Puedes contactar a **330 por email**.\n- **367 dormidos:** llevan más de 90 días sin venir o no tienen visitas registradas. Puedes contactar a **247 por email**.\n\nLa tabla muestra también el alcance por WhatsApp y push, y las exclusiones por falta de consentimiento, suspensión o duplicados. No sumes los canales: una misma persona puede aparecer en más de uno.",
+        "steps": [
+          "get_business_context",
+          "customer_segments",
+          "audience_reach",
+          "audience_reach",
+          "show_table",
+          "cite_sources"
+        ],
+        "blocks": [
+          "table"
+        ],
+        "replies": [],
+        "toolResults": [
+          "{\"data\":{\"business\":{\"name\":\"Café Alborada\",\"timezone\":\"America/Mexico_City\",\"currency\":\"MXN\",\"points_rule\":\"1 punto por cada $10 MXN pagados\",\"reward_rule\":\"150 puntos = una bebida gratis (hasta $68 MXN)\"},\"locations\":[{\"id\":\"loc_coyoacan\",\"name\":\"Coyoacán\",\"opened_at\":\"2022-02-10\"},{\"id\":\"loc_polanco\",\"name\":\"Polanco\",\"opened_at\":\"2023-06-01\"},{\"id\":\"loc_roma\",\"name\":\"Roma Norte\",\"opened_at\":\"2021-03-15\"}],\"segments\":[{\"id\":\"champions\",\"definition\":\"8 o más visitas en los últimos 60 días\",\"customers\":216},{\"id\":\"regulars\",\"definition\":\"3 a 7 visitas en los últimos 60 días\",\"customers\":337},{\"id\":\"occasional\",\"definition\":\"Clientes activos con menos de 3 visitas en los últimos 60 días\",\"customers\":456},{\"id\":\"new\",\"definition\":\"Se inscribieron en los últimos 45 días\",\"customers\":171},{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483},{\"id\":\"dormant\",\"definition\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367}],\"calendar\":{\"dataFrom\":\"2025-11-01\",\"dataAsOf\":\"2026-10-31\",\"presets\":{\"last_full_month\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-31\",\"days\":31,\"label\":\"octubre 2026\"},\"previous_full_month\":{\"from\":\"2026-09-01\",\"to\":\"2026-09-30\",\"days\":30,\"label\":\"septiembre 2026\"},\"last_week\":{\"from\":\"2026-10-25\",\"to\":\"2026-10-31\",\"days\":7,\"label\":\"2026-10-25 a 2026-10-31\"},\"previous_week\":{\"from\":\"2026-10-18\",\"to\":\"2026-10-24\",\"days\":7,\"label\":\"2026-10-18 a 2026-10-24\"},\"last_12_weeks\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"previous_12_weeks\":{\"from\":\"2026-05-17\",\"to\":\"2026-08-08\",\"days\":84,\"label\":\"2026-05-17 a 2026-08-08\"},\"last_3_months\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\"},\"previous_3_months\":{\"from\":\"2026-05-01\",\"to\":\"2026-07-31\",\"days\":92,\"label\":\"2026-05-01 a 2026-07-31\"},\"all_data\":{\"from\":\"2025-11-01\",\"to\":\"2026-10-31\",\"days\":365,\"label\":\"2025-11-01 a 2026-10-31\"}},\"firstOfferDate\":\"2026-11",
+          "{\"data\":{\"home_location\":null,\"segments\":[{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483,\"avg_spend\":3276.78,\"consent_rates\":{\"push\":0.5052,\"whatsapp\":0.5569,\"email\":0.6874}},{\"id\":\"dormant\",\"definition\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367,\"avg_spend\":1279.79,\"consent_rates\":{\"push\":0.5259,\"whatsapp\":0.515,\"email\":0.6812}}],\"total_customers\":850},\"notes\":[\"Segmentos calculados a la fecha de corte (2026-10-31).\",\"total_customers suma los segmentos pedidos; los segmentos son excluyentes.\",\"El tamaño del segmento no es el alcance: para saber a cuántos se puede contactar usar audience_reach.\"],\"warnings\":[],\"source\":{\"id\":\"src_f5d9b60743\",\"tool\":\"customer_segments\",\"endpoints\":[\"GET /v1/business\",\"GET /v1/locations\",\"GET /v1/segments\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:20.199Z\"}}",
+          "{\"data\":{\"audience\":{\"segment_id\":\"at_risk\"},\"matched\":483,\"by_channel\":[{\"channel\":\"email\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":151,\"excluded_duplicates\":2,\"reachable\":330},{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},{\"channel\":\"push\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":239,\"excluded_duplicates\":2,\"reachable\":242}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_4d3176cf45\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:20.485Z\"}}",
+          "{\"data\":{\"audience\":{\"segment_id\":\"dormant\"},\"matched\":367,\"by_channel\":[{\"channel\":\"email\",\"matched\":367,\"excluded_suspended\":4,\"excluded_no_consent\":116,\"excluded_duplicates\":0,\"reachable\":247},{\"channel\":\"push\",\"matched\":367,\"excluded_suspended\":4,\"excluded_no_consent\":172,\"excluded_duplicates\":0,\"reachable\":191},{\"channel\":\"whatsapp\",\"matched\":367,\"excluded_suspended\":4,\"excluded_no_consent\":176,\"excluded_duplicates\":0,\"reachable\":187}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_f14c3faef6\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:20.507Z\"}}"
+        ]
+      }
+    },
+    {
+      "caseId": "E-05",
+      "group": "scenario",
+      "title": "Campañas que funcionaron",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.990909090909091,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.9090909090909091
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.9090909090909091,
+        "items": [
+          {
+            "id": "CA-E05-1",
+            "verdict": "cumple",
+            "reason": "El texto identifica a “Te extrañamos” como la mejor evidencia por tener grupo de control, y la tabla muestra un lift de 23.9 puntos frente a celdas sin lift para las demás campañas, aunque no presenta un ordenamiento explícito de todas por esa métrica."
+          },
+          {
+            "id": "CA-E05-2",
+            "verdict": "cumple",
+            "reason": "Señala que el 2x1 tuvo más canjes pero no se saben cuántas visitas provocó, y la tabla marca el lift como nulo en las campañas sin control, haciendo visible su menor confiabilidad."
+          },
+          {
+            "id": "CA-E05-3",
+            "verdict": "cumple",
+            "reason": "Advierte que el grupo de control fue pequeño y que el impacto debe tomarse como orientativo, en concordancia con la confiabilidad media reportada."
+          },
+          {
+            "id": "CA-E05-4",
+            "verdict": "cumple",
+            "reason": "Presenta el costo histórico por canje de cada campaña en la tabla y aclara que la estimación de la nueva repetición usa como base el costo unitario de la concha, que es de $10."
+          },
+          {
+            "id": "CA-E05-5",
+            "verdict": "parcial",
+            "reason": "La tabla incluye campaña, vigencia, canal, enviados, canje, lift y costo, pero omite la audiencia y la oferta, que sí aparecen descritas en los datos de campañas y no están en la tabla."
+          },
+          {
+            "id": "CA-E05-6",
+            "verdict": "cumple",
+            "reason": "Responde que sí repetiría la concha gratis por WhatsApp, propone usarla como prueba de recuperación con grupo de control y la tarjeta de campaña fija la vigencia del 1 al 14 de noviembre de 2026, posterior al corte de datos del 31 de octubre de 2026."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "cumple",
+            "reason": "La propuesta concreta define audiencia (4+ visitas y 21+ días sin venir), canal (WhatsApp), oferta (concha gratis), fechas (1–14 de noviembre de 2026) y alcance alcanzable de 579 clientes."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "Las afirmaciones principales incluyen métricas y comparaciones (23.9 puntos de lift frente a 31.3% de canje; 85 canjes), pero el texto no explicita el periodo de los canjes ni un periodo comparable para todas las campañas al afirmar que el 2x1 tuvo más canjes."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Considera costo y margen: costo histórico por canje, costo unitario de la concha de $10, utilidad bruta por visita de $66.54 y $56.54 tras la oferta; la oferta es razonable y se apoya en la campaña con mejor evidencia incremental."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Menciona el grupo de control pequeño, la confiabilidad media y que una sola campaña anterior obliga a tomar el impacto como orientativo, además de advertir que el canje no demuestra visitas adicionales."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Abre con una respuesta directa sobre cuál campaña funcionó mejor y si la repetiría, y luego aporta las salvedades y la tabla sin relleno innecesario."
+          }
+        ],
+        "costUsd": 0.00096234
+      },
+      "usage": {
+        "agentCostUsd": 0.02465175,
+        "judgeCostUsd": 0.00096234,
+        "tokensIn": 71760,
+        "tokensOut": 1941,
+        "llmCalls": 7,
+        "requests": 1,
+        "firstTextMs": 21861.281699999992,
+        "totalMs": 32647.72039999999,
+        "streamErrors": []
+      },
+      "pendingApproval": true,
+      "excerpt": {
+        "text": "**La mejor evidencia es “Te extrañamos”**, vigente del 8 al 21 de junio de 2026: fue la única campaña completada con grupo de control. Aunque el 2x1 tuvo más canjes, no sabemos cuántas visitas provocó.\n\nSí repetiría la concha gratis por WhatsApp, como una prueba de recuperación y con grupo de control. La estimación usa una sola campaña anterior, cuyo grupo de control fue pequeño, así que tomaría el impacto como orientativo.\n\nEl costo histórico por canje de la tabla y el costo estimado para repetirla usan bases distintas: el nuevo cálculo considera el costo unitario de la concha.",
+        "steps": [
+          "get_business_context",
+          "campaign_performance",
+          "offer_economics",
+          "estimate_campaign_impact",
+          "audience_reach",
+          "show_table",
+          "cite_sources",
+          "show_campaign_card",
+          "request_draft_approval"
+        ],
+        "blocks": [
+          "table",
+          "campaign_card"
+        ],
+        "replies": [],
+        "toolResults": [
+          "{\"data\":{\"business\":{\"name\":\"Café Alborada\",\"timezone\":\"America/Mexico_City\",\"currency\":\"MXN\",\"points_rule\":\"1 punto por cada $10 MXN pagados\",\"reward_rule\":\"150 puntos = una bebida gratis (hasta $68 MXN)\"},\"locations\":[{\"id\":\"loc_coyoacan\",\"name\":\"Coyoacán\",\"opened_at\":\"2022-02-10\"},{\"id\":\"loc_polanco\",\"name\":\"Polanco\",\"opened_at\":\"2023-06-01\"},{\"id\":\"loc_roma\",\"name\":\"Roma Norte\",\"opened_at\":\"2021-03-15\"}],\"segments\":[{\"id\":\"champions\",\"definition\":\"8 o más visitas en los últimos 60 días\",\"customers\":216},{\"id\":\"regulars\",\"definition\":\"3 a 7 visitas en los últimos 60 días\",\"customers\":337},{\"id\":\"occasional\",\"definition\":\"Clientes activos con menos de 3 visitas en los últimos 60 días\",\"customers\":456},{\"id\":\"new\",\"definition\":\"Se inscribieron en los últimos 45 días\",\"customers\":171},{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483},{\"id\":\"dormant\",\"definition\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367}],\"calendar\":{\"dataFrom\":\"2025-11-01\",\"dataAsOf\":\"2026-10-31\",\"presets\":{\"last_full_month\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-31\",\"days\":31,\"label\":\"octubre 2026\"},\"previous_full_month\":{\"from\":\"2026-09-01\",\"to\":\"2026-09-30\",\"days\":30,\"label\":\"septiembre 2026\"},\"last_week\":{\"from\":\"2026-10-25\",\"to\":\"2026-10-31\",\"days\":7,\"label\":\"2026-10-25 a 2026-10-31\"},\"previous_week\":{\"from\":\"2026-10-18\",\"to\":\"2026-10-24\",\"days\":7,\"label\":\"2026-10-18 a 2026-10-24\"},\"last_12_weeks\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"previous_12_weeks\":{\"from\":\"2026-05-17\",\"to\":\"2026-08-08\",\"days\":84,\"label\":\"2026-05-17 a 2026-08-08\"},\"last_3_months\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\"},\"previous_3_months\":{\"from\":\"2026-05-01\",\"to\":\"2026-07-31\",\"days\":92,\"label\":\"2026-05-01 a 2026-07-31\"},\"all_data\":{\"from\":\"2025-11-01\",\"to\":\"2026-10-31\",\"days\":365,\"label\":\"2025-11-01 a 2026-10-31\"}},\"firstOfferDate\":\"2026-11",
+          "{\"data\":{\"campaigns\":[{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"objective\":\"Recuperar clientes inactivos\",\"status\":\"completed\",\"channel\":\"whatsapp\",\"audience_description\":\"Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp\",\"offer\":{\"type\":\"free_item\",\"value\":null,\"product_id\":\"prd_concha\",\"product_name\":\"Concha\"},\"valid_from\":\"2026-06-08\",\"valid_to\":\"2026-06-21\",\"results\":{\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"}},{\"id\":\"cmp_0002\",\"name\":\"Martes de 2x1 en Americano\",\"objective\":\"Piloto para mover tráfico de martes\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes de Coyoacán con wallet y consentimiento de push\",\"offer\":{\"type\":\"two_for_one\",\"value\":null,\"product_id\":\"prd_americano\",\"product_name\":\"Americano\"},\"valid_from\":\"2026-02-03\",\"valid_to\":\"2026-02-24\",\"results\":{\"sent\":383,\"delivered\":372,\"redeemed\":153,\"control_size\":0,\"open_rate_percent\":61,\"redemption_rate_percent\":39.9,\"treatment_visit_rate_percent\":76,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":13296,\"discount_cost\":9984,\"attributed_gross_profit\":7899,\"cost_per_redemption\":65.25,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0001\",\"name\":\"20% en todo por Buen Fin\",\"objective\":\"Subir ventas en Buen Fin\",\"status\":\"completed\",\"channel\":\"email\",\"audience_description\":\"Todos los clientes con consentimiento de email\",\"offer\":{\"type\":\"percent_off\",\"value\":20,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2025-11-14\",\"valid_to\":\"2025-",
+          "{\"data\":{\"audience\":{\"inactive_days_min\":21,\"min_visits\":4},\"matched\":1084,\"by_channel\":[{\"channel\":\"email\",\"matched\":1084,\"excluded_suspended\":6,\"excluded_no_consent\":352,\"excluded_duplicates\":6,\"reachable\":720},{\"channel\":\"whatsapp\",\"matched\":1084,\"excluded_suspended\":6,\"excluded_no_consent\":495,\"excluded_duplicates\":4,\"reachable\":579},{\"channel\":\"push\",\"matched\":1084,\"excluded_suspended\":6,\"excluded_no_consent\":532,\"excluded_duplicates\":3,\"reachable\":543}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_eacd65c480\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:33.101Z\"}}",
+          "{\"data\":{\"offer\":{\"type\":\"free_item\",\"product_id\":\"prd_concha\"},\"product_name\":\"Concha\",\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"total_cost\":null},\"notes\":[\"Costo unitario de Concha regalado ($10).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"warnings\":[],\"source\":{\"id\":\"src_d8bd7a9096\",\"tool\":\"offer_economics\",\"endpoints\":[\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:32.991Z\"}}",
+          "{\"data\":{\"reach\":{\"channel\":\"whatsapp\",\"matched\":1084,\"excluded_suspended\":6,\"excluded_no_consent\":495,\"excluded_duplicates\":4,\"reachable\":579},\"offer_economics\":{\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"]},\"reference_campaign\":{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"},\"similar_campaigns\":[\"cmp_0004\"],\"impact\":{\"kind\":\"incremental\",\"extra_visits\":[68,138,208],\"extra_net_sales\":[6372.96,12933.36,19493.76],\"expected_redemptions\":[181,181,181],\"offer_cost\":[1810,1810,1810],\"net_gross_profit\":[2714.72,7372.52,12030.32],\"confidence\":\"media\"}},\"notes\":[\"Rangos en orden [bajo, central, alto]; la utilidad neta es conservadora (bajo = menor utilidad con mayor costo).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Supuesto: las visitas adicionales tienen el ticket promedio del negocio.\"],\"warnings\":[\"Una sola campaña de referencia: los canjes esperados no tienen rango de variación.\"],\"source\":{\"id\":\"src_a098d6c759\",\"tool\":\"estimate_campaign_impact\",\"endpoints\":[\"POST /v1/campaigns/preview\",\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:33.028Z\"}}"
+        ]
+      }
+    },
+    {
+      "caseId": "E-06",
+      "group": "scenario",
+      "title": "Preparar y enviar con doble aprobación",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.22083333333333333,
+        "components": {
+          "figures": 0,
+          "sourced": 1,
+          "control": 0,
+          "trajectory": 0.3333333333333333,
+          "format": 0,
+          "judge": 0.375
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0,
+        "missingFigures": [
+          "reach_by_channel[0].matched"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0.3333333333333333,
+        "missingTools": [
+          "create_campaign_draft",
+          "send_campaign"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 0,
+        "missingBlocks": [
+          "campaign_card"
+        ],
+        "forbiddenBlocks": [],
+        "control": 0,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.375,
+        "items": [
+          {
+            "id": "CA-E06-1",
+            "verdict": "parcial",
+            "reason": "parcial"
+          },
+          {
+            "id": "CA-E06-2",
+            "verdict": "parcial",
+            "reason": "parcial"
+          },
+          {
+            "id": "CA-E06-4",
+            "verdict": "no_cumple",
+            "reason": "no_cumple"
+          },
+          {
+            "id": "CA-E06-5",
+            "verdict": "no_cumple",
+            "reason": "no_cumple"
+          },
+          {
+            "id": "CA-C03",
+            "verdict": "no_cumple",
+            "reason": "no_cumple"
+          },
+          {
+            "id": "CA-C10",
+            "verdict": "no_cumple",
+            "reason": "no_cumple"
+          },
+          {
+            "id": "CA-X03",
+            "verdict": "no_cumple",
+            "reason": "no_cumple"
+          },
+          {
+            "id": "especificidad",
+            "verdict": "parcial",
+            "reason": "parcial"
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "parcial"
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "parcial",
+            "reason": "parcial"
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "cumple"
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "cumple"
+          }
+        ],
+        "costUsd": 0.00049629
+      },
+      "usage": {
+        "agentCostUsd": 0.017114849999999997,
+        "judgeCostUsd": 0.00049629,
+        "tokensIn": 67979,
+        "tokensOut": 1438,
+        "llmCalls": 6,
+        "requests": 1,
+        "firstTextMs": 14644.94630000001,
+        "totalMs": 23796.350399999996,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "Al 31 de octubre, podemos contactar por WhatsApp a **267 clientes frecuentes en riesgo**. Propongo recuperarles con una concha gratis: una campaña parecida tuvo grupo de control, aunque era pequeño, así que la estimación debe tomarse con cautela.\n\nPrimero necesitas aprobar el borrador en la tarjeta; después se solicitará una aprobación separada para enviarlo.\nNo pude mostrar la tarjeta de la campaña por un error de verificación. **No se creó ni se envió**.\n\nPuedo reintentar la preparación para que revises la propuesta y apruebes el borrador antes de solicitar la aprobación de envío.",
+        "steps": [
+          "get_business_context",
+          "audience_reach",
+          "offer_economics",
+          "campaign_performance",
+          "estimate_campaign_impact",
+          "offer_economics",
+          "estimate_campaign_impact",
+          "cite_sources",
+          "show_campaign_card (figure_verification)"
+        ],
+        "blocks": [],
+        "replies": [],
+        "toolResults": [
+          "{\"data\":{\"business\":{\"name\":\"Café Alborada\",\"timezone\":\"America/Mexico_City\",\"currency\":\"MXN\",\"points_rule\":\"1 punto por cada $10 MXN pagados\",\"reward_rule\":\"150 puntos = una bebida gratis (hasta $68 MXN)\"},\"locations\":[{\"id\":\"loc_coyoacan\",\"name\":\"Coyoacán\",\"opened_at\":\"2022-02-10\"},{\"id\":\"loc_polanco\",\"name\":\"Polanco\",\"opened_at\":\"2023-06-01\"},{\"id\":\"loc_roma\",\"name\":\"Roma Norte\",\"opened_at\":\"2021-03-15\"}],\"segments\":[{\"id\":\"champions\",\"definition\":\"8 o más visitas en los últimos 60 días\",\"customers\":216},{\"id\":\"regulars\",\"definition\":\"3 a 7 visitas en los últimos 60 días\",\"customers\":337},{\"id\":\"occasional\",\"definition\":\"Clientes activos con menos de 3 visitas en los últimos 60 días\",\"customers\":456},{\"id\":\"new\",\"definition\":\"Se inscribieron en los últimos 45 días\",\"customers\":171},{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483},{\"id\":\"dormant\",\"definition\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367}],\"calendar\":{\"dataFrom\":\"2025-11-01\",\"dataAsOf\":\"2026-10-31\",\"presets\":{\"last_full_month\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-31\",\"days\":31,\"label\":\"octubre 2026\"},\"previous_full_month\":{\"from\":\"2026-09-01\",\"to\":\"2026-09-30\",\"days\":30,\"label\":\"septiembre 2026\"},\"last_week\":{\"from\":\"2026-10-25\",\"to\":\"2026-10-31\",\"days\":7,\"label\":\"2026-10-25 a 2026-10-31\"},\"previous_week\":{\"from\":\"2026-10-18\",\"to\":\"2026-10-24\",\"days\":7,\"label\":\"2026-10-18 a 2026-10-24\"},\"last_12_weeks\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"previous_12_weeks\":{\"from\":\"2026-05-17\",\"to\":\"2026-08-08\",\"days\":84,\"label\":\"2026-05-17 a 2026-08-08\"},\"last_3_months\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\"},\"previous_3_months\":{\"from\":\"2026-05-01\",\"to\":\"2026-07-31\",\"days\":92,\"label\":\"2026-05-01 a 2026-07-31\"},\"all_data\":{\"from\":\"2025-11-01\",\"to\":\"2026-10-31\",\"days\":365,\"label\":\"2025-11-01 a 2026-10-31\"}},\"firstOfferDate\":\"2026-11",
+          "{\"data\":{\"audience\":{\"segment_id\":\"at_risk\"},\"matched\":483,\"by_channel\":[{\"channel\":\"email\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":151,\"excluded_duplicates\":2,\"reachable\":330},{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},{\"channel\":\"push\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":239,\"excluded_duplicates\":2,\"reachable\":242}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_4d3176cf45\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:41.553Z\"}}",
+          "{\"data\":{\"campaigns\":[{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"objective\":\"Recuperar clientes inactivos\",\"status\":\"completed\",\"channel\":\"whatsapp\",\"audience_description\":\"Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp\",\"offer\":{\"type\":\"free_item\",\"value\":null,\"product_id\":\"prd_concha\",\"product_name\":\"Concha\"},\"valid_from\":\"2026-06-08\",\"valid_to\":\"2026-06-21\",\"results\":{\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"}},{\"id\":\"cmp_0002\",\"name\":\"Martes de 2x1 en Americano\",\"objective\":\"Piloto para mover tráfico de martes\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes de Coyoacán con wallet y consentimiento de push\",\"offer\":{\"type\":\"two_for_one\",\"value\":null,\"product_id\":\"prd_americano\",\"product_name\":\"Americano\"},\"valid_from\":\"2026-02-03\",\"valid_to\":\"2026-02-24\",\"results\":{\"sent\":383,\"delivered\":372,\"redeemed\":153,\"control_size\":0,\"open_rate_percent\":61,\"redemption_rate_percent\":39.9,\"treatment_visit_rate_percent\":76,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":13296,\"discount_cost\":9984,\"attributed_gross_profit\":7899,\"cost_per_redemption\":65.25,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0001\",\"name\":\"20% en todo por Buen Fin\",\"objective\":\"Subir ventas en Buen Fin\",\"status\":\"completed\",\"channel\":\"email\",\"audience_description\":\"Todos los clientes con consentimiento de email\",\"offer\":{\"type\":\"percent_off\",\"value\":20,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2025-11-14\",\"valid_to\":\"2025-",
+          "{\"data\":{\"offer\":{\"type\":\"points_multiplier\",\"value\":2},\"product_name\":null,\"cost_per_redemption\":4.25,\"visit_gross_profit\":66.54,\"margin_after_offer\":62.29,\"cost_share_of_visit_profit\":6.4,\"basis\":\"9.37 puntos extra por ticket promedio de $93.72.\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"],\"total_cost\":null},\"notes\":[\"9.37 puntos extra por ticket promedio de $93.72.\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"],\"warnings\":[],\"source\":{\"id\":\"src_afbb13f410\",\"tool\":\"offer_economics\",\"endpoints\":[\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:41.664Z\"}}",
+          "{\"data\":{\"reach\":{\"channel\":\"push\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":239,\"excluded_duplicates\":2,\"reachable\":242},\"offer_economics\":{\"cost_per_redemption\":4.25,\"visit_gross_profit\":66.54,\"margin_after_offer\":62.29,\"cost_share_of_visit_profit\":6.4,\"basis\":\"9.37 puntos extra por ticket promedio de $93.72.\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"]},\"reference_campaign\":null,\"similar_campaigns\":[\"cmp_0003\",\"cmp_0002\"],\"impact\":{\"kind\":\"redemptions_only\",\"expected_redemptions\":[24,60,97],\"offer_cost\":[102,255,412.25],\"confidence\":\"baja\"}},\"notes\":[\"Rangos en orden [bajo, central, alto]; la utilidad neta es conservadora (bajo = menor utilidad con mayor costo).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\",\"Supuesto: las visitas adicionales tienen el ticket promedio del negocio.\"],\"warnings\":[\"No hay campaña parecida con grupo de control: solo se estiman canjes, no visitas incrementales.\"],\"source\":{\"id\":\"src_f1fcb42a3a\",\"tool\":\"estimate_campaign_impact\",\"endpoints\":[\"POST /v1/campaigns/preview\",\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:42.157Z\"}}",
+          "{\"data\":{\"offer\":{\"type\":\"free_item\",\"product_id\":\"prd_concha\"},\"product_name\":\"Concha\",\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"total_cost\":null},\"notes\":[\"Costo unitario de Concha regalado ($10).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"],\"warnings\":[],\"source\":{\"id\":\"src_d8bd7a9096\",\"tool\":\"offer_economics\",\"endpoints\":[\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:44.813Z\"}}",
+          "{\"data\":{\"reach\":{\"channel\":\"whatsapp\",\"matched\":483,\"excluded_suspended\":0,\"excluded_no_consent\":214,\"excluded_duplicates\":2,\"reachable\":267},\"offer_economics\":{\"cost_per_redemption\":10,\"visit_gross_profit\":66.54,\"margin_after_offer\":56.54,\"cost_share_of_visit_profit\":15,\"basis\":\"Costo unitario de Concha regalado ($10).\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\"]},\"reference_campaign\":{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"},\"similar_campaigns\":[\"cmp_0004\"],\"impact\":{\"kind\":\"incremental\",\"extra_visits\":[31,64,96],\"extra_net_sales\":[2905.32,5998.08,8997.12],\"expected_redemptions\":[84,84,84],\"offer_cost\":[840,840,840],\"net_gross_profit\":[1222.74,3418.56,5547.84],\"confidence\":\"media\"}},\"notes\":[\"Rangos en orden [bajo, central, alto]; la utilidad neta es conservadora (bajo = menor utilidad con mayor costo).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Supuesto: las visitas adicionales tienen el ticket promedio del negocio.\"],\"warnings\":[\"Una sola campaña de referencia: los canjes esperados no tienen rango de variación.\"],\"source\":{\"id\":\"src_4dbc58f1e6\",\"tool\":\"estimate_campaign_impact\",\"endpoints\":[\"POST /v1/campaigns/preview\",\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:37:44.813Z\"}}"
+        ]
+      }
+    },
+    {
+      "caseId": "EJEMPLO",
+      "group": "example",
+      "title": "Categoría más rentable y cómo empujarla",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.7849999999999999,
+        "components": {
+          "figures": 0.5,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.85
+        }
+      },
+      "checks": {
+        "figureAccuracy": 0.5,
+        "missingFigures": [
+          "top.share_percent"
+        ],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.85,
+        "items": [
+          {
+            "id": "CA-EJ-1",
+            "verdict": "cumple",
+            "reason": "Declara el periodo agosto-octubre 2026 en el texto y en el subtítulo de la gráfica, coherente con la fecha de corte de datos (2026-10-31)."
+          },
+          {
+            "id": "CA-EJ-2",
+            "verdict": "parcial",
+            "reason": "Reporta la utilidad antes de descuentos por categoría ($919,417 café caliente, etc.) pero no incluye el porcentaje del total (51.5% disponible en los datos)."
+          },
+          {
+            "id": "CA-EJ-3",
+            "verdict": "cumple",
+            "reason": "Incluye un chart de barras 'Utilidad por categoría' con las cinco categorías ordenadas de mayor a menor."
+          },
+          {
+            "id": "CA-EJ-4",
+            "verdict": "cumple",
+            "reason": "La tarjeta muestra reachable 167 de 337 (push) y desglosa exclusiones: 168 sin consentimiento, 2 suspendidos, 0 duplicados."
+          },
+          {
+            "id": "CA-EJ-5",
+            "verdict": "parcial",
+            "reason": "La tarjeta de campaña incluye periodo (1-7 nov 2026) y fuentes, pero no aparece la pregunta explícita '¿Preparo el borrador?' ni se pide confirmación al usuario."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "cumple",
+            "reason": "Nombra audiencia (clientes regulares, 3-7 visitas en 60 días), canal (push), oferta (puntos dobles x2), fechas (1-7 nov 2026) y alcance (167 alcanzables de 337)."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "La cifra principal de utilidad trae valor y periodo, pero no compara con otras categorías en el texto ni con el share del total; la propuesta no cuantifica el incremento esperado de esa categoría."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Considera costo por canje ($4.25), margen por visita ($66.54 → $62.29) y costo total estimado, con oferta razonable frente al margen."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Advierte que los puntos aplican a toda la compra, que el antecedente no tuvo grupo de control y que solo se estiman canjes, no visitas ni ventas adicionales."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde primero con la categoría y la utilidad, y explica en lenguaje claro la propuesta y sus límites, sin relleno."
+          }
+        ],
+        "costUsd": 0.00074244
+      },
+      "usage": {
+        "agentCostUsd": 0.0228328,
+        "judgeCostUsd": 0.00074244,
+        "tokensIn": 61482,
+        "tokensOut": 1568,
+        "llmCalls": 6,
+        "requests": 1,
+        "firstTextMs": 18028.674600000028,
+        "totalMs": 26835.838700000022,
+        "streamErrors": []
+      },
+      "pendingApproval": true,
+      "excerpt": {
+        "text": "**Café caliente dejó $919,417 de utilidad antes de descuentos** entre agosto y octubre de 2026; fue la categoría que más aportó.\n\nPara empujarlo, sugiero invitar a clientes regulares a tomar café caliente con puntos dobles. La oferta aplicaría a **toda la compra**, no solo al café, así que conviene medir si realmente aumenta la venta de esa categoría. El antecedente de puntos dobles no tuvo grupo de control; por eso no podemos atribuirle visitas adicionales.",
+        "steps": [
+          "get_business_context",
+          "sales_breakdown",
+          "audience_reach",
+          "campaign_performance",
+          "show_chart",
+          "cite_sources",
+          "offer_economics",
+          "estimate_campaign_impact",
+          "cite_sources",
+          "show_campaign_card",
+          "request_draft_approval"
+        ],
+        "blocks": [
+          "chart",
+          "campaign_card"
+        ],
+        "replies": [],
+        "toolResults": [
+          "{\"data\":{\"business\":{\"name\":\"Café Alborada\",\"timezone\":\"America/Mexico_City\",\"currency\":\"MXN\",\"points_rule\":\"1 punto por cada $10 MXN pagados\",\"reward_rule\":\"150 puntos = una bebida gratis (hasta $68 MXN)\"},\"locations\":[{\"id\":\"loc_coyoacan\",\"name\":\"Coyoacán\",\"opened_at\":\"2022-02-10\"},{\"id\":\"loc_polanco\",\"name\":\"Polanco\",\"opened_at\":\"2023-06-01\"},{\"id\":\"loc_roma\",\"name\":\"Roma Norte\",\"opened_at\":\"2021-03-15\"}],\"segments\":[{\"id\":\"champions\",\"definition\":\"8 o más visitas en los últimos 60 días\",\"customers\":216},{\"id\":\"regulars\",\"definition\":\"3 a 7 visitas en los últimos 60 días\",\"customers\":337},{\"id\":\"occasional\",\"definition\":\"Clientes activos con menos de 3 visitas en los últimos 60 días\",\"customers\":456},{\"id\":\"new\",\"definition\":\"Se inscribieron en los últimos 45 días\",\"customers\":171},{\"id\":\"at_risk\",\"definition\":\"10 o más visitas en la ventana de datos y entre 30 y 90 días sin venir\",\"customers\":483},{\"id\":\"dormant\",\"definition\":\"Más de 90 días sin venir, o sin visitas registradas\",\"customers\":367}],\"calendar\":{\"dataFrom\":\"2025-11-01\",\"dataAsOf\":\"2026-10-31\",\"presets\":{\"last_full_month\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-31\",\"days\":31,\"label\":\"octubre 2026\"},\"previous_full_month\":{\"from\":\"2026-09-01\",\"to\":\"2026-09-30\",\"days\":30,\"label\":\"septiembre 2026\"},\"last_week\":{\"from\":\"2026-10-25\",\"to\":\"2026-10-31\",\"days\":7,\"label\":\"2026-10-25 a 2026-10-31\"},\"previous_week\":{\"from\":\"2026-10-18\",\"to\":\"2026-10-24\",\"days\":7,\"label\":\"2026-10-18 a 2026-10-24\"},\"last_12_weeks\":{\"from\":\"2026-08-09\",\"to\":\"2026-10-31\",\"days\":84,\"label\":\"2026-08-09 a 2026-10-31\"},\"previous_12_weeks\":{\"from\":\"2026-05-17\",\"to\":\"2026-08-08\",\"days\":84,\"label\":\"2026-05-17 a 2026-08-08\"},\"last_3_months\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\"},\"previous_3_months\":{\"from\":\"2026-05-01\",\"to\":\"2026-07-31\",\"days\":92,\"label\":\"2026-05-01 a 2026-07-31\"},\"all_data\":{\"from\":\"2025-11-01\",\"to\":\"2026-10-31\",\"days\":365,\"label\":\"2025-11-01 a 2026-10-31\"}},\"firstOfferDate\":\"2026-11",
+          "{\"data\":{\"dimension\":\"category\",\"metric\":\"gross_profit_before_discounts\",\"period\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\"},\"rows\":[{\"key\":\"cafe_caliente\",\"label\":\"Café caliente\",\"transactions\":17943,\"units\":19033,\"gross_sales\":1235476,\"gross_profit_before_discounts\":919417,\"value\":919417,\"share_percent\":51.5},{\"key\":\"cafe_frio\",\"label\":\"Café frío\",\"transactions\":4471,\"units\":4533,\"gross_sales\":335442,\"gross_profit_before_discounts\":256080,\"value\":256080,\"share_percent\":14.3},{\"key\":\"panaderia\",\"label\":\"Panadería\",\"transactions\":7804,\"units\":7804,\"gross_sales\":376186,\"gross_profit_before_discounts\":247686,\"value\":247686,\"share_percent\":13.9},{\"key\":\"comida\",\"label\":\"Comida\",\"transactions\":2661,\"units\":2661,\"gross_sales\":328540,\"gross_profit_before_discounts\":206546,\"value\":206546,\"share_percent\":11.6},{\"key\":\"otras_bebidas\",\"label\":\"Otras bebidas\",\"transactions\":3120,\"units\":3145,\"gross_sales\":229198,\"gross_profit_before_discounts\":157006,\"value\":157006,\"share_percent\":8.8}],\"highest\":{\"key\":\"cafe_caliente\",\"label\":\"Café caliente\",\"transactions\":17943,\"units\":19033,\"gross_sales\":1235476,\"gross_profit_before_discounts\":919417,\"value\":919417,\"share_percent\":51.5},\"lowest\":{\"key\":\"otras_bebidas\",\"label\":\"Otras bebidas\",\"transactions\":3120,\"units\":3145,\"gross_sales\":229198,\"gross_profit_before_discounts\":157006,\"value\":157006,\"share_percent\":8.8},\"total_rows\":5,\"total\":1786735},\"notes\":[\"La utilidad por categoría o producto es antes de descuentos, porque los descuentos se aplican al ticket completo.\"],\"warnings\":[],\"source\":{\"id\":\"src_e7a80088d9\",\"tool\":\"sales_breakdown\",\"endpoints\":[\"GET /v1/analytics/sales?from=2026-08-01&group_by=category&to=2026-10-31\"],\"period\":{\"from\":\"2026-08-01\",\"to\":\"2026-10-31\",\"days\":92,\"label\":\"2026-08-01 a 2026-10-31\",\"timezone\":\"America/Mexico_City\"},\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:38:06.960Z\"}}",
+          "{\"data\":{\"campaigns\":[{\"id\":\"cmp_0004\",\"name\":\"Te extrañamos\",\"objective\":\"Recuperar clientes inactivos\",\"status\":\"completed\",\"channel\":\"whatsapp\",\"audience_description\":\"Clientes con 4+ visitas y 21+ días sin venir, con consentimiento de WhatsApp\",\"offer\":{\"type\":\"free_item\",\"value\":null,\"product_id\":\"prd_concha\",\"product_name\":\"Concha\"},\"valid_from\":\"2026-06-08\",\"valid_to\":\"2026-06-21\",\"results\":{\"sent\":272,\"delivered\":259,\"redeemed\":85,\"control_size\":67,\"open_rate_percent\":77.2,\"redemption_rate_percent\":31.3,\"treatment_visit_rate_percent\":50.7,\"control_visit_rate_percent\":26.9,\"lift_points\":23.9,\"lift_interval_points\":{\"low\":11.7,\"high\":36},\"attributed_revenue\":5712,\"discount_cost\":2856,\"attributed_gross_profit\":3360,\"cost_per_redemption\":33.6,\"reliability\":\"media\",\"reliability_reason\":\"Grupo de control pequeño (67 clientes).\"}},{\"id\":\"cmp_0002\",\"name\":\"Martes de 2x1 en Americano\",\"objective\":\"Piloto para mover tráfico de martes\",\"status\":\"completed\",\"channel\":\"push\",\"audience_description\":\"Clientes de Coyoacán con wallet y consentimiento de push\",\"offer\":{\"type\":\"two_for_one\",\"value\":null,\"product_id\":\"prd_americano\",\"product_name\":\"Americano\"},\"valid_from\":\"2026-02-03\",\"valid_to\":\"2026-02-24\",\"results\":{\"sent\":383,\"delivered\":372,\"redeemed\":153,\"control_size\":0,\"open_rate_percent\":61,\"redemption_rate_percent\":39.9,\"treatment_visit_rate_percent\":76,\"control_visit_rate_percent\":null,\"lift_points\":null,\"lift_interval_points\":null,\"attributed_revenue\":13296,\"discount_cost\":9984,\"attributed_gross_profit\":7899,\"cost_per_redemption\":65.25,\"reliability\":\"baja\",\"reliability_reason\":\"Sin grupo de control: la visita no se puede atribuir a la campaña.\"}},{\"id\":\"cmp_0001\",\"name\":\"20% en todo por Buen Fin\",\"objective\":\"Subir ventas en Buen Fin\",\"status\":\"completed\",\"channel\":\"email\",\"audience_description\":\"Todos los clientes con consentimiento de email\",\"offer\":{\"type\":\"percent_off\",\"value\":20,\"product_id\":null,\"product_name\":null},\"valid_from\":\"2025-11-14\",\"valid_to\":\"2025-",
+          "{\"data\":{\"audience\":{\"segment_id\":\"regulars\"},\"matched\":337,\"by_channel\":[{\"channel\":\"email\",\"matched\":337,\"excluded_suspended\":2,\"excluded_no_consent\":114,\"excluded_duplicates\":2,\"reachable\":219},{\"channel\":\"whatsapp\",\"matched\":337,\"excluded_suspended\":2,\"excluded_no_consent\":160,\"excluded_duplicates\":0,\"reachable\":175},{\"channel\":\"push\",\"matched\":337,\"excluded_suspended\":2,\"excluded_no_consent\":168,\"excluded_duplicates\":0,\"reachable\":167}],\"best_channel_by_reach\":\"email\"},\"notes\":[\"reachable es el alcance real: ya descuenta suspendidos, clientes sin consentimiento en el canal y duplicados.\",\"Reportar reachable del canal elegido, no el tamaño de la audiencia (matched).\"],\"warnings\":[],\"source\":{\"id\":\"src_b124ab4f0b\",\"tool\":\"audience_reach\",\"endpoints\":[\"POST /v1/campaigns/preview\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:38:07.030Z\"}}",
+          "{\"data\":{\"offer\":{\"type\":\"points_multiplier\",\"value\":2},\"product_name\":null,\"cost_per_redemption\":4.25,\"visit_gross_profit\":66.54,\"margin_after_offer\":62.29,\"cost_share_of_visit_profit\":6.4,\"basis\":\"9.37 puntos extra por ticket promedio de $93.72.\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"],\"total_cost\":null},\"notes\":[\"9.37 puntos extra por ticket promedio de $93.72.\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"],\"warnings\":[],\"source\":{\"id\":\"src_afbb13f410\",\"tool\":\"offer_economics\",\"endpoints\":[\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:38:13.019Z\"}}",
+          "{\"data\":{\"reach\":{\"channel\":\"push\",\"matched\":337,\"excluded_suspended\":2,\"excluded_no_consent\":168,\"excluded_duplicates\":0,\"reachable\":167},\"offer_economics\":{\"cost_per_redemption\":4.25,\"visit_gross_profit\":66.54,\"margin_after_offer\":62.29,\"cost_share_of_visit_profit\":6.4,\"basis\":\"9.37 puntos extra por ticket promedio de $93.72.\",\"assumptions\":[\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\"]},\"reference_campaign\":null,\"similar_campaigns\":[\"cmp_0003\",\"cmp_0002\"],\"impact\":{\"kind\":\"redemptions_only\",\"expected_redemptions\":[16,42,67],\"offer_cost\":[68,178.5,284.75],\"confidence\":\"baja\"}},\"notes\":[\"Rangos en orden [bajo, central, alto]; la utilidad neta es conservadora (bajo = menor utilidad con mayor costo).\",\"Ticket promedio $93.72 y margen bruto 71% de los últimos 3 meses.\",\"Cada punto se valúa hasta $0.45 (bebida de $68 por 150 puntos); el costo se difiere hasta el canje.\",\"Supuesto: las visitas adicionales tienen el ticket promedio del negocio.\"],\"warnings\":[\"No hay campaña parecida con grupo de control: solo se estiman canjes, no visitas incrementales.\"],\"source\":{\"id\":\"src_f6f3397212\",\"tool\":\"estimate_campaign_impact\",\"endpoints\":[\"POST /v1/campaigns/preview\",\"GET /v1/campaigns?limit=100\",\"GET /v1/products?limit=100\",\"GET /v1/analytics/sales?from=2026-08-01&group_by=location&to=2026-10-31\"],\"data_as_of\":\"2026-10-31\",\"fetched_at\":\"2026-11-05T03:38:13.128Z\"}}"
+        ]
+      }
+    }
+  ]
+}

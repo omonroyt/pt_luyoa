@@ -1,0 +1,196 @@
+{
+  "meta": {
+    "date": "2026-11-04",
+    "label": "compare-humo-deepseek-v4.1-flash",
+    "model": "deepseek/deepseek-v4.1-flash-1017",
+    "judgeModel": "minimax/minimax-m3.1-flash",
+    "commit": "08a6792+cambios",
+    "promptVersion": "932c93c24281",
+    "dataAsOf": "2026-10-31",
+    "repeats": 1
+  },
+  "summary": {
+    "cases": 7,
+    "ran": 0,
+    "skipped": 0,
+    "errors": 7,
+    "meanScore": null,
+    "scoreDeviation": null,
+    "hardGateFailures": 0,
+    "scenarioFigureAccuracy": null,
+    "unsourcedFigures": 0,
+    "controlViolations": 0,
+    "honestNegatives": null,
+    "agentCostUsd": 0,
+    "judgeCostUsd": 0,
+    "costPerConversationUsd": null,
+    "firstTextP50Ms": null,
+    "firstTextP95Ms": null,
+    "totalP50Ms": null,
+    "totalP95Ms": null,
+    "llmCallsMean": null
+  },
+  "results": [
+    {
+      "caseId": "E-01",
+      "group": "scenario",
+      "title": "Octubre contra septiembre",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "error": "Sin respuesta por error del servicio: No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 407.38610000000335,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      }
+    },
+    {
+      "caseId": "E-02",
+      "group": "scenario",
+      "title": "Peor día de la semana y qué hacer",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "error": "Sin respuesta por error del servicio: No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 1023.8106000000262,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      }
+    },
+    {
+      "caseId": "E-03",
+      "group": "scenario",
+      "title": "Sucursal que preocupa",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "error": "Sin respuesta por error del servicio: No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 429.89360000001034,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      }
+    },
+    {
+      "caseId": "E-04",
+      "group": "scenario",
+      "title": "Clientes que se pierden y alcance real",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "error": "Sin respuesta por error del servicio: No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 352.9891999999527,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      }
+    },
+    {
+      "caseId": "E-05",
+      "group": "scenario",
+      "title": "Campañas que funcionaron",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "error": "Sin respuesta por error del servicio: No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 297.95510000002105,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      }
+    },
+    {
+      "caseId": "E-06",
+      "group": "scenario",
+      "title": "Preparar y enviar con doble aprobación",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "error": "Sin respuesta por error del servicio: No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 267.23080000001937,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      }
+    },
+    {
+      "caseId": "EJEMPLO",
+      "group": "example",
+      "title": "Categoría más rentable y cómo empujarla",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "error": "Sin respuesta por error del servicio: No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+      "usage": {
+        "agentCostUsd": 0,
+        "judgeCostUsd": 0,
+        "tokensIn": 0,
+        "tokensOut": 0,
+        "llmCalls": 0,
+        "requests": 1,
+        "firstTextMs": null,
+        "totalMs": 376.25070000003325,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      }
+    }
+  ]
+}

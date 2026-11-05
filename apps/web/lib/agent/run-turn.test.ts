@@ -75,7 +75,7 @@ describe("streamAgentTurn", () => {
     expect(second!.prompt.some((message) => message.role === "tool")).toBe(true);
   });
 
-  it("expone las escrituras solo junto con las herramientas de aprobación", async () => {
+  it("expone las escrituras y ofrece la aprobación solo después de una tarjeta", async () => {
     const model = scriptedModel(() => ({ text: "Hola." }));
     await (await streamAgentTurn(QUESTION, { model, mcp: fixtureMcpConnection() })).text();
     const [first] = model.doStreamCalls as unknown as DoStreamCall[];
@@ -84,12 +84,14 @@ describe("streamAgentTurn", () => {
       expect.arrayContaining([
         "compare_periods",
         ...PRESENTATION_TOOLS,
-        ...APPROVAL_TOOLS,
         "create_campaign_draft",
         "send_campaign",
       ]),
     );
+    // ES: 20 herramientas; las de aprobación validan que haya una tarjeta (card-gate.ts).
+    // EN: 20 tools; the approval ones check there is a card (card-gate.ts).
     expect(names).toHaveLength(20);
+    expect(names).toEqual(expect.arrayContaining([...APPROVAL_TOOLS]));
     expect(systemText(first!)).toContain("show_chart");
     expect(systemText(first!)).toContain("request_draft_approval");
   });

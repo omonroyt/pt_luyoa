@@ -22,7 +22,7 @@ export type McpConnection = {
 };
 
 export function connectMcpClient(connection: McpConnection): Promise<MCPClient> {
-  const inProcessFetch = (input: RequestInfo | URL, init?: RequestInit) =>
+  const inProcessFetch = (input: string | URL | Request, init?: RequestInit) =>
     handleMcpRequest(new Request(input, init), connection);
   return createMCPClient({
     transport: {

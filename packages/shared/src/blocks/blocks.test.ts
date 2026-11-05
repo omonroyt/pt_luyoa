@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { z } from "zod";
 import { CampaignCardBlock, messageLength } from "./campaign-card";
 import { ChartBlock, MAX_CHART_POINTS } from "./chart";
 import { CiteSourcesBlock } from "./cite-sources";
@@ -58,7 +59,7 @@ const CARD = {
     totalCostRange: [310, 960],
   },
   history: [{ name: "Te extrañamos", lift: 23.9, n: 410, reliable: true }],
-  message: { text: "¡Te extrañamos!", length: 15, limit: 1024 },
+  message: { text: "¡Te extrañamos!" },
   warnings: [],
 };
 
@@ -114,5 +115,14 @@ describe("bloques visuales", () => {
   it("rechaza una tarjeta con canal o estado fuera del catálogo", () => {
     expect(CampaignCardBlock.safeParse({ ...CARD, channel: "sms" }).success).toBe(false);
     expect(CampaignCardBlock.safeParse({ ...CARD, state: "approved" }).success).toBe(false);
+  });
+});
+
+describe("compatibilidad de los esquemas con los proveedores", () => {
+  it("ningún bloque usa esquemas de tupla, que Z.AI rechaza", () => {
+    const blocks = [ChartBlock, TableBlock, KpisBlock, CampaignCardBlock, CiteSourcesBlock];
+    for (const block of blocks) {
+      expect(JSON.stringify(z.toJSONSchema(block))).not.toContain("prefixItems");
+    }
   });
 });

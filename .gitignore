@@ -18,8 +18,9 @@ next-env.d.ts
 data/*.db
 data/*.db-*
 
-# Evaluaciones: reportes temporales
+# Evaluaciones: reportes temporales y transcripciones completas (grandes)
 evals/reports/tmp/
+evals/reports/raw/
 
 # Herramientas
 .vercel/

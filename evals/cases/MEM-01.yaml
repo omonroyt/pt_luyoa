@@ -1,0 +1,13 @@
+id: MEM-01
+group: memory
+title: "Preferencia guardada y aplicada después"
+criteria: ["CA-X04"]
+requires: ["memory"]
+turns:
+  - user: "Recuerda que para mis campañas prefiero WhatsApp."
+  - user: "Propón una campaña para recuperar a los clientes en riesgo."
+expect:
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  must_mention:
+    - "WhatsApp"
+  rubric: ["CA-X04"]

@@ -21,8 +21,10 @@ import {
   type UIMessage,
 } from "ai";
 import type { MCPClient } from "@ai-sdk/mcp";
+import { approvalStepPolicy, type StepLike } from "./approval-policy";
 import { createApprovalTools } from "./approval-tools";
 import { loadBusinessContext } from "./business-context";
+import { createCardGate } from "./card-gate";
 import { connectMcpClient, type McpConnection } from "./mcp-tools";
 import { createPresentationTools } from "./presentation-tools";
 import {
@@ -71,10 +73,11 @@ const modelName = (model: LanguageModel) => (typeof model === "string" ? model :
 async function buildTools(client: MCPClient, registry: SourceRegistry) {
   const businessTools = trackSources(await client.tools(), registry);
   const context = await loadBusinessContext(businessTools);
+  const gate = createCardGate();
   const tools = await withReason({
     ...businessTools,
-    ...createPresentationTools(registry),
-    ...createApprovalTools(),
+    ...createPresentationTools(registry, gate),
+    ...createApprovalTools(gate),
   });
   return { tools, context };
 }
@@ -136,6 +139,29 @@ export function finalStepPolicy(instructions: string) {
       : undefined;
 }
 
+/**
+ * ES: Política de cada paso: primero el control de aprobación (una tarjeta mostrada sin
+ *     pedir aprobación obliga a pedirla, incluso en el último paso), luego el cierre del
+ *     último paso y, en cualquier otro paso, todas las herramientas con el prompt base.
+ *     El prompt base se repite porque el AI SDK arrastra a los pasos siguientes las
+ *     instrucciones que fija un paso, y la nota de un paso forzado no debe quedarse.
+ * EN: Per-step policy: first the approval control (a card shown without asking for
+ *     approval forces the request, even on the last step), then the last-step closing
+ *     and, on any other step, all tools with the base prompt. The base prompt is repeated
+ *     because the AI SDK carries a step's instructions over to later steps, and a forced
+ *     step's note must not stay.
+ */
+export function turnStepPolicy(instructions: string, toolNames: ReadonlyArray<string>) {
+  const approval = approvalStepPolicy(instructions);
+  const final = finalStepPolicy(instructions);
+  const gated = { activeTools: [...toolNames], instructions };
+  return (options: {
+    stepNumber: number;
+    steps: ReadonlyArray<StepLike>;
+  }): { activeTools: string[]; instructions?: string } =>
+    approval(options) ?? final(options) ?? gated;
+}
+
 export async function streamAgentTurn(
   messages: UIMessage[],
   dependencies: TurnDependencies,
@@ -159,7 +185,7 @@ export async function streamAgentTurn(
       messages: await convertToModelMessages(messages),
       tools,
       stopWhen: isStepCount(MAX_STEPS),
-      prepareStep: finalStepPolicy(instructions),
+      prepareStep: turnStepPolicy(instructions, Object.keys(tools)),
       ...tracer.callbacks,
       onEnd: close,
       onAbort: close,

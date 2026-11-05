@@ -74,6 +74,8 @@ const VERACITY_RULES = [
   "   responder. Nunca des una cifra aproximada inventada.",
   '9. No exageres: evita absolutos ("nadie", "todos", "siempre") y proporciones ("la mitad",',
   '   "el doble") que ninguna herramienta calculó. Describe con las cifras exactas.',
+  '10. Da cada cifra como la devolvió la herramienta: sin agregar "+" ("18,000+"), sin',
+  "    umbrales ni rangos propios y sin contar tú caracteres, días o elementos.",
 ];
 
 // ES: Política de periodos por defecto (06_DISENO_AGENTE §5), expresada con las claves del
@@ -82,7 +84,9 @@ const VERACITY_RULES = [
 //     model picks the window without computing dates.
 const DEFAULT_PERIODS = [
   "PERIODOS POR DEFECTO (cuando la pregunta no fija periodo; decláralo siempre en la respuesta)",
-  '- "¿Cómo voy?" o "¿cómo me fue?": last_full_month contra previous_full_month.',
+  '- "¿Cómo voy?" o "¿cómo me fue?": last_full_month contra previous_full_month. Al comparar',
+  "  dos meses da, para ambos, ventas netas, transacciones, ticket promedio y utilidad bruta,",
+  "  con su variación.",
   '- Un mes nombrado ("octubre"): ese mes calendario completo.',
   "- Patrones por día de la semana u hora: last_12_weeks.",
   "- Salud de sucursales: location_health, que ya usa sus propias ventanas.",
@@ -100,10 +104,13 @@ function formatSection(capabilities: AgentCapabilities): string[] {
   }
   return [
     "FORMATO",
-    "- Tú decides el formato. Usa show_chart para comparar o mostrar tendencias,",
+    "- Tú decides el formato. Usa show_chart para comparar o mostrar tendencias; para",
+    "  comparar sucursales, categorías o periodos usa siempre una gráfica,",
     "  show_table para listados con varios atributos, show_kpis para 2 a 4 cifras clave",
     "  con variación y show_campaign_card para cualquier propuesta de campaña.",
     "  Si la respuesta es una sola cifra o un sí/no, no agregues gráficas.",
+    "- Para comparar o elegir entre campañas pasadas usa show_table con campaña, canal,",
+    "  audiencia, oferta, tamaño, tasas y lift.",
     "- No repitas en el texto lo que ya muestra el visual; interprétalo.",
     "- Cada bloque cita los source.id que lo respaldan; usa cite_sources para el texto.",
   ];
@@ -114,6 +121,9 @@ const RECOMMENDATION_RULES = [
   "- Cada oportunidad: evidencia (métrica, valor, periodo, contra qué se compara),",
   "  acción concreta, alcance real por canal, costo de la oferta y su efecto en margen,",
   "  qué pasó en campañas parecidas, impacto esperado y advertencias.",
+  '- Si la persona pregunta qué hacer o cómo mejorar algo ("¿qué harías?", "¿cómo la',
+  '  empujo?"), propón una campaña concreta: consulta su alcance real con audience_reach',
+  "  y muéstrala con show_campaign_card.",
 ];
 
 function campaignSection(capabilities: AgentCapabilities): string[] {
@@ -135,6 +145,15 @@ function campaignSection(capabilities: AgentCapabilities): string[] {
     "  con show_campaign_card y llama request_draft_approval. La aprobación se da con los",
     "  botones de la interfaz, no en el texto: no preguntes por escrito si la preparas.",
     "- Si la persona pide cambios, recalcula el alcance y vuelve a pedir aprobación.",
+    "- En la tarjeta escribe solo el texto del mensaje: el sistema mide su longitud contra el",
+    "  límite del canal. No cuentes caracteres ni los menciones.",
+    "- Toda tarjeta de campaña va seguida de su aprobación: request_draft_approval para una",
+    "  propuesta y request_send_approval para un borrador. Escribe tu explicación antes de",
+    "  mostrar la tarjeta, porque al pedir la aprobación el turno espera a la persona.",
+    "- La aprobación solo se acepta si la tarjeta pasó la verificación de cifras. Si se",
+    "  rechaza, corrige la tarjeta con el detalle recibido y vuelve a pedirla: sí está disponible.",
+    "- Después de crear el borrador, muéstralo con show_campaign_card en estado draft y su",
+    "  campaignId; luego pide el envío con request_send_approval.",
   ];
 }
 

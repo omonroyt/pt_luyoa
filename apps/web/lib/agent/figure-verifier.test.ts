@@ -67,7 +67,7 @@ const CARD = {
   },
   economics: { costPerRedemption: 10, marginNote: "m", totalCostRange: [310, 960] },
   history: [],
-  message: { text: "¡Te extrañamos!", length: 15, limit: 1024 },
+  message: { text: "¡Te extrañamos!" },
 };
 
 describe("matchesSource", () => {
@@ -120,11 +120,11 @@ describe("verifyBlock", () => {
       sources: ["src_cccccccccc"],
       channel: "push",
       reach: { ...CARD.reach },
-      message: { text: "x".repeat(150), length: 150, limit: 140 },
+      message: { text: "x".repeat(150) },
     };
     const problems = verifyBlock("show_campaign_card", card, registry()).join(" ");
     expect(problems).toContain("debe citar el resultado de audience_reach");
-    expect(problems).toContain("el límite es 140");
+    expect(problems).toContain("el límite de push es 140");
   });
 
   it("muestra un borrador solo con el campaignId que devolvió create_campaign_draft", () => {

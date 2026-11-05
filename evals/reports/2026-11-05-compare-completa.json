@@ -1,0 +1,40 @@
+{
+  "title": "Comparación de modelos (completa) · 2026-11-05",
+  "rows": [
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "label": "compare-completa-claude-haiku-5.5",
+      "repeats": 1,
+      "meanScore": 0.9665941452338512,
+      "scoreDeviation": 0.036629570130994084,
+      "hardGateFailures": 0,
+      "errors": 0,
+      "costPerConversationUsd": 0.011210991176470588,
+      "firstTextP50Ms": 5966.52919999999,
+      "firstTextP95Ms": 14771.990900000003,
+      "totalP50Ms": 11105.588900000002,
+      "totalP95Ms": 36027.30899999995,
+      "llmCallsMean": 4.411764705882353
+    }
+  ],
+  "decision": {
+    "winner": {
+      "model": "anthropic/claude-haiku-5.5",
+      "label": "compare-completa-claude-haiku-5.5",
+      "repeats": 1,
+      "meanScore": 0.9665941452338512,
+      "scoreDeviation": 0.036629570130994084,
+      "hardGateFailures": 0,
+      "errors": 0,
+      "costPerConversationUsd": 0.011210991176470588,
+      "firstTextP50Ms": 5966.52919999999,
+      "firstTextP95Ms": 14771.990900000003,
+      "totalP50Ms": 11105.588900000002,
+      "totalP95Ms": 36027.30899999995,
+      "llmCallsMean": 4.411764705882353
+    },
+    "reasons": [
+      "compare-completa-claude-haiku-5.5 tiene el mejor puntaje entre los que pasan las puertas duras"
+    ]
+  }
+}

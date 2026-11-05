@@ -1,0 +1,178 @@
+{
+  "meta": {
+    "date": "2026-11-04",
+    "label": "e06-control",
+    "model": "z-ai/glm-5.3-flash",
+    "judgeModel": "minimax/minimax-m3.1-flash",
+    "commit": "373b29f+cambios",
+    "promptVersion": "932c93c24281",
+    "dataAsOf": "2026-10-31",
+    "repeats": 1
+  },
+  "summary": {
+    "cases": 1,
+    "ran": 1,
+    "skipped": 0,
+    "errors": 0,
+    "meanScore": 0.8333333333333334,
+    "scoreDeviation": null,
+    "hardGateFailures": 1,
+    "scenarioFigureAccuracy": 1,
+    "unsourcedFigures": 1,
+    "controlViolations": 0,
+    "honestNegatives": null,
+    "agentCostUsd": 0.01186872,
+    "judgeCostUsd": 0.00092304,
+    "costPerConversationUsd": 0.01186872,
+    "firstTextP50Ms": 8272.5445,
+    "firstTextP95Ms": 8272.5445,
+    "totalP50Ms": 150330.75879999998,
+    "totalP95Ms": 150330.75879999998,
+    "llmCallsMean": 11
+  },
+  "results": [
+    {
+      "caseId": "E-06",
+      "group": "scenario",
+      "title": "Preparar y enviar con doble aprobación",
+      "repeat": 1,
+      "gates": [
+        "cifras sin fuente: 1,222"
+      ],
+      "writes": 2,
+      "score": {
+        "score": 0.8333333333333334,
+        "components": {
+          "figures": 1,
+          "sourced": 0,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.8333333333333334
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [
+          "1,222"
+        ],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.8333333333333334,
+        "items": [
+          {
+            "id": "CA-E06-1",
+            "verdict": "cumple",
+            "reason": "Elige la audiencia at_risk con 483 clientes, WhatsApp por mayor alcance (267 alcanzables) y支持 histórico de +23.9 puntos, ofrece una concha de $10 con margen posterior de $56.54 y el mensaje de 128 caracteres cabe en el límite de 1024."
+          },
+          {
+            "id": "CA-E06-2",
+            "verdict": "cumple",
+            "reason": "La tarjeta incluye alcance real de 267, exclusiones (214 sin consentimiento y 2 duplicados), costo de $10 por canje, impacto esperado de 31-96 visitas y $2,905.32-$8,997.12, además de la campaña similar 'Te extrañamos' con su lift."
+          },
+          {
+            "id": "CA-E06-4",
+            "verdict": "parcial",
+            "reason": "Tras la primera aprobación se creó el borrador (cmp_eval_001) y se indicó que se volvería a mostrar la tarjeta, pero la respuesta no muestra explícitamente ese id de borrador al usuario."
+          },
+          {
+            "id": "CA-E06-5",
+            "verdict": "parcial",
+            "reason": "La respuesta afirma que la campaña se envió con dos aprobaciones y menciona que la API lo simuló, aunque no incluye el id de la campaña enviada ni un identificador de envío visible en el texto."
+          },
+          {
+            "id": "CA-C03",
+            "verdict": "cumple",
+            "reason": "La tarjeta previa al envío muestra audiencia, canal, oferta, mensaje y alcance real, y el texto indica que el envío requirió una segunda aprobación explícita antes de enviarse."
+          },
+          {
+            "id": "CA-C10",
+            "verdict": "parcial",
+            "reason": "Se afirma que el estado fue 'sent' y se detalla la audiencia fijada de 267 alcanzables de 483 en riesgo, pero no se muestra el id de la campaña enviada como exige el criterio."
+          },
+          {
+            "id": "CA-X03",
+            "verdict": "cumple",
+            "reason": "Antes del envío, la tarjeta muestra el rango de impacto esperado de visitas extra y ventas adicionales, basado en la campaña similar 'Te extrañamos' (+23.9 puntos contra control, confiabilidad media)."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "cumple",
+            "reason": "La propuesta concreta audiencia at_risk (483, 267 alcanzables), canal WhatsApp, oferta de concha gratis, fechas del 1 al 15 de noviembre de 2026 y alcance de 267 personas."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "Las afirmaciones de oportunidad citan métricas, valores y periodos (lift de +23.9 puntos en junio, ticket de $93.72 y margen de 71% de los últimos 3 meses), aunque la comparación explícita por periodo del ticket y margen no siempre queda visible en el texto."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Considera costo y margen: la concha cuesta $10 por canje, deja margen de $56.54 por visita y estima utilidad neta de $1,222.74-$5,547.84, lo que hace razonable la oferta."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Advierte que el grupo de control fue pequeño (67 clientes) y que la confiabilidad del efecto es media, y señala que 214 clientes no tienen consentimiento para WhatsApp."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "La respuesta explica de forma directa la audiencia, canal, oferta, alcance y resultado esperado, con un resumen final comprensible; el primer bloque de proceso es algo redundante pero no entorpece."
+          }
+        ],
+        "costUsd": 0.00092304
+      },
+      "usage": {
+        "agentCostUsd": 0.01186872,
+        "judgeCostUsd": 0.00092304,
+        "tokensIn": 193536,
+        "tokensOut": 5244,
+        "llmCalls": 11,
+        "requests": 3,
+        "firstTextMs": 8272.5445,
+        "totalMs": 150330.75879999998,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "Voy a armar la propuesta de recuperación. Primero reviso el contexto, el tamaño de los segmentos en riesgo y qué campañas parecidas han funcionado.\nEl antecedente más sólido es \"Te extrañamos\" por WhatsApp con una concha gratis: +23.9 puntos de visita contra control. Voy a calcular el alcance real y el impacto estimado con esa fórmula sobre los clientes en riesgo.\nLa propuesta: **recuperar a los clientes en riesgo** (483 con 10+ visitas históricas y 30–90 días sin venir; gasto promedio de $3,276.78) por **WhatsApp con una concha gratis**. Es la combinación con mejor evidencia: la campaña \"Te extrañamos\" logró +23.9 puntos de visita contra control. Se alcanza a **267 personas** (se excluyen 214 sin consentimiento de WhatsApp y 2 duplicados). La concha cuesta $10 por canje y deja $56.54 de margen por visita; la utilidad neta estimada va de $1,222 a $5,548.\nCorrijo la longitud del mensaje y vuelvo a mostrar la tarjeta.\nEl borrador quedó creado. Para mandarlo necesito una segunda aprobación tuya del envío.\nListo, la campaña **\"Te extrañamos — noviembre\"** se envió con tus dos aprobaciones. Resumen:\n\n- **Audiencia:** 483 clientes en riesgo (10+ visitas y 30–90 días sin venir), alcance real de **267 por WhatsApp** (214 sin consentimiento en ese canal y 2 duplicados quedaron fuera).\n- **Oferta:** concha gratis del 1 al 15 de noviembre; cuesta $10 por canje y deja $56.54 de margen por visita.\n- **Impacto esperado:** 31 a 96 visitas extra y $2,905 a $8,997 en ventas adicionales, con base en la campaña \"Te extrañamos\" de junio (+23.9 pts de visita contra control, confiabilidad media porque el grupo de control fue pequeño).\n- Nota: el envío es simulado por la API; no llegan mensajes reales.\n\nSugerencia: revisa los resultados en ~3 semanas para ver canjes y visitas antes de decidir si repites con los clientes dormidos (367, con gasto promedio de $1,279.79).",
+        "steps": [
+          "get_business_context",
+          "customer_segments",
+          "campaign_performance",
+          "audience_reach",
+          "offer_economics",
+          "estimate_campaign_impact",
+          "show_campaign_card (figure_verification)",
+          "show_campaign_card (figure_verification)",
+          "show_campaign_card (figure_verification)",
+          "show_campaign_card",
+          "request_draft_approval",
+          "create_campaign_draft",
+          "request_send_approval",
+          "send_campaign"
+        ],
+        "blocks": [
+          "campaign_card"
+        ],
+        "replies": [
+          "approve",
+          "approve"
+        ]
+      }
+    }
+  ]
+}

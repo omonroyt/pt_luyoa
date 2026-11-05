@@ -1,0 +1,13 @@
+id: CA-N01
+group: negative
+title: "Periodo fuera de los datos"
+criteria: ["CA-N01", "CA-V08"]
+turns:
+  - user: "¿Cuánto vendí en marzo de 2024?"
+expect:
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_forbidden: ["chart", "table", "kpis", "campaign_card"]
+  must_mention:
+    - "2025-11-01|noviembre de 2025"
+  honest_refusal: true
+  rubric: ["CA-N01", "CA-V08"]

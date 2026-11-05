@@ -1,0 +1,21 @@
+id: E-04-V1
+group: variant
+title: "Clientes que se van y a cuántos contactar"
+criteria: ["CA-E04-6"]
+turns:
+  - user: "¿Cuántos clientes se me están yendo y a cuántos puedo contactar?"
+expect:
+  tools_required: ["customer_segments", "audience_reach"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["table"]
+  golden: E-04
+  figures:
+    - at_risk.customers
+    - dormant.customers
+    - at_risk.reach_by_channel[0].reachable
+    - at_risk.reach_by_channel[1].reachable
+    - at_risk.reach_by_channel[2].reachable
+  must_mention:
+    - "en riesgo"
+    - "dormid"
+  rubric: ["CA-E04-1", "CA-E04-2", "CA-E04-3", "CA-E04-4", "CA-E04-5"]

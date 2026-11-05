@@ -24,7 +24,7 @@ type LocationData = {
     concern: { level: string; score: number; reasons: string[] };
     change: { net_sales: { percent: number | null } };
     monthly_series: unknown[];
-    risk_customers: { at_risk: number; dormant: number };
+    risk_customers: { at_risk: number; dormant: number; total: number };
   }>;
 };
 
@@ -103,5 +103,15 @@ describe("location_health", () => {
     expect(worst?.concern.reasons.length).toBeGreaterThan(0);
     expect(worst?.monthly_series).toHaveLength(12);
     expect(payload.notes[0]).toContain("propio historial");
+  });
+
+  it("entrega el total de clientes en riesgo y dormidos por sucursal (ADR-09)", async () => {
+    session = await connectTestClient();
+    const { payload } = await session.call<Output<LocationData>>("location_health");
+    for (const location of payload.data.locations) {
+      const risk = location.risk_customers;
+      expect(risk.total).toBe(risk.at_risk + risk.dormant);
+    }
+    expect(payload.data.locations.some((location) => location.risk_customers.total > 0)).toBe(true);
   });
 });

@@ -1,0 +1,19 @@
+id: EJEMPLO
+group: example
+title: "Categoría más rentable y cómo empujarla"
+criteria: ["CA-EJ-2", "CA-V04"]
+turns:
+  - user: "¿Qué categoría de productos me deja más utilidad y cómo la empujo?"
+expect:
+  tools_required: ["sales_breakdown", "audience_reach"]
+  tools_optional:
+    ["get_business_context", "offer_economics", "estimate_campaign_impact", "campaign_performance"]
+  tools_forbidden: ["create_campaign_draft", "send_campaign"]
+  blocks_required: ["chart", "campaign_card"]
+  golden: EJEMPLO
+  figures:
+    - top.gross_profit_before_discounts
+    - top.share_percent
+  must_mention:
+    - "antes de descuentos"
+  rubric: ["CA-EJ-1", "CA-EJ-2", "CA-EJ-3", "CA-EJ-4", "CA-EJ-5"]

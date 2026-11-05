@@ -26,7 +26,7 @@
 | ADR-10 | Drizzle + libSQL (SQLite local, Turso en la nube) | Aceptada |
 | ADR-11 | Trazas propias en BD, OpenTelemetry opcional | Aceptada |
 | ADR-12 | Evaluaciones: verificaciones deterministas + juez con rúbrica | Aceptada |
-| ADR-13 | Elección de modelo por medición | Aceptada para desarrollo; se cierra en M6 |
+| ADR-13 | Elección de modelo por medición | Aceptada; cerrada en M6 con `anthropic/claude-haiku-5.5` |
 | ADR-14 | Vercel + Turso para la demo publicada | Propuesta |
 | ADR-15 | Recharts para gráficas | Aceptada |
 | ADR-16 | Multi-negocio por configuración aislada | Aceptada |
@@ -109,6 +109,13 @@
   - Las escrituras del MCP solo se exponen junto con estas herramientas.
   - Las pruebas recorren el flujo completo con el MCP real y fixtures: el turno se detiene, el token emitido crea el borrador, un token inventado no llega a la API y un contenido alterado invalida el token.
 - **Requisito para la interfaz (M5):** la tarjeta con los botones de aprobación se dibuja con el `campaign` de `request_draft_approval` (o de `request_send_approval`), que es exactamente el contenido que se firma. Así lo que la persona ve es lo que aprueba, aunque el modelo hubiera mostrado antes una tarjeta distinta.
+- **Control del orquestador (M6, IMP-53):** en la corrida de humo, GLM-5.3-Flash pidió la aprobación en texto en E-06, sin llamar `request_draft_approval`, pese a la regla del prompt. Ahora `prepareStep` revisa los pasos del turno. Si se mostró con éxito una tarjeta de campaña y después no hubo una llamada de aprobación, el siguiente paso solo deja activa la herramienta de aprobación y agrega una instrucción para llamarla: `request_draft_approval` para una propuesta y `request_send_approval` para un borrador. No usa `toolChoice`, porque Z.AI, el proveedor original de GLM, rechaza forzar una herramienta, por nombre o con `required` (verificado en M6). El control tiene prioridad sobre el cierre del último paso. Así toda tarjeta llega a la interfaz con sus botones (07 §3.4) y la aprobación no depende de que el modelo obedezca el prompt (`lib/agent/approval-policy.ts`).
+- **Aprobación solo después de una tarjeta válida (M6, IMP-53):** con Claude Haiku 5.5, el modelo pedía la aprobación en el mismo paso en que mostraba la tarjeta. Si la tarjeta fallaba el verificador de cifras, la petición llegaba igual y la persona habría aprobado sin ver la evidencia (CA-C03).
+  - **Compuerta de tarjeta** (`lib/agent/card-gate.ts`): recuerda el estado de la última tarjeta que pasó el verificador en el turno. La entrada de `request_draft_approval` solo es válida después de una propuesta verificada, y la de `request_send_approval`, después de un borrador verificado. La tarjeta se verifica al validar su entrada, y el AI SDK valida en orden las llamadas de un paso. Por eso una aprobación que llega junto con su tarjeta ya conoce el veredicto: sigue si la tarjeta pasó y se rechaza si no. La ejecución de la tarjeta vuelve a verificar y devuelve el detalle de los problemas. Esperar a la ejecución dentro de la validación no sirve, porque el SDK ejecuta las herramientas después de validar todas las llamadas del paso. Si no, la llamada falla con una instrucción para el modelo ("muestra la tarjeta y vuelve a llamarla; la herramienta sí está disponible"), y la interfaz muestra "El agente pidió un paso antes de tiempo y lo está corrigiendo". La validación del historial de la conversación (`chat-request.ts`) usa las herramientas sin compuerta.
+  - **Primer intento descartado:** ocultar las herramientas de aprobación hasta tener tarjeta. El SDK respondía `NoSuchToolError` ("herramienta no disponible") y, en el humo, Haiku dejaba de intentarlo aun cuando el paso siguiente sí se la ofrecía (E-06 y MT-01).
+  - **Llamada rechazada:** una llamada de aprobación marcada `invalid` no cuenta como pedida, así que el paso siguiente la exige.
+  - **Tarjeta del borrador:** si se creó un borrador (`create_campaign_draft` sin error) y no se mostró su tarjeta, el paso siguiente deja activas `show_campaign_card` y `request_send_approval`, con una instrucción. La aprobación de envío sigue activa porque el modelo suele pedirla junto con la tarjeta, y la compuerta solo la acepta si la tarjeta pasa. En el humo, dejar solo la tarjeta hacía que esa petición conjunta se rechazara. En el humo, Haiku creaba el borrador y pedía el envío solo en texto.
+  - **Instrucciones por paso:** el AI SDK arrastra a los pasos siguientes las instrucciones que fija un paso, así que los pasos normales vuelven a fijar el prompt base y la nota de un paso forzado no se queda.
 - **Alternativa evaluada en IMP-34: aprobación nativa del AI SDK 7** (`toolApproval` con `experimental_toolApprovalSecret`).
   - Firma con HMAC la solicitud de aprobación y la liga a la herramienta, al id de la llamada y a sus argumentos.
   - Se descartó porque duplica lo que ya garantiza el token propio, que además es de un solo uso, vence a los 10 minutos y lo verifica el MCP.
@@ -165,15 +172,15 @@
 
 ## ADR-13 · Elección de modelo por medición
 
-- **Estado:** Aceptada para desarrollo; la elección final se cierra con la comparación de modelos (M6).
+- **Estado:** Aceptada. Se cerró en M6: el modelo del agente es `anthropic/claude-haiku-5.5` (ver "Decisión final" al final de este ADR).
 - **Decisión:** comparar al menos 4 modelos de OpenRouter con el set de evaluación completo, midiendo calidad (puntaje del corredor), costo por conversación (desde el `usage` de OpenRouter) y latencia (primer token y total).
 - **Estudio previo (2026-11-04):** se revisaron los 454 modelos del catálogo de OpenRouter (389 con herramientas) y se puntuaron 16 con criterios fijados de antemano: uso de herramientas (AutomationBench de Artificial Analysis, 30%), veracidad (alucinación en AA-Omniscience, 25%), costo por conversación con el perfil de tokens medido (20%), latencia (10%) y disponibilidad (5%). La calidad del español no tiene medición comparable entre fabricantes y se mide en M6.
-- **Modelo de desarrollo:** `z-ai/glm-5.3-flash`, con el proveedor original primero y sin versiones de precisión reducida (fp4). Es el único candidato que queda entre los tres primeros con cualquier combinación de pesos probada. Respaldo: `deepseek/deepseek-v4.1-flash-1017`.
+- **Modelo de desarrollo (M4 y M5):** `z-ai/glm-5.3-flash`, solo con el proveedor original y sin versiones de precisión reducida (fp4). Desde M6, cuando se conoce el proveedor original, OpenRouter no recurre a otros (`allow_fallbacks: false`): en la corrida de humo, un proveedor de respaldo devolvió una llamada a herramienta incompleta y el turno falló. La contrapartida es que, si el proveedor original falla, el turno falla y la interfaz ofrece reintentar. **Hallazgo de M6:** Z.AI rechazaba todas las solicitudes del agente, porque la tarjeta de campaña tenía un esquema con tupla (`z.tuple`), y el respaldo las mandaba en silencio a otros proveedores. Las mediciones de GLM anteriores al tercer humo de M6 (prueba de compatibilidad, M4, M5 y primer humo) probablemente no fueron de Z.AI. Los rangos ahora son listas de dos números y una prueba impide volver a usar tuplas en los bloques. Es el único candidato que queda entre los tres primeros con cualquier combinación de pesos probada. Respaldo: `deepseek/deepseek-v4.1-flash-1017`.
 - **Candidatos de M6:**
 
   | Modelo | Familia | Papel |
   |---|---|---|
-  | `z-ai/glm-5.3-flash` | Z.ai, pesos abiertos | Modelo de desarrollo |
+  | `z-ai/glm-5.3-flash` | Z.ai, pesos abiertos | Modelo de desarrollo (M4 y M5) |
   | `deepseek/deepseek-v4.1-flash-1017` | DeepSeek, pesos abiertos | Mayor puntaje base; vigilar veracidad |
   | `anthropic/claude-haiku-5.5` | Anthropic | Cerrado de bajo costo |
   | `openai/gpt-6.1-terra` | OpenAI | Cerrado de gama media |
@@ -184,6 +191,26 @@
 - **Prueba de compatibilidad (2026-11-04):** los cinco candidatos completaron una pregunta de dos herramientas por el stack real (AI SDK 7, `@openrouter/ai-sdk-provider` y cliente MCP), sin argumentos inválidos y citando fuentes reales; costo total 0.037 USD. Reporte: `evals/reports/2026-11-04-compat.json`. Tres modelos sumaron cifras en el texto en lugar de citar las de la herramienta, lo que confirma la necesidad del verificador de cifras (ADR-09).
 - **Criterios de desempate:** confiabilidad al llamar herramientas, calidad del español, respeto de la aprobación y costo.
 - **Opción de dos modelos:** si los números lo justifican, uno principal para el agente y uno barato para el juez o para el resumen semanal.
+
+- **Decisión final (M6, 2026-11-04): `anthropic/claude-haiku-5.5`.**
+  - **Medición:** corrida completa de 36 casos × 2 repeticiones, con el mismo prompt, herramientas, API real, verificador de cifras y juez (`evals/reports/2026-11-04-compare-completa-recalificada.md`):
+
+    | Modelo | Puntaje | Casos con cifras sin fuente | USD / conversación | Total p50 / p95 | Llamadas al modelo |
+    |---|---|---|---|---|---|
+    | `z-ai/glm-5.3-flash` | 0.94 ± 0.08 | 5 | 0.0050 | 20.2 / 83.3 s | 6.0 |
+    | `anthropic/claude-haiku-5.5` | 0.92 ± 0.08 | 0 | 0.0107 | 10.1 / 34.8 s | 4.2 |
+
+  - **Por qué:** GLM-5.3-Flash dio cifras sin fuente en 5 casos de escenarios y variantes: sumas ("391" = 219 + 172; "577" = 330 + 247), una proporción ("2.5 veces"), una diferencia que no coincide con los datos y la longitud del mensaje contada por el modelo. Con eso se cumplen dos condiciones de la regla de cambio del estudio: cifra inventada en los escenarios, y un candidato que lo iguala sin puertas duras. Haiku no dio cifras sin fuente en esos grupos, responde en la mitad del tiempo y su costo cabe en el presupuesto.
+  - **Controles de la medición:**
+    - cada cifra marcada se revisó a mano y se corrigieron los falsos positivos del verificador (años, truncamiento, miles abreviados y aproximaciones marcadas);
+    - las transcripciones guardadas se recalificaron con `pnpm rescore`; GLM pasó de 7 a 5 casos con puerta dura y Haiku siguió en 0;
+    - una corrida anterior se descartó por el límite de solicitudes de la API.
+  - **Contraste con el estudio previo:** Haiku tenía el menor puntaje del grupo en uso de herramientas (AutomationBench 35.4%), pero en esta carga no inventó cifras y completó el flujo de doble aprobación. Además, las mediciones previas de GLM probablemente no fueron de su proveedor original (ver arriba). La medición propia sustituye a las métricas generales para esta decisión.
+  - **Límites:**
+    - 2 repeticiones de las 3 previstas, por el tope de gasto;
+    - Terra (0.81) y Gemini Argon (0.93, 14 veces el costo de GLM) solo se midieron en la corrida de humo;
+    - DeepSeek quedó fuera por la configuración de privacidad de la cuenta.
+  - **Consecuencia:** `OPENROUTER_MODEL=anthropic/claude-haiku-5.5` en el entorno de la app (configuración del responsable). La política de proveedor original aplica: Anthropic sin respaldo de otros proveedores.
 
 ## ADR-14 · Vercel + Turso para la demo publicada
 

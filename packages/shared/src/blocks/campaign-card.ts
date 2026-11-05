@@ -37,7 +37,11 @@ export function messageLength(text: string): number {
   return text.length;
 }
 
-const Range = z.tuple([z.number(), z.number()]).describe("Rango [mínimo, máximo]");
+// ES: Lista de exactamente dos números y no z.tuple: el proveedor original de GLM (Z.AI)
+//     rechaza toda la solicitud si una herramienta usa un esquema de tupla (prefixItems).
+// EN: A list of exactly two numbers rather than z.tuple: GLM's original provider (Z.AI)
+//     rejects the whole request if a tool uses a tuple schema (prefixItems).
+const Range = z.array(z.number()).min(2).max(2).describe("Rango [mínimo, máximo]");
 
 const Reach = z
   .object({
@@ -95,7 +99,13 @@ export const CampaignCardBlock = BlockBase.extend({
       reliable: z.boolean(),
     }),
   ),
-  message: z.object({ text: z.string(), length: z.number(), limit: z.number() }),
+  // ES: Solo el texto: la longitud y el límite del canal los calcula el sistema. En M6 el
+  //     modelo contaba mal los caracteres y el verificador rechazaba 25 de 27 tarjetas.
+  // EN: Text only: the length and the channel limit are computed by the system. In M6 the
+  //     model miscounted characters and the verifier rejected 25 of 27 cards.
+  message: z.object({
+    text: z.string().describe("Texto exacto del mensaje; no cuentes sus caracteres"),
+  }),
   warnings: z.array(z.string()),
   approvalId: z.string().optional(),
 });

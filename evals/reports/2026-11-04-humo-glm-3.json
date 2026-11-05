@@ -1,0 +1,905 @@
+{
+  "meta": {
+    "date": "2026-11-04",
+    "label": "humo-glm-3",
+    "model": "z-ai/glm-5.3-flash",
+    "judgeModel": "minimax/minimax-m3.1-flash",
+    "commit": "373b29f+cambios",
+    "promptVersion": "932c93c24281",
+    "dataAsOf": "2026-10-31",
+    "repeats": 1
+  },
+  "summary": {
+    "cases": 7,
+    "ran": 7,
+    "skipped": 0,
+    "errors": 0,
+    "meanScore": 0.9239502164502165,
+    "scoreDeviation": 0.08860089596902997,
+    "hardGateFailures": 1,
+    "scenarioFigureAccuracy": 1,
+    "unsourcedFigures": 1,
+    "controlViolations": 0,
+    "honestNegatives": null,
+    "agentCostUsd": 0.03148477,
+    "judgeCostUsd": 0.00487923,
+    "costPerConversationUsd": 0.004497824285714286,
+    "firstTextP50Ms": 31739.3848,
+    "firstTextP95Ms": 47201.26240000001,
+    "totalP50Ms": 55767.163499999995,
+    "totalP95Ms": 92336.36919999999,
+    "llmCallsMean": 5.857142857142857
+  },
+  "results": [
+    {
+      "caseId": "E-01",
+      "group": "scenario",
+      "title": "Octubre contra septiembre",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.9750000000000001,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.75
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.75,
+        "items": [
+          {
+            "id": "CA-E01-1",
+            "verdict": "parcial",
+            "reason": ""
+          },
+          {
+            "id": "CA-E01-2",
+            "verdict": "parcial",
+            "reason": ""
+          },
+          {
+            "id": "CA-E01-3",
+            "verdict": "cumple",
+            "reason": ""
+          },
+          {
+            "id": "CA-E01-4",
+            "verdict": "parcial",
+            "reason": ""
+          },
+          {
+            "id": "CA-E01-5",
+            "verdict": "cumple",
+            "reason": ""
+          },
+          {
+            "id": "especificidad",
+            "verdict": "no_aplica",
+            "reason": ""
+          },
+          {
+            "id": "evidencia",
+            "verdict": "no_aplica",
+            "reason": ""
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_aplica",
+            "reason": ""
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_aplica",
+            "reason": ""
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": ""
+          }
+        ],
+        "costUsd": 0.00030882
+      },
+      "usage": {
+        "agentCostUsd": 0.00348855,
+        "judgeCostUsd": 0.00030882,
+        "tokensIn": 51917,
+        "tokensOut": 618,
+        "llmCalls": 4,
+        "requests": 1,
+        "firstTextMs": 31739.3848,
+        "totalMs": 37118.6538,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "Octubre te fue bien: **$808,254 en ventas netas, +4.2% contra septiembre** ($775,804), con 8,680 tickets (+5.6%) y utilidad bruta de $575,646 (+4.6%).\n\nLo que creció fue el número de visitas transaccionales, no el ticket: el ticket promedio bajó un poquito ($93.12 vs $94.37, −1.3%). Como octubre tiene 31 días contra 30 de septiembre, el comparativo justo por día muestra ventas de $26,073/día vs $25,860/día, +0.8% — una mejora real pero modesta. Las visitas con tarjeta también subieron (3,208 vs 3,074, +4.4%).\n\nSi quieres, te desgloso este comparativo por sucursal para ver cuál explica el crecimiento — o cuál lo está frenando.",
+        "steps": [
+          "compare_periods",
+          "show_kpis",
+          "cite_sources"
+        ],
+        "blocks": [
+          "kpis"
+        ],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-02",
+      "group": "scenario",
+      "title": "Peor día de la semana y qué hacer",
+      "repeat": 1,
+      "gates": [
+        "cifras sin fuente: 270"
+      ],
+      "writes": 0,
+      "score": {
+        "score": 0.8318181818181818,
+        "components": {
+          "figures": 1,
+          "sourced": 0,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.8181818181818182
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [
+          "270"
+        ],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.8181818181818182,
+        "items": [
+          {
+            "id": "CA-E02-1",
+            "verdict": "cumple",
+            "reason": "Indica el rango analizado 2026-08-09 a 2026-10-31, coherente con el data_as_of 2026-10-31 de los resultados."
+          },
+          {
+            "id": "CA-E02-2",
+            "verdict": "cumple",
+            "reason": "Identifica el martes como el día con menor transactions_per_day (181.67) y muestra una gráfica de transacciones por día de la semana con ese día resaltado."
+          },
+          {
+            "id": "CA-E02-3",
+            "verdict": "no_cumple",
+            "reason": "No compara ni indica si el patrón de peor día se mantiene en Coyoacán, Polanco y Roma Norte."
+          },
+          {
+            "id": "CA-E02-4",
+            "verdict": "cumple",
+            "reason": "Propone campaña para el segmento regulars (3-7 visitas en 60 días), canal email, oferta de puntos dobles, mensaje concreto y alcance real de 219 contactables."
+          },
+          {
+            "id": "CA-E02-5",
+            "verdict": "cumple",
+            "reason": "Incluye el costo por canje ($4.25), el margen bruto por visita ($66.54) y el antecedente del 2x1 de americano con 39.9% de canje,cellular ajustando la limitación de atribución."
+          },
+          {
+            "id": "CA-E02-6",
+            "verdict": "no_cumple",
+            "reason": "No cierra preguntando si se prepara el borrador ni solicita confirmación antes de crear nada."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "cumple",
+            "reason": "Nombra audiencia (regulars), canal (email), oferta (puntos dobles), fechas (2026-11-03 a 2026-11-24) y alcance (219 de 337 contactables)."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "cumple",
+            "reason": "Las afirmaciones principales incluyen métricas, valores, periodo y comparación entre el martes y el sábado; las estimaciones de canjes seemarks Supported."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Compara el costo por canje con el margen bruto por visita y el margen restante,-dessertando una oferta de riesgo bajo."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Advierte que no hay grupo de control comparable y que solo puede estimar canjes (21-32), no visitas incrementales."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde primero cuál es el peor día y después la acción, con datos y explicaciones comprensibles."
+          }
+        ],
+        "costUsd": 0.00077994
+      },
+      "usage": {
+        "agentCostUsd": 0.00801222,
+        "judgeCostUsd": 0.00077994,
+        "tokensIn": 133866,
+        "tokensOut": 3144,
+        "llmCalls": 8,
+        "requests": 1,
+        "firstTextMs": 35859.9934,
+        "totalMs": 92336.36919999999,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "Tu peor día es el **martes**: 181.7 transacciones por día en promedio en las últimas 12 semanas (2026-08-09 a 2026-10-31), contra 350.3 del sábado, el mejor día. Es el único día que cae por debajo de 270.\nQué haría: una campaña de martes para tus clientes regulares (3–7 visitas en los últimos 60 días), con **puntos dobles** y por **email**, que es el canal con mejor alcance real: 219 de 337 regulares contactables (114 sin consentimiento de email, 2 suspendidas, 2 duplicadas).\n\nPor qué puntos dobles y no descuento: ya probaste el 2x1 de americano los martes (febrero 2026) con 39.9% de canje, pero sin grupo de control no sabemos cuántas visitas generó de verdad. Los puntos dobles cuestan solo $4.25 por canje contra un margen bruto de $66.54 por visita — el 6.4% del margen — así que el riesgo es bajo. Advertencia honesta: no hay campaña comparable con grupo de control, así que solo puedo estimar canjes (21–32), no visitas incrementales.",
+        "steps": [
+          "get_business_context",
+          "sales_breakdown",
+          "audience_reach",
+          "campaign_performance",
+          "estimate_campaign_impact",
+          "offer_economics",
+          "show_chart",
+          "cite_sources",
+          "show_campaign_card (invalid_input)",
+          "show_campaign_card (invalid_input)",
+          "show_campaign_card (figure_verification)",
+          "show_campaign_card"
+        ],
+        "blocks": [
+          "chart",
+          "campaign_card"
+        ],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-03",
+      "group": "scenario",
+      "title": "Sucursal que preocupa",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.97,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.7
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.7,
+        "items": [
+          {
+            "id": "CA-E03-1",
+            "verdict": "cumple",
+            "reason": "Compara las tres sucursales contra sus propias 12 semanas previas en ventas, tickets, visitas por día y ticket promedio, con periodos comparables (2026-08-09 a 2026-10-31 vs 2026-05-17 a 2026-08-08)."
+          },
+          {
+            "id": "CA-E03-2",
+            "verdict": "cumple",
+            "reason": "Nombra a Roma Norte como la sucursal que más debe preocupar y respalda con ventas -31% ($558,080), visitas con tarjeta -38.4% y tendencia trimestral -31.2%."
+          },
+          {
+            "id": "CA-E03-3",
+            "verdict": "cumple",
+            "reason": "Incluye un gráfico de barras agrupadas de ventas netas por sucursal, últimas 12 semanas vs 12 previas."
+          },
+          {
+            "id": "CA-E03-4",
+            "verdict": "parcial",
+            "reason": "Aclara que el problema no es el tamaño sino la caída (Polanco con casi el doble de ventas es 'preocupación media'), pero no dice explícitamente que una sucursal más pequeña no es preocupante por sí misma."
+          },
+          {
+            "id": "CA-E03-5",
+            "verdict": "cumple",
+            "reason": "Propone una campaña de recuperación para los 219 clientes en riesgo de Roma Norte y ofrece como alternativa analizar por día/hora el impacto de la caída."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "parcial",
+            "reason": "Define audiencia (219 clientes en riesgo de Roma Norte) y alcance, pero deja canal, oferta y fechas pendientes de definir, prometiendo mostrarlos después."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "cumple",
+            "reason": "Las afirmaciones principales traen métrica, valor, periodo y comparación (ventas $558,080, -31%, visitas 65→40 por día, octubre 2026 $182,498 como mes más bajo)."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No considera costo, margen ni la razonabilidad económica de la oferta; solo anuncia que lo calculará antes de decidir."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "no_cumple",
+            "reason": "No menciona ninguna limitación del análisis (ausencia de grupo de control, tamaño de muestra o diferencias estacionales) pese a afirmar causalidad sobre la caída de visitas."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde de inmediato qué sucursal preocupa, luego desglosa el resto con un resumen por sucursal y cierra con una acción clara."
+          }
+        ],
+        "costUsd": 0.00064032
+      },
+      "usage": {
+        "agentCostUsd": 0.00346341,
+        "judgeCostUsd": 0.00064032,
+        "tokensIn": 74111,
+        "tokensOut": 1482,
+        "llmCalls": 5,
+        "requests": 1,
+        "firstTextMs": 11755.703399999999,
+        "totalMs": 52399.881499999996,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "La que más te debería preocupar es **Roma Norte**: nivel de preocupación alta, con ventas netas de $558,080 en las últimas 12 semanas (2026-08-09 a 2026-10-31), un -31% contra las 12 semanas previas, y visitas con tarjeta por día -38.4%. Su tendencia trimestral también cae -31.2%, es decir, no es una sola mala quincena: octubre 2026 ($182,498) fue su mes más bajo del año.\nResumen por sucursal (comparando cada una contra sus propias 12 semanas previas):\n\n- **Roma Norte — preocupación alta.** Ventas netas -31% ($558,080), tickets -31%, visitas con tarjeta por día -38.4% (de 65 a 40 por día). Además tiene 219 clientes en riesgo y 172 dormidos. Su nivel de octubre 2026 ($182,498) es el más bajo de toda su serie mensual.\n- **Coyoacán — preocupación alta.** Ventas netas -16.5% ($629,976), visitas por día -24.6%, con 183 en riesgo y 126 dormidos. Octubre ($229,158) también fue su mes más flojo.\n- **Polanco — preocupación media.** Ventas casi estables (-4.6%, $1,046,906); la señal de alerta es visitas con tarjeta por día -23.2%, aunque su base era más alta.\n\nEl patrón es común: el ticket promedio casi no se movió en ninguna sucursal (entre -0.1% y -1.1%), así que el problema no es que la gente gaste menos, sino que **viene menos gente**, sobre todo con tarjeta.\n\n**Acción concreta que te propongo:** una campaña de recuperación para los clientes en riesgo de Roma Norte (son 219, el segmento con mayor valor perdido). Si te late, la armo y te muestro el alcance real por canal, costo de la oferta e impacto estimado antes de decidir. También puedo mirar primero por qué día u hora le pegó más a Roma, si prefieres entender la caída antes de lanzar algo.",
+        "steps": [
+          "location_health",
+          "show_chart (invalid_input)",
+          "show_chart (invalid_input)",
+          "show_chart",
+          "cite_sources"
+        ],
+        "blocks": [
+          "chart"
+        ],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-04",
+      "group": "scenario",
+      "title": "Clientes que se pierden y alcance real",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.98,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.8
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.8,
+        "items": [
+          {
+            "id": "CA-E04-1",
+            "verdict": "cumple",
+            "reason": "Define y explica ambos segmentos con las reglas exactas de las herramientas: en riesgo (10+ visitas y 30-90 días sin venir) y dormido (más de 90 días o sin visitas registradas)."
+          },
+          {
+            "id": "CA-E04-2",
+            "verdict": "cumple",
+            "reason": "Reporta 483 clientes en riesgo y 367 dormidos, con el total de 850, coincidente con los resultados de herramientas."
+          },
+          {
+            "id": "CA-E04-3",
+            "verdict": "cumple",
+            "reason": "Da el reachable por canal (email 330/247, WhatsApp 267/187, push 242/191) y explica las exclusiones: sin consentimiento (239 push, 214 WhatsApp en en riesgo), tarjetas suspendidas y duplicados."
+          },
+          {
+            "id": "CA-E04-4",
+            "verdict": "parcial",
+            "reason": "La tabla está organizada por segmento con una columna por canal, no con una fila por canal, por lo que la comparación por canal no queda en formato de tabla por canal."
+          },
+          {
+            "id": "CA-E04-5",
+            "verdict": "cumple",
+            "reason": "Recomienda enfocarse en el segmento en riesgo por canal email, justificándolo con el mayor alcance (330) y el mayor gasto promedio ($3,276.78 vs $1,279.79)."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "parcial",
+            "reason": "Nombra audiencia (en riesgo), canal (email) y alcance (330), pero no incluye oferta concreta ni fechas de campaña; solo ofrece preparar la propuesta."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "cumple",
+            "reason": "Cada afirmación lleva métrica, valor y periodo (corte 2026-10-31) con comparación entre segmentos y entre canales."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "no_cumple",
+            "reason": "No considera costo, margen ni una oferta razonable; solo menciona que puede estimar costo e impacto en un paso posterior."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Advierte que el tamaño del segmento no equivale al alcance real y detalla las exclusiones aplicadas, cubriendo la limitación relevante."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde de inmediato con cifras y segmentos, sin relleno, comprensible para alguien no analista."
+          }
+        ],
+        "costUsd": 0.000782655
+      },
+      "usage": {
+        "agentCostUsd": 0.00335914,
+        "judgeCostUsd": 0.000782655,
+        "tokensIn": 81386,
+        "tokensOut": 1226,
+        "llmCalls": 6,
+        "requests": 1,
+        "firstTextMs": 47201.26240000001,
+        "totalMs": 55767.163499999995,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "Aquí está el panorama a la fecha de corte (2026-10-31): tienes **850 clientes** en los dos segmentos que se están yendo.\n\n- **En riesgo: 483 clientes** — venían seguido (10+ visitas históricas) pero llevan entre 30 y 90 días sin venir. Son los más valiosos: gasto promedio de $3,276.78. A ellos puedes llegar por email a 330, WhatsApp a 267 o push a 242.\n- **Dormidos: 367 clientes** — más de 90 días sin venir (o sin visitas registradas). Gasto promedio de $1,279.79. Alcanzables: 247 por email, 191 por push, 187 por WhatsApp.\n\nDos cosas que valen la pena notar:\n\n1. **El email es tu canal más fuerte en ambos casos** (es donde más gente dio consentimiento), y el gasto de los en riesgo es mucho mayor, así que si tuvieras que priorizar, empezaría por ahí.\n2. El tamaño del segmento no es lo mismo que el alcance: por ejemplo, de los 483 en riesgo, 239 no tienen consentimiento para push y 214 no para WhatsApp; el \"reachable\" de la tabla ya lo descuenta, junto con tarjetas suspendidas y duplicados.\n\nSi quieres, te armo una propuesta concreta de campaña de recuperación para el segmento en riesgo (el de mayor valor), con oferta, costo estimado e impacto esperado antes de que apruebes nada.",
+        "steps": [
+          "customer_segments",
+          "audience_reach",
+          "audience_reach",
+          "show_table (invalid_input)",
+          "show_table",
+          "cite_sources"
+        ],
+        "blocks": [
+          "table"
+        ],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-05",
+      "group": "scenario",
+      "title": "Campañas que funcionaron",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.98,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.8
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.8,
+        "items": [
+          {
+            "id": "CA-E05-1",
+            "verdict": "no_aplica",
+            "reason": "Solo una campaña tiene grupo de control, por lo que no hay ordenamiento por lift entre varias; la compara correctamente con su control."
+          },
+          {
+            "id": "CA-E05-2",
+            "verdict": "cumple",
+            "reason": "Marca que las otras tres campañas no tuvieron grupo de control y explica que no puede atribuirse con confianza el efecto sobre visitas."
+          },
+          {
+            "id": "CA-E05-3",
+            "verdict": "cumple",
+            "reason": "Advierte que el grupo de control de «Te extrañamos» tenía 67 personas y califica su confiabilidad como media."
+          },
+          {
+            "id": "CA-E05-4",
+            "verdict": "cumple",
+            "reason": "Considera el costo por canje de 2x1 ($65.25) y explica que el descuento erode el margen, además de señalar el bajo canje de las otras ofertas."
+          },
+          {
+            "id": "CA-E05-5",
+            "verdict": "parcial",
+            "reason": "La tabla incluye campaña, canal, oferta, canje y lift, pero omite audiencia y tamaño de muestra, por lo que no cumple el conjunto solicitado."
+          },
+          {
+            "id": "CA-E05-6",
+            "verdict": "parcial",
+            "reason": "Recomienda repetir «Te extrañamos» y el 2x1 de martes con control, pero no propone fechas concretas posteriores a data_as_of."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "parcial",
+            "reason": "Nombra audiencia, canal y oferta, pero no incluye fechas de relanzamiento ni alcance cuantificado de la campaña repetida."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "Las afirmaciones Bringing buen desempeño se apoyan en métricas, pero en general no se presentan periodos de los datos ni comparación con todas las campañas; el periodo solo aparece en la tabla visual."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Relaciona el costo por canje y el margen de las ofertas, y condiciona la repetición del 2x1 a medir su efecto incremental."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Menciona explícitamente la muestra pequeña de 67 clientes, la falta de grupo de control en las otras campañas y la confiabilidad media o baja."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde directamente qué campaña funcionó mejor y cuáles repetiría, con un lenguaje comprensible y sin relleno excesivo."
+          }
+        ],
+        "costUsd": 0.00053547
+      },
+      "usage": {
+        "agentCostUsd": 0.00233508,
+        "judgeCostUsd": 0.00053547,
+        "tokensIn": 54124,
+        "tokensOut": 936,
+        "llmCalls": 4,
+        "requests": 1,
+        "firstTextMs": 35783.7671,
+        "totalMs": 47239.739100000006,
+        "streamErrors": []
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "La que claramente funcionó fue **\"Te extrañamos\"** (WhatsApp, concha gratis, junio 2026): recuperó clientes inactivos con **+23.9 puntos de tasa de visita** contra el grupo de control, canje de 31.3% y utilidad atribuida de $3,360 MXN con costo por canje de $33.60. Es la única con grupo de control, así que es la única cuyo efecto se puede atribuir con confianza (aunque el control fue de 67 personas, por eso su confiabilidad es \"media\" y no alta).\n\nDe las otras tres, la que más me gustaría repetir con medición es el **2x1 de Americano en martes**: 39.9% de canje y $7,899 de utilidad atribuida, pero como no tuvo grupo de control, no sabemos cuánta de esa visita habría pasado de todos modos. Nota: su costo por canje fue alto ($65.25), porque el 2x1 se come margen del producto.\n\nMis recomendaciones:\n\n1. **Repetir \"Te extrañamos\" tal cual** — es la receta probada: WhatsApp + regalo de bajo costo (concha) + audiencia de clientes que ya conoces. Si la relanzas, sugiero usar un grupo de control más grande para confirmar el efecto.\n2. **Repetir el 2x1 de martes solo si se mide con control** — el canje fue fuerte, pero no sabemos si generó visitas nuevas.\n3. **No repetir el 20% general de Buen Fin ni los puntos dobles tal cual** — canje bajo (14.6% y 9.8%) y sin evidencia de efecto en visitas; el descuento general además regala margen a quienes ya iban a comprar.\n\n¿Quieres que arme una propuesta para relanzar \"Te extrañamos\"? Calculo alcance real, costo e impacto esperado y te la muestro lista para aprobar.",
+        "steps": [
+          "campaign_performance",
+          "show_table",
+          "cite_sources"
+        ],
+        "blocks": [
+          "table"
+        ],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "E-06",
+      "group": "scenario",
+      "title": "Preparar y enviar con doble aprobación",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.7458333333333333,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 0,
+          "trajectory": 0.3333333333333333,
+          "format": 1,
+          "judge": 0.625
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 0.3333333333333333,
+        "missingTools": [
+          "create_campaign_draft",
+          "send_campaign"
+        ],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 0,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.625,
+        "items": [
+          {
+            "id": "CA-E06-1",
+            "verdict": "cumple",
+            "reason": "La tarjeta define la audiencia at_risk, justify el canal por alcance e historial, incluye oferta de concha con costo unitario y mensaje de 131 caracteres bajo el límite de 1024."
+          },
+          {
+            "id": "CA-E06-2",
+            "verdict": "cumple",
+            "reason": "La tarjeta muestra alcance alcanzable de 267 con sus exclusiones, costo de $10 por canje, rango de impacto y la campaña similar cmp_0004."
+          },
+          {
+            "id": "CA-E06-4",
+            "verdict": "no_cumple",
+            "reason": "La tarjeta está en estado proposal y no se muestra ningún borrador creado ni su id."
+          },
+          {
+            "id": "CA-E06-5",
+            "verdict": "no_cumple",
+            "reason": "No hubo envío ni confirmación sent; la tarjeta permanece en estado proposal."
+          },
+          {
+            "id": "CA-C03",
+            "verdict": "no_cumple",
+            "reason": "La tarjeta es proposal y la respuesta no envía, por lo que no seFVQn evidencia que el envío requiera una segunda aprobación explícita."
+          },
+          {
+            "id": "CA-C10",
+            "verdict": "no_cumple",
+            "reason": "No se envió la campaña y no se confirman estado sent, id de campaña ni audiencia fijada."
+          },
+          {
+            "id": "CA-X03",
+            "verdict": "cumple",
+            "reason": "Antes de enviar, la tarjeta muestra visitas extra de 31 a 96 y是基于 cmp_0004 con +23.9 puntos contra control, aunque rotula confiabilidad media."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "cumple",
+            "reason": "Nombra segmento at_risk, canal WhatsApp, concha gratis, fechas del 1 al 21 de noviembre de 2026 y alcance alcanzable de 267."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "parcial",
+            "reason": "El impacto se apoya en cmp_0004, con envío de 272, control de 67 y lift de 23.9 puntos, pero no explicita el periodo de la campaña de referencia ni presenta todas las afirmaciones de oportunidad con comparación completa."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Considera costo de $10, utilidad de $66.54, margen remanente de $56.54 y costo total de $840."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "cumple",
+            "reason": "Indica que solo existe una campaña con control (n=272), confianza media y que 214 clientes no tienen consentimiento de WhatsApp."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Expone de forma directa audiencia, canal, oferta, mensaje, alcance y riesgos, con poco texto superfluo."
+          }
+        ],
+        "costUsd": 0.00073704
+      },
+      "usage": {
+        "agentCostUsd": 0.00495699,
+        "judgeCostUsd": 0.00073704,
+        "tokensIn": 93813,
+        "tokensOut": 2844,
+        "llmCalls": 6,
+        "requests": 1,
+        "firstTextMs": 3444.2072000000044,
+        "totalMs": 78234.7432,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "Voy a armar la campaña. Primero reviso el contexto y los segmentos de clientes en riesgo, más qué campañas de recuperación han funcionado.\nLa campaña \"Te extrañamos\" por WhatsApp con concha gratis fue la más efectiva: +23.9 puntos de visita contra control. Voy a replicarla sobre el segmento en riesgo (at_risk): reviso alcance real y costo.\nAjusto la longitud del mensaje y muestro la tarjeta de nuevo:",
+        "steps": [
+          "get_business_context",
+          "customer_segments",
+          "campaign_performance",
+          "audience_reach",
+          "offer_economics",
+          "estimate_campaign_impact",
+          "show_campaign_card (figure_verification)",
+          "show_campaign_card (figure_verification)",
+          "show_campaign_card"
+        ],
+        "blocks": [
+          "campaign_card"
+        ],
+        "replies": []
+      }
+    },
+    {
+      "caseId": "EJEMPLO",
+      "group": "example",
+      "title": "Categoría más rentable y cómo empujarla",
+      "repeat": 1,
+      "gates": [],
+      "writes": 0,
+      "score": {
+        "score": 0.985,
+        "components": {
+          "figures": 1,
+          "sourced": 1,
+          "control": 1,
+          "trajectory": 1,
+          "format": 1,
+          "judge": 0.85
+        }
+      },
+      "checks": {
+        "figureAccuracy": 1,
+        "missingFigures": [],
+        "unsourced": [],
+        "periodDeclared": true,
+        "trajectory": 1,
+        "missingTools": [],
+        "forbiddenToolsUsed": [],
+        "format": 1,
+        "missingBlocks": [],
+        "forbiddenBlocks": [],
+        "control": 1,
+        "writeViolation": false,
+        "behavior": 1,
+        "behaviorFailures": []
+      },
+      "judge": {
+        "score": 0.85,
+        "items": [
+          {
+            "id": "CA-EJ-1",
+            "verdict": "cumple",
+            "reason": "Declara explícitamente el periodo (1 de agosto al 31 de octubre, «últimos 3 meses») y la fecha de corte de los datos."
+          },
+          {
+            "id": "CA-EJ-2",
+            "verdict": "cumple",
+            "reason": "Reporta la utilidad antes de descuentos de café caliente ($919,417) y su participación del total (51.5%), cifras que coinciden con la herramienta."
+          },
+          {
+            "id": "CA-EJ-3",
+            "verdict": "cumple",
+            "reason": "Incluye una gráfica de barras con la utilidad por categoría del periodo ago–oct 2026."
+          },
+          {
+            "id": "CA-EJ-4",
+            "verdict": "parcial",
+            "reason": "Da el alcance real (298 de 456 contactables) pero el texto no explica las exclusiones (153 sin consentimiento, 5 suspendidos), que solo aparecen en la tarjeta."
+          },
+          {
+            "id": "CA-EJ-5",
+            "verdict": "parcial",
+            "reason": "Muestra tarjeta de campaña con fuentes y vigencia 1–15 de noviembre, pero no cierra con la pregunta «¿Preparo el borrador?»; ya entrega el mensaje redactado."
+          },
+          {
+            "id": "especificidad",
+            "verdict": "cumple",
+            "reason": "Define audiencia (ocasionales, menos de 3 visitas en 60 días), canal (email), oferta (puntos dobles), fechas (1–15 nov) y alcance (298)."
+          },
+          {
+            "id": "evidencia",
+            "verdict": "cumple",
+            "reason": "Cada afirmación lleva métrica, valor y periodo, con comparación (51.5% del total, 6.4% del margen de la visita) y sin inventar cifras."
+          },
+          {
+            "id": "criterio_de_negocio",
+            "verdict": "cumple",
+            "reason": "Considera costo por canje ($4.25), margen posterior ($62.29) y costo total estimado, con oferta proporcionada respecto al margen."
+          },
+          {
+            "id": "advertencias",
+            "verdict": "parcial",
+            "reason": "Las advertencias (sin grupo de control, confianza baja, solo canjes) aparecen en la tarjeta, pero el texto no las menciona y afirma «el costo es bajo» sin matizar la limitación de impacto."
+          },
+          {
+            "id": "claridad",
+            "verdict": "cumple",
+            "reason": "Responde de forma directa qué categoría gana y cómo empujarla, con datos concretos y sin relleno innecesario."
+          }
+        ],
+        "costUsd": 0.001094985
+      },
+      "usage": {
+        "agentCostUsd": 0.00586938,
+        "judgeCostUsd": 0.001094985,
+        "tokensIn": 120362,
+        "tokensOut": 3186,
+        "llmCalls": 8,
+        "requests": 1,
+        "firstTextMs": 2860.0726999999897,
+        "totalMs": 89800.74849999999,
+        "streamErrors": [
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?",
+          "No pude completar la respuesta por un error del servicio. ¿Lo intento de nuevo?"
+        ]
+      },
+      "pendingApproval": false,
+      "excerpt": {
+        "text": "Voy a revisar la utilidad por categoría en los últimos 3 meses y, con eso, te propongo cómo empujarla.\nCafé caliente es tu categoría ganadora. Antes de proponerte cómo empujarla, reviso el alcance real de una audiencia y qué campañas parecidas han funcionado.\nYa tengo el panorama. Calculo el costo de la oferta y el impacto esperado.\nAquí está el panorama completo:\n\n**Café caliente es tu categoría con más utilidad: $919,417 antes de descuentos del 1 de agosto al 31 de octubre (51.5% del total).** Es también la más vendida en transacciones, así que hay margen para empujarla aún más.\n\nPara empujarla propongo una campaña a tus clientes ocasionales (menos de 3 visitas en 60 días): puntos dobles por email, el canal con mayor alcance real (298 de 456 contactables). El costo es bajo ($4.25 por canje, solo 6.4% de la utilidad de la visita).",
+        "steps": [
+          "sales_breakdown",
+          "campaign_performance",
+          "audience_reach",
+          "offer_economics",
+          "estimate_campaign_impact",
+          "show_chart",
+          "show_campaign_card (invalid_input)",
+          "show_campaign_card (figure_verification)",
+          "show_campaign_card (figure_verification)",
+          "show_campaign_card"
+        ],
+        "blocks": [
+          "chart",
+          "campaign_card"
+        ],
+        "replies": []
+      }
+    }
+  ]
+}
