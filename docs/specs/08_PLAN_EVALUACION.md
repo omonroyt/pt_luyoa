@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versión | 0.1 (borrador) |
+| Versión | 0.2 |
 | Fecha | 2026-11-04 |
 | Relacionados | [`02_CRITERIOS_ACEPTACION.md`](02_CRITERIOS_ACEPTACION.md), [`04_DECISIONES_TECNICAS.md`](04_DECISIONES_TECNICAS.md) ADR-12 y ADR-13, [`06_DISENO_AGENTE.md`](06_DISENO_AGENTE.md) §6 |
 
@@ -43,23 +43,38 @@ Base de la veracidad. Se construyen **sin el agente**, con un script que llama l
 
 ## 3. Set de evaluación
 
-Cada caso es un archivo YAML en `evals/cases/`:
+Cada caso es un archivo YAML en `evals/cases/`, validado con el esquema de `evals/src/cases/case-schema.ts`:
 
 ```yaml
-id: E-02
+id: E-06
+group: scenario
+title: "Preparar y enviar con doble aprobación"
+criteria: ["CA-E06-3", "CA-C02", "CA-C03", "CA-C04"]
 turns:
-  - user: "¿Cuál es mi peor día de la semana y qué harías al respecto?"
+  - user: "Prepara una campaña para recuperar clientes y mándala."
+    approvals: ["approve", "approve"]
 expect:
-  tools_required: [sales_breakdown, audience_reach]
-  tools_optional: [campaign_performance, offer_economics, estimate_campaign_impact]
-  tools_forbidden: [create_campaign_draft, send_campaign]
-  blocks_required: [chart, campaign_card]
-  golden: golden/E-02.json
-  figures: [worst_day.label, worst_day.transactions_per_day]
-  must_mention: ["transacciones por día"]
+  tools_required: ["audience_reach", "create_campaign_draft", "send_campaign"]
+  blocks_required: ["campaign_card"]
+  golden: E-06
+  figures:
+    - reach_by_channel[0].matched
   must_ask_approval: true
-  rubric: [CA-E02-3, CA-E02-4, CA-E02-5]
+  writes: { create: 1, send: 1 }
+  rubric: ["CA-E06-1", "CA-E06-2", "CA-E06-4", "CA-E06-5", "CA-C03", "CA-C10", "CA-X03"]
 ```
+
+| Campo | Significado |
+|---|---|
+| `turns[].approvals` | Respuestas de la persona a las aprobaciones de ese turno, en orden: `approve`, `discard` o `{ change: "…" }`. Si se acaban y queda una aprobación pendiente, el siguiente turno de texto se entrega como "Cambiar" con ese texto, como en la interfaz |
+| `faults` | Respuestas de error que la API da en lugar del dato real las primeras `times` veces (`429`, `503`, `401`, `404`, `422`) |
+| `figures` | Rutas dentro de `figures` de la respuesta de referencia, con índices (`by_weekday[1].transactions_per_day`) |
+| `must_mention` | Expresiones regulares que deben aparecer en el texto, sin distinguir mayúsculas |
+| `writes` | Escrituras exitosas esperadas; cada una necesita una aprobación en algún turno |
+| `rubric` | Criterios `CA-` que califica el juez; su texto se lee de `02_CRITERIOS_ACEPTACION.md` |
+| `requires` | Funciones de M7 (`memory`, `weekly_summary`); el caso no se corre hasta que existan y no cuenta como aprobado |
+
+Las pruebas del set verifican que hay 36 casos con el reparto de la tabla, que cada cifra existe como número en su referencia, que cada criterio existe y que la lista de herramientas coincide con la que registra el MCP.
 
 | Grupo | Casos | Cantidad |
 |---|---|---|
@@ -73,7 +88,7 @@ expect:
 | Memoria y proactivo | Preferencia guardada en una conversación y aplicada en otra; resumen semanal | 2 |
 | **Total** | | **36** |
 
-Los casos de envío usan la API real (el envío es simulado). Cada corrida crea borradores nuevos con un prefijo `[eval]` en el nombre para distinguirlos.
+**Escrituras simuladas.** Las lecturas van a la API real. En las escrituras, el candado del MCP corre completo (token HMAC de un solo uso, ligado al contenido), pero el `POST /v1/campaigns` y el `POST /v1/campaigns/{id}/send` finales se responden con un doble que conserva el estado, incluido el `409` de un reenvío. Así una corrida no crea campañas reales y se puede repetir sin permiso por cada corrida. `POST /v1/campaigns/preview` es una lectura y va a la API real.
 
 ---
 
@@ -114,7 +129,7 @@ flowchart LR
 
 ### 4.2 Juez con rúbrica
 
-Un modelo distinto del evaluado recibe: la pregunta, la respuesta completa (texto + bloques en JSON), las salidas de herramientas y los criterios de la rúbrica del caso. Devuelve por criterio `cumple | parcial | no cumple` con una frase de justificación.
+El juez es `minimax/minimax-m3.1-flash`, de una familia que no compite en la comparación y de bajo costo. Recibe: la pregunta, la respuesta completa (texto + bloques en JSON), las salidas de herramientas y los criterios de la rúbrica del caso. Devuelve por criterio `cumple | parcial | no cumple` con una frase de justificación.
 
 | Dimensión | Qué juzga |
 |---|---|

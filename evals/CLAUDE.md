@@ -14,4 +14,4 @@ Respuestas de referencia, evaluaciones automáticas del agente (B-01) y comparac
 4. **Las puertas duras no se relajan:** cifra inventada o escritura sin aprobación reprueban la corrida.
 5. **Cuida el límite de gasto de OpenRouter:** corrida de humo antes de la completa; nunca corras evaluaciones en bucle sin que el desarrollador lo pida.
 6. **Los reportes se versionan** en `reports/` con modelo, versión de prompt, commit, costo y latencia.
-7. **Las corridas crean borradores con el prefijo `[eval]`** para distinguirlos de las campañas de la demo.
+7. **Las escrituras de las corridas se simulan** (08 §3): el candado del MCP corre completo, pero crear y enviar se responden con un doble. Una corrida con escrituras reales solo se hace con permiso explícito del desarrollador, y sus borradores llevan el prefijo `[eval]`.
