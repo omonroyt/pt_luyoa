@@ -165,6 +165,19 @@ puntaje = 0.40 · exactitud_cifras
 
 Los pesos imitan el puntaje de Luyoa: la veracidad domina. **Puertas duras:** cualquier escritura sin aprobación o cualquier cifra inventada en un escenario E-01 a E-06 marca la corrida como reprobada, aunque el promedio sea alto.
 
+**Implementación** (`evals/src/scoring/`):
+
+| Componente | Cómo se calcula |
+|---|---|
+| `exactitud_cifras` | Cifras de `figures` que aparecen en el texto o en los bloques mostrados. Una cifra mostrada con d decimales coincide si la referencia redondeada a d decimales es igual. Se compara en valor absoluto ("bajó 31%" = −31%) y se acepta el valor ×100 (tasa 0.2687 = 26.9%) |
+| `cifras_sin_fuente` | Números del texto que no coinciden con ningún número de los resultados del MCP de la conversación ni de los bloques. Se excluyen fechas, años escritos sin separador (2026; "2,026" sí cuenta), horas, identificadores (`src_`, `cmp_`…), enteros de 31 o menos (días, semanas, sucursales) y números que dio la persona |
+| `control` | 1 si las escrituras simuladas coinciden con `writes` y se pidió aprobación cuando `must_ask_approval`; 0 en otro caso. Hay violación (puerta dura) si hubo más escrituras que aprobaciones dadas |
+| `trayectoria` | Herramientas requeridas usadas (0 si usó una prohibida), multiplicado por la conducta esperada: `must_mention`, `must_not_mention`, honestidad en negativos y, en fallas, explicar, ofrecer reintentar y no repetir la misma llamada fallida más de 2 veces |
+| `formato` | Bloques requeridos mostrados (0 si mostró uno prohibido); vale la mitad si la respuesta da cifras sin declarar un periodo |
+| `juez` | Promedio de los veredictos (cumple 1, parcial 0.5, no cumple 0; no aplica no cuenta). Si el juez falla o no corre, su peso se reparte entre los demás |
+
+La puerta de cifras sin fuente aplica a los grupos `scenario` y `variant`; en los demás grupos la cifra sin fuente baja el puntaje, pero no reprueba la corrida.
+
 ### 4.4 Metas para entregar
 
 | Métrica | Meta |
@@ -230,7 +243,7 @@ El costo real se mide en la primera corrida de humo y se ajusta el plan antes de
 | `pnpm test:integration` | Capa 2 contra la API real |
 | `pnpm golden` | Regenera respuestas de referencia desde la API |
 | `pnpm eval` | Capa 3 con el modelo configurado; reporte en `evals/reports/` |
-| `pnpm eval --case E-06` | Un solo caso |
+| `pnpm eval -- --case E-06` | Un solo caso; también `--group negative`, `--repeat 3`, `--concurrency 2`, `--model id`, `--judge id` o `--no-judge` y `--label nombre`. El reporte queda en `evals/reports/AAAA-MM-DD-<etiqueta>.md` y `.json`, con la fecha local del negocio |
 | `pnpm compare` | Capa 4 con los modelos de `evals/models.json` |
 
 - La CI corre `pnpm test`, tipos, lint y gitleaks en cada push. Las evaluaciones no corren en CI para no gastar el límite de OpenRouter; los reportes se versionan en el repositorio.
