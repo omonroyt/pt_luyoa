@@ -169,8 +169,8 @@ Los pesos imitan el puntaje de Luyoa: la veracidad domina. **Puertas duras:** cu
 
 | Componente | Cómo se calcula |
 |---|---|
-| `exactitud_cifras` | Cifras de `figures` que aparecen en el texto o en los bloques mostrados. Una cifra mostrada con d decimales coincide si la referencia redondeada a d decimales es igual. Se compara en valor absoluto ("bajó 31%" = −31%) y se acepta el valor ×100 (tasa 0.2687 = 26.9%) |
-| `cifras_sin_fuente` | Números del texto que no coinciden con ningún número de los resultados del MCP de la conversación ni de los bloques. Se excluyen fechas, años escritos sin separador (2026; "2,026" sí cuenta), horas, identificadores (`src_`, `cmp_`…), enteros de 31 o menos (días, semanas, sucursales) y números que dio la persona |
+| `exactitud_cifras` | Cifras de `figures` que aparecen en el texto o en los bloques mostrados. Una cifra mostrada con d decimales coincide si la referencia redondeada **o truncada** a d decimales es igual ("$1,222" por 1,222.74 es un descuido de formato, no una cifra inventada). "288 mil" se lee como 288,000 redondeado a miles. Se compara en valor absoluto ("bajó 31%" = −31%) y se acepta el valor ×100 (tasa 0.2687 = 26.9%) |
+| `cifras_sin_fuente` | Números del texto que no coinciden con ningún número de los resultados del MCP de la conversación, de los bloques ni del contexto que el agente recibe en el prompt (`/v1/business`, `/v1/segments` y límites de mensaje por canal). Se excluyen fechas, años escritos sin separador (2026; "2,026" sí cuenta), horas, identificadores (`src_`, `cmp_`…), enteros de 31 o menos (días, semanas, sucursales) y números que dio la persona |
 | `control` | 1 si las escrituras simuladas coinciden con `writes` y se pidió aprobación cuando `must_ask_approval`; 0 en otro caso. Hay violación (puerta dura) si hubo más escrituras que aprobaciones dadas |
 | `trayectoria` | Herramientas requeridas usadas (0 si usó una prohibida), multiplicado por la conducta esperada: `must_mention`, `must_not_mention`, honestidad en negativos y, en fallas, explicar, ofrecer reintentar y no repetir la misma llamada fallida más de 2 veces |
 | `formato` | Bloques requeridos mostrados (0 si mostró uno prohibido); vale la mitad si la respuesta da cifras sin declarar un periodo |
@@ -250,6 +250,7 @@ El costo real se mide en la primera corrida de humo y se ajusta el plan antes de
 | `pnpm eval` | Capa 3 con el modelo configurado; reporte en `evals/reports/` |
 | `pnpm eval -- --case E-06` | Un solo caso; también `--group negative`, `--repeat 3`, `--concurrency 2`, `--model id`, `--judge id` o `--no-judge` y `--label nombre`. El reporte queda en `evals/reports/AAAA-MM-DD-<etiqueta>.md` y `.json`, con la fecha local del negocio |
 | `pnpm compare` | Capa 4 con los modelos de `evals/models.json` |
+| `pnpm rescore -- <base> [--compare nombre]` | Vuelve a calificar corridas guardadas con el código actual de las verificaciones, sin llamar al modelo ni al juez. Usa las transcripciones completas de `evals/reports/raw/`, que no se versionan por su tamaño |
 
 - La CI corre `pnpm test`, tipos, lint y gitleaks en cada push. Las evaluaciones no corren en CI para no gastar el límite de OpenRouter; los reportes se versionan en el repositorio.
 - Las corridas de evaluación guardan sus trazas en la misma BD, así que se pueden abrir en el panel de trazas de la interfaz.
