@@ -1,0 +1,102 @@
+{
+  "title": "Comparación de modelos (humo) · 2026-11-04",
+  "rows": [
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "label": "compare-humo-glm-5.3-flash",
+      "repeats": 1,
+      "meanScore": 0.9402319109461967,
+      "scoreDeviation": 0.0646607799305819,
+      "hardGateFailures": 0,
+      "errors": 0,
+      "costPerConversationUsd": 0.0064562871428571434,
+      "firstTextP50Ms": 11915.144,
+      "firstTextP95Ms": 34178.0399,
+      "totalP50Ms": 41394.5279,
+      "totalP95Ms": 163112.9728,
+      "llmCallsMean": 7.428571428571429
+    },
+    {
+      "model": "deepseek/deepseek-v4.1-flash-1017",
+      "label": "compare-humo-deepseek-v4.1-flash",
+      "repeats": 1,
+      "meanScore": null,
+      "scoreDeviation": null,
+      "hardGateFailures": 0,
+      "errors": 7,
+      "costPerConversationUsd": null,
+      "firstTextP50Ms": null,
+      "firstTextP95Ms": null,
+      "totalP50Ms": null,
+      "totalP95Ms": null,
+      "llmCallsMean": null
+    },
+    {
+      "model": "anthropic/claude-haiku-5.5",
+      "label": "compare-humo-claude-haiku-5.5",
+      "repeats": 1,
+      "meanScore": 0.9298268398268398,
+      "scoreDeviation": 0.04143864633429225,
+      "hardGateFailures": 0,
+      "errors": 0,
+      "costPerConversationUsd": 0.011407814285714286,
+      "firstTextP50Ms": 6177.178599999985,
+      "firstTextP95Ms": 12066.867100000032,
+      "totalP50Ms": 12448.034800000023,
+      "totalP95Ms": 23998.056500000006,
+      "llmCallsMean": 4.571428571428571
+    },
+    {
+      "model": "openai/gpt-6.1-terra",
+      "label": "compare-humo-gpt-6.1-terra",
+      "repeats": 1,
+      "meanScore": 0.8115404040404041,
+      "scoreDeviation": 0.25756868358845647,
+      "hardGateFailures": 0,
+      "errors": 0,
+      "costPerConversationUsd": 0.01997637857142857,
+      "firstTextP50Ms": 14166.156399999978,
+      "firstTextP95Ms": 21861.281699999992,
+      "totalP50Ms": 22992.671499999997,
+      "totalP95Ms": 32647.72039999999,
+      "llmCallsMean": 5.571428571428571
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "label": "compare-humo-gemini-4-argon",
+      "repeats": 1,
+      "meanScore": 0.9318795093795095,
+      "scoreDeviation": 0.06409736170187202,
+      "hardGateFailures": 1,
+      "errors": 0,
+      "costPerConversationUsd": 0.09227968571428571,
+      "firstTextP50Ms": 24128.907799999928,
+      "firstTextP95Ms": 78619.4952,
+      "totalP50Ms": 52004.587300000014,
+      "totalP95Ms": 93418.17989999999,
+      "llmCallsMean": 4.857142857142857
+    }
+  ],
+  "decision": {
+    "winner": {
+      "model": "z-ai/glm-5.3-flash",
+      "label": "compare-humo-glm-5.3-flash",
+      "repeats": 1,
+      "meanScore": 0.9402319109461967,
+      "scoreDeviation": 0.0646607799305819,
+      "hardGateFailures": 0,
+      "errors": 0,
+      "costPerConversationUsd": 0.0064562871428571434,
+      "firstTextP50Ms": 11915.144,
+      "firstTextP95Ms": 34178.0399,
+      "totalP50Ms": 41394.5279,
+      "totalP95Ms": 163112.9728,
+      "llmCallsMean": 7.428571428571429
+    },
+    "reasons": [
+      "compare-humo-deepseek-v4.1-flash: descartado (0 casos con puerta dura, 7 con error)",
+      "compare-humo-gemini-4-argon: descartado (1 casos con puerta dura, 0 con error)",
+      "compare-humo-glm-5.3-flash tiene el mejor puntaje entre los que pasan las puertas duras"
+    ]
+  }
+}

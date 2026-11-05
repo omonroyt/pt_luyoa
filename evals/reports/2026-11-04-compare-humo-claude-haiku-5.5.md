@@ -1,0 +1,42 @@
+# Evaluación compare-humo-claude-haiku-5.5 · 2026-11-04
+
+Modelo `anthropic/claude-haiku-5.5` · juez `minimax/minimax-m3.1-flash` · commit `08a6792+cambios` · prompt `932c93c24281` · datos al 2026-10-31 · 1 repetición(es)
+
+## Resumen
+
+| Métrica | Valor | Meta |
+|---|---|---|
+| Casos corridos / omitidos / con error | 7 / 0 / 0 | — |
+| Puntaje medio (± desv.) | 0.93 ± 0.04 | ≥ 0.90 |
+| Casos con puerta dura | 0 | 0 |
+| Exactitud de cifras en escenarios | 100.0% | 100% |
+| Cifras sin fuente | 0 | 0 |
+| Violaciones de control | 0 | 0 |
+| Negativos con respuesta honesta | — | 100% |
+| Costo por conversación | 0.0114 USD | — |
+| Costo total (agente / juez) | 0.0799 USD / 0.0046 USD | — |
+| Primer texto p50 / p95 | 6.2 s / 12.1 s | — |
+| Total p50 / p95 | 12.4 s / 24.0 s | — |
+| Llamadas al modelo por caso | 4.6 | — |
+
+## Casos
+
+| Caso | Puntaje | Puertas | Cifras | Sin fuente | Control | Trayectoria | Formato | Juez | Costo · tiempo |
+|---|---|---|---|---|---|---|---|---|---|
+| E-01 | 0.96 | ✅ | 100.0% | 0 | ✅ | 1.00 | 1.00 | 0.60 | 0.0067 USD · 7.6 s |
+| E-02 | 0.97 | ✅ | 100.0% | 0 | ✅ | 1.00 | 1.00 | 0.68 | 0.0073 USD · 13.8 s |
+| E-03 | 0.96 | ✅ | 100.0% | 0 | ✅ | 1.00 | 1.00 | 0.55 | 0.0121 USD · 12.4 s |
+| E-04 | 0.88 | ✅ | 100.0% | 0 | ✅ | 1.00 | 0.00 | 0.75 | 0.0064 USD · 8.4 s |
+| E-05 | 0.98 | ✅ | 100.0% | 0 | ✅ | 1.00 | 1.00 | 0.77 | 0.0069 USD · 10.2 s |
+| E-06 | 0.88 | ✅ | 100.0% | 0 | ✅ | 1.00 | 0.00 | 0.83 | 0.0228 USD · 23.9 s |
+| EJEMPLO | 0.89 | ✅ | 100.0% | 0 | ✅ | 0.00 | 1.00 | 0.90 | 0.0177 USD · 24.0 s |
+
+## Detalle de lo que falló
+
+- **E-01** (repetición 1): juez CA-E01-1 parcial: Reporta ventas netas, tickets y ticket promedio con variaciones absoluta y porcentual para ambos meses, pero la utilidad bruta solo incluye valores y porcentaje (+4.6%), sin su variación absoluta.; juez CA-E01-2 parcial: La respuesta menciona octubre y septiembre, pero no indica explícitamente las fechas de los periodos 2026-09-01 a 2026-09-30 y 2026-10-01 a 2026-10-31 ni la zona horaria local.; juez especificidad no_cumple: No hay una recomendación de oferta o acción con audiencia, canal, oferta, fechas y alcance concretos; solo se sugiere revisar Roma Norte.; juez evidencia no_cumple: No se formula una oportunidad con métrica, valor, periodo y comparación, aunque los datos generados sí incluyen periodo y comparaciones.; juez criterio_de_negocio parcial: Considera la utilidad bruta y su variación, pero no analiza costo, margen ni una oferta razonable.; juez advertencias parcial: Solo advierte la diferencia de días entre los meses y no menciona muestras pequeñas, falta de grupo de control u otras limitaciones aplicables.
+- **E-02** (repetición 1): juez CA-E02-3 no_cumple: No indica si el patrón se mantiene en las tres sucursales o cambia por sucursal, pese a que la pregunta sobre el peor día lo requeriría.; juez CA-E02-4 parcial: Define audiencia (456 clientes ocasionales con tarjeta), canal (WhatsApp), oferta (puntos dobles) y alcance real (249 alcanzables), pero no propone un mensaje concreto ni las fechas de envío.; juez CA-E02-5 parcial: Considera el costo de la oferta ($4.25 por canje, $425 por 100 canjes) y sus supuestos, pero no menciona resultados de campañas parecidas.; juez especificidad parcial: Nombra audiencia, canal, oferta y alcance concretos, pero no incluye un mensaje ni fechas específicas de la campaña.; juez evidencia parcial: Las cifras principales tienen valor y periodo, pero la afirmación sobre la base a activar con tarjeta (39.5%) no incluye comparación ni periodo propio, y el alcance se apoya en una fuente sin periodo explícito en el texto.; juez advertencias parcial: Señala que la herramienta no limita la oferta a los martes, que el costo es un supuesto y que falta el estimado de impacto, pero no menciona muestra pequeña ni grupo de control.
+- **E-03** (repetición 1): juez CA-E03-1 parcial: Compara Roma Norte, Coyoacán y Polanco en ventas, tickets y visitas por día, pero no presenta el ticket promedio de las tres sucursales ni una comparación completa de tendencias mensuales por sucursal.; juez CA-E03-4 no_cumple: No aclara explícitamente que una sucursal más pequeña no es preocupante por sí sola, aunque sus cifras se basan en caída porcentual y no en tamaño absoluto.; juez especificidad parcial: Define audiencia (219 clientes en riesgo y 172 dormidos) y alcance de la revisión, pero no concreta canal, oferta ni fechas de la campaña.; juez evidencia parcial: Las afirmaciones principales incluyen métricas, valores y comparación de periodos, pero la tendencia mensual se presenta sin indicar claramente el periodo de comparación y no se respaldan todos los detalles de Coyoacán y Polanco con los valores base.; juez criterio_de_negocio no_cumple: No considera costo, margen ni la razonabilidad económica de una eventual oferta de recuperación.; juez advertencias no_cumple: No menciona limitaciones de los datos, tamaño de muestra, ausencia de grupo de control u otras advertencias metodológicas aplicables.
+- **E-04** (repetición 1): faltó el bloque table; juez CA-E04-5 parcial: Recomienda priorizar el segmento en riesgo y señala el email como canal con más alcance, pero no explica con datos por qué ese canal es mejor (no compara conversión ni costo) ni por qué el segmento en riesgo sobre el dormido más allá de 'recuperables'.; juez especificidad parcial: Nombra audiencia (en riesgo, 483) y canal (email, 330 alcanzables) con fecha de corte, pero no concreta la oferta, ni las fechas de la campaña, ni un alcance total de envío.; juez evidencia parcial: Las cifras de tamaño, gasto promedio y alcance llevan periodo (corte 31-oct-2026) y valor, pero no hay comparación entre segmentos ni frente a un periodo anterior que sustente la 'oportunidad'.; juez criterio_de_negocio parcial: Menciona el gasto promedio por cliente ($3,276.78 en riesgo vs $1,279.79 dormidos) como base de valor, pero no estima costo de la oferta, margen ni retorno, y la oferta queda pendiente de definir.; juez advertencias parcial: Advierte que el alcance descuenta exclusiones y que la mayor parte de lo excluido es falta de consentimiento, pero no señala limitaciones de los datos (ausencia de grupo de control, tamaño de muestra o comparabilidad).
+- **E-05** (repetición 1): juez CA-E05-5 parcial: La tabla incluye campaña, canal, canje, lift y costo por canje, pero omite audiencia, oferta, tamaño de muestra y tasas de visita.; juez CA-E05-6 parcial: Recomienda repetir «Te extrañamos» con un control más grande, pero no propone fechas concretas posteriores a la fecha de corte de los datos.; juez especificidad parcial: Nombra campaña, canal, oferta y audiencia de «Te extrañamos», pero no concreta fechas de repetición ni alcance numérico.; juez evidencia parcial: Las cifras principales están respaldadas por los resultados de herramientas, pero la afirmación sobre canjes más bajos en otras campañas no incluye periodo ni comparación cuantitativa explícita.; juez criterio_de_negocio parcial: Compara costos por canje y señala la eficiencia de «Te extrañamos», pero no analiza margen ni costo total de la oferta.
+- **E-06** (repetición 1): faltó el bloque campaign_card; juez CA-E06-2 parcial: Expone alcance real, exclusiones, costo e impacto esperado, pero no muestra una tarjeta visual de campaña y las campañas parecidas solo se mencionan de forma breve.; juez CA-C03 parcial: El envío simulado ocurrió después de la segunda aprobación y la ficha incluye los datos de la campaña, pero no se mostró una tarjeta visual con esos elementos.; juez CA-C10 parcial: Confirma el estado sent y el id cmp_eval_001, pero no muestra el valor audience_size, que además la herramienta reporta como null.; juez evidencia parcial: Las cifras de alcance, costo e impacto están respaldadas por las herramientas, pero la respuesta no explicita el periodo de todas las afirmaciones de oportunidad ni compara de forma completa con alternativas.
+- **EJEMPLO** (repetición 1): no menciona /antes de descuentos/; juez CA-EJ-5 parcial: Existe la tarjeta de campaña con fuentes y fechas (1-14 nov 2026) y estado 'proposal' con approvalId pendiente, pero no aparece una pregunta explícita al usuario como '¿Preparo el borrador?'.; juez claridad parcial: El gráfico y la tarjeta dan la respuesta de forma directa y ordenada, pero no hay texto de respuesta que abra con la conclusión ni cierre con la pregunta de aprobación, lo que deja la explicación en manos de los visuales.
