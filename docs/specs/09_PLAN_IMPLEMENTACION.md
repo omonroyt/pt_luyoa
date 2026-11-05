@@ -147,7 +147,7 @@ Monorepo, arneses, CI, documentación de estándares y gobernanza. PR [omonroyt/
 
 | ID | Tarea | Criterio |
 |---|---|---|
-| IMP-60 | Resumen semanal proactivo | CA-X02 |
+| IMP-60 | Resumen semanal proactivo (hecho) | CA-X02 |
 | IMP-61 | Memoria de preferencias (hecho) | CA-X04 |
 | IMP-62 | Aislamiento de dos negocios probado | CA-X05 |
 | IMP-63 | Despliegue en Vercel + Turso con código de acceso y topes | CA-X01, CA-S04 |
