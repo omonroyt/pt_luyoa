@@ -4,7 +4,7 @@
  * EN: Database connection (local SQLite or Turso depending on DATABASE_URL). Migrations
  *     are applied automatically when it opens, with no manual steps.
  */
-import { mkdirSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createClient } from "@libsql/client";
@@ -17,7 +17,21 @@ export type Database = LibSQLDatabase<typeof schema>;
 
 export type DatabaseOptions = { url: string; authToken?: string; migrationsFolder?: string };
 
-const defaultMigrationsFolder = () => path.join(findRepoRoot(), "apps/web/lib/db/migrations");
+/**
+ * ES: Carpeta de migraciones. En el repositorio está bajo la raíz del monorepo; en una
+ *     función empaquetada se busca también junto al directorio actual, por si el marcador
+ *     de la raíz no se encuentra.
+ * EN: Migrations folder. In the repository it is under the monorepo root; in a bundled
+ *     function it is also looked up next to the current directory, in case the root marker
+ *     is not found.
+ */
+function defaultMigrationsFolder(): string {
+  const candidates = [
+    path.join(/* turbopackIgnore: true */ findRepoRoot(), "apps/web/lib/db/migrations"),
+    path.join(/* turbopackIgnore: true */ process.cwd(), "lib/db/migrations"),
+  ];
+  return candidates.find((folder) => existsSync(folder)) ?? (candidates[0] as string);
+}
 
 function ensureLocalDirectory(url: string): void {
   if (!url.startsWith("file:")) return;
