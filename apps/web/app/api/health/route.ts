@@ -15,6 +15,11 @@ export function GET(): NextResponse {
       APPROVAL_SECRET: configured("APPROVAL_SECRET"),
       MCP_SERVICE_TOKEN: configured("MCP_SERVICE_TOKEN"),
       BUSINESSES: configured("BUSINESSES"),
+      CRON_SECRET: configured("CRON_SECRET"),
+      DEMO_ACCESS_CODE: configured("DEMO_ACCESS_CODE"),
     },
+    // ES: Tipo de base, no su dirección: "turso" en el despliegue, "archivo" en local.
+    // EN: Database kind, not its address: "turso" when deployed, "archivo" locally.
+    database: process.env.DATABASE_URL?.startsWith("libsql:") ? "turso" : "archivo",
   });
 }

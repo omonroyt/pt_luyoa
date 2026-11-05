@@ -10,18 +10,20 @@ import { isSameOrigin } from "@/lib/auth/service-token";
 import { getDatabase } from "@/lib/db/client";
 import { createDbPreferenceStore } from "@/lib/memory/preference-store";
 import { PREFERENCE_LABELS, PreferenceKeySchema } from "@/lib/memory/preferences";
-import { currentBusiness } from "@/lib/tenancy/current-business";
+import { currentBusiness, sessionRequiredResponse } from "@/lib/tenancy/current-business";
 
 const errorResponse = (status: number, code: string, message: string) =>
   Response.json({ error: { code, message } }, { status });
 
-async function businessStore() {
-  return createDbPreferenceStore(await getDatabase(), currentBusiness().id);
+async function businessStore(businessId: string) {
+  return createDbPreferenceStore(await getDatabase(), businessId);
 }
 
 export async function GET(request: Request): Promise<Response> {
   if (!isSameOrigin(request)) return errorResponse(403, "forbidden", "Origen no permitido.");
-  const saved = await (await businessStore()).list();
+  const business = currentBusiness(request);
+  if (!business) return sessionRequiredResponse();
+  const saved = await (await businessStore(business.id)).list();
   return Response.json({
     preferences: saved.map((preference) => ({
       key: preference.key,
@@ -34,9 +36,11 @@ export async function GET(request: Request): Promise<Response> {
 
 export async function DELETE(request: Request): Promise<Response> {
   if (!isSameOrigin(request)) return errorResponse(403, "forbidden", "Origen no permitido.");
+  const business = currentBusiness(request);
+  if (!business) return sessionRequiredResponse();
   const key = PreferenceKeySchema.safeParse(new URL(request.url).searchParams.get("key"));
   if (!key.success) return errorResponse(400, "validation_error", "Preferencia inválida.");
-  const removed = await (await businessStore()).remove(key.data);
+  const removed = await (await businessStore(business.id)).remove(key.data);
   return removed
     ? Response.json({ removed: true, key: key.data })
     : errorResponse(404, "not_found", "Esa preferencia no está guardada.");

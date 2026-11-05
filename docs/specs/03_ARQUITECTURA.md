@@ -518,8 +518,8 @@ flowchart LR
 **Protección de la demo pública (RG-04, CA-S04):**
 
 - Las llaves solo existen en el servidor; el navegador nunca las ve.
-- Código de acceso para entrar a la demo, compartido con Luyoa.
-- Límite de mensajes por sesión e IP, tope de pasos por turno y tope de gasto diario.
+- Código de acceso para entrar a la demo, compartido con Luyoa. `proxy.ts` exige una sesión en cookie firmada (HMAC, 7 días, `HttpOnly`, `SameSite=Lax`) en todas las páginas y rutas de la interfaz; el código decide el negocio de la sesión (ADR-16).
+- Límite de turnos por sesión e IP (IP cifrada con HMAC), tope de pasos por turno (12) y tope de gasto diario calculado con el costo de las trazas. Los contadores viven en la base porque en serverless la memoria no se comparte.
 - El límite de gasto de la propia llave de OpenRouter es la última red.
 
 ---

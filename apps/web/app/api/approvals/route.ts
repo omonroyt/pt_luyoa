@@ -8,7 +8,7 @@ import { isSameOrigin } from "@/lib/auth/service-token";
 import { ApprovalRequest, issueApproval } from "@/lib/approvals/issue-approval";
 import { approvalStore } from "@/lib/mcp/runtime";
 import { serverConfig } from "@/lib/server-config";
-import { currentBusiness } from "@/lib/tenancy/current-business";
+import { currentBusiness, sessionRequiredResponse } from "@/lib/tenancy/current-business";
 
 export async function POST(request: Request): Promise<Response> {
   if (!isSameOrigin(request)) {
@@ -24,11 +24,13 @@ export async function POST(request: Request): Promise<Response> {
       .join("; ");
     return Response.json({ error: { code: "validation_error", message } }, { status: 400 });
   }
+  const business = currentBusiness(request);
+  if (!business) return sessionRequiredResponse();
   const config = serverConfig();
   const approval = await issueApproval(parsed.data, {
     secret: config.approvalSecret,
     store: approvalStore,
-    businessId: currentBusiness().id,
+    businessId: business.id,
   });
   return Response.json(approval, { status: 201 });
 }

@@ -15,10 +15,14 @@ app/                    Rutas de Next.js (páginas y route handlers)
 components/blocks/      Un componente por bloque visual: chart, table, kpis, campaign-card, source
 components/chat/        Hilo, entrada, panel de trazas
 components/ui/          Piezas de interfaz compartidas: marca, íconos, tema, script en línea
+components/access/      Formulario del código de acceso
 lib/agent/              Prompt de sistema, herramientas de presentación, verificador de cifras, trazas
 lib/approvals/          Emisión y verificación de tokens de aprobación
 lib/db/                 Esquema Drizzle y consultas
 lib/tenancy/            Registro de negocios y negocio de cada solicitud (X-05)
+lib/auth/               Token de servicio del MCP y sesión firmada de la demo (IMP-63)
+lib/demo/               Topes de la demo publicada: turnos, intentos y gasto diario
+proxy.ts                Puerta de la demo: exige la sesión cuando hay código de acceso
 public/brand/           Ilustración de la marca (Fluent Emoji, MIT; créditos en el README)
 ```
 
