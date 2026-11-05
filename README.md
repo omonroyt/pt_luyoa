@@ -120,6 +120,10 @@ SQLite local en `data/local.db` (ignorado por git) o Turso en despliegue, según
 - [`docs/`](docs/README.md): especificaciones, estándares de código y gobernanza de IA.
 - Commits en Conventional Commits, validados por los hooks de `.githooks/` y por la CI.
 
+## Créditos
+
+- Ilustración de la taza: "Hot beverage" de [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) © Microsoft Corporation, licencia MIT, recoloreada para la marca (`apps/web/public/brand/taza-cafe.png`, `apps/web/app/icon.png`).
+
 ## Seguridad
 
 Las llaves solo existen en `.env` (ignorado por git) o en las variables de entorno del despliegue. La CI ejecuta gitleaks sobre todo el historial en cada push.
