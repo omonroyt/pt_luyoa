@@ -45,8 +45,9 @@ describe("stepStatus y toolLabel", () => {
 });
 
 describe("SUGGESTIONS", () => {
-  it("incluye los seis escenarios y el caso de ejemplo", () => {
+  it("incluye el resumen de la semana, los seis escenarios y el caso de ejemplo", () => {
     expect(SUGGESTIONS.map((suggestion) => suggestion.id)).toEqual([
+      "semana",
       "E-01",
       "E-02",
       "E-03",

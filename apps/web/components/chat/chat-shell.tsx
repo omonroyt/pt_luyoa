@@ -15,6 +15,7 @@ import { ApprovalProvider } from "@/components/blocks/approval-context";
 import { SourcesProvider } from "@/components/blocks/sources-context";
 import { ChatHeader } from "./chat-header";
 import { ChatInput } from "./chat-input";
+import { EmptyChat } from "./empty-chat";
 import { MessageThread } from "./message-thread";
 import { PreferencesPanel } from "./preferences-panel";
 import { RetryBanner } from "./retry-banner";
@@ -46,9 +47,7 @@ export function ChatShell() {
           />
           <main className="flex flex-1 flex-col gap-4">
             {chat.messages.length === 0 ? (
-              <p className="text-muted">
-                Pregúntame cómo va tu negocio: ventas, sucursales, clientes y campañas.
-              </p>
+              <EmptyChat onOpenSummary={chat.setMessages} />
             ) : (
               <MessageThread messages={chat.messages} onShowTrace={showTrace} />
             )}

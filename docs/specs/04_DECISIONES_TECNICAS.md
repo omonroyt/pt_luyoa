@@ -219,6 +219,7 @@
 - **Alternativas:** Render, Fly.io o Railway con un contenedor; Cloudflare.
 - **Por qué:** despliegue directo desde GitHub, variables de entorno cifradas y niveles gratuitos suficientes.
 - **Consecuencias:** límite de duración por función; protección de la demo con código de acceso, límite de mensajes y tope de gasto.
+- **Cron (M7):** `apps/web/vercel.json` programa `/api/cron/weekly` los lunes a las 13:00 UTC. La ruta exige `Authorization: Bearer CRON_SECRET`, que Vercel envía cuando la variable está configurada.
 
 ## ADR-15 · Recharts para gráficas
 
