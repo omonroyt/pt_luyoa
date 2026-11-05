@@ -84,7 +84,9 @@ export function ChatShell() {
             ) : (
               <MessageThread messages={chat.messages} onShowTrace={showTrace} />
             )}
-            {chat.error ? <RetryBanner onRetry={() => void chat.regenerate()} /> : null}
+            {chat.error ? (
+              <RetryBanner error={chat.error} onRetry={() => void chat.regenerate()} />
+            ) : null}
           </main>
           <ShellFooter chat={chat} showSuggestions={!empty} />
         </div>

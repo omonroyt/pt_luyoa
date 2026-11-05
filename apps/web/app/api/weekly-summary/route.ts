@@ -7,7 +7,7 @@
 import { latestWeeklySummary } from "@/lib/agent/weekly-summary-store";
 import { isSameOrigin } from "@/lib/auth/service-token";
 import { getDatabase } from "@/lib/db/client";
-import { currentBusiness } from "@/lib/tenancy/current-business";
+import { currentBusiness, sessionRequiredResponse } from "@/lib/tenancy/current-business";
 
 export async function GET(request: Request): Promise<Response> {
   if (!isSameOrigin(request)) {
@@ -16,7 +16,9 @@ export async function GET(request: Request): Promise<Response> {
       { status: 403 },
     );
   }
-  const summary = await latestWeeklySummary(await getDatabase(), currentBusiness().id);
+  const business = currentBusiness(request);
+  if (!business) return sessionRequiredResponse();
+  const summary = await latestWeeklySummary(await getDatabase(), business.id);
   return Response.json({
     summary: summary
       ? {

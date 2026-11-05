@@ -1,10 +1,11 @@
 /**
  * ES: Esquema de la base de datos de la aplicación (docs/specs/03_ARQUITECTURA.md §6).
  *     Guarda solo lo que la API de Café Alborada no guarda: conversaciones, trazas,
- *     preferencias, aprobaciones y resúmenes. Nunca llaves ni datos de contacto.
+ *     preferencias, aprobaciones, resúmenes y contadores de uso. Nunca llaves ni datos de
+ *     contacto.
  * EN: Application database schema (docs/specs/03_ARQUITECTURA.md §6). It stores only
  *     what the Café Alborada API does not: conversations, traces, preferences,
- *     approvals and summaries. Never keys or contact data.
+ *     approvals, summaries and usage counters. Never keys or contact data.
  */
 import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
@@ -105,4 +106,18 @@ export const weeklySummaries = sqliteTable("weekly_summaries", {
   weekEnd: text("week_end").notNull(),
   content: text("content", { mode: "json" }).notNull(),
   createdAt: createdAt(),
+});
+
+/**
+ * ES: Contadores de uso de la demo publicada (IMP-63, CA-S04): turnos por sesión y por IP
+ *     (cifrada) por día, e intentos de código de acceso. Viven en la base porque en
+ *     serverless la memoria no se comparte entre instancias.
+ * EN: Published demo usage counters (IMP-63, CA-S04): turns per session and per (hashed) IP
+ *     per day, and access code attempts. They live in the database because in serverless
+ *     memory is not shared across instances.
+ */
+export const usageCounters = sqliteTable("usage_counters", {
+  key: text("key").primaryKey(),
+  count: integer("count").notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
 });
