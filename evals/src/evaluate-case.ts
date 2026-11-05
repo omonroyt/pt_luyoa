@@ -29,9 +29,16 @@ export type CaseUsage = {
 
 // ES: Extracto de la conversación para auditar el puntaje y al juez desde el reporte.
 // EN: Conversation excerpt to audit the score and the judge from the report.
-export type CaseExcerpt = { text: string; steps: string[]; blocks: string[]; replies: unknown[] };
+export type CaseExcerpt = {
+  text: string;
+  steps: string[];
+  blocks: string[];
+  replies: unknown[];
+  toolResults: string[];
+};
 
 const EXCERPT_LIMIT = 6000;
+const RESULT_LIMIT = 2000;
 
 function excerptOf(extracted: ReturnType<typeof extract>, replies: unknown[]): CaseExcerpt {
   return {
@@ -41,6 +48,9 @@ function excerptOf(extracted: ReturnType<typeof extract>, replies: unknown[]): C
       .map((step) => (step.errorCode ? `${step.name} (${step.errorCode})` : step.name)),
     blocks: extracted.blocks.map((block) => block.kind),
     replies,
+    toolResults: extracted.mcpOutputs.map((output) =>
+      JSON.stringify(output).slice(0, RESULT_LIMIT),
+    ),
   };
 }
 
