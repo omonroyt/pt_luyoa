@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { missingApproval, type StepLike } from "./approval-policy";
+import { missingApproval, missingDraftCard, type StepLike } from "./approval-policy";
 import { MAX_STEPS, turnStepPolicy } from "./run-turn";
 
 const card = (state: string): StepLike => ({
@@ -16,6 +16,18 @@ const failedCard: StepLike = {
 };
 const ask = (toolName: string): StepLike => ({ content: [{ type: "tool-call", toolName }] });
 const text: StepLike = { content: [{ type: "text" }] };
+// ES: La tarjeta y una aprobación que el SDK rechazó por no estar activa (NoSuchToolError).
+// EN: The card and an approval the SDK rejected because it was not active (NoSuchToolError).
+const cardWithEarlyAsk: StepLike = {
+  content: [
+    ...card("proposal").content,
+    { type: "tool-call", toolName: "request_draft_approval", invalid: true },
+    { type: "tool-error", toolName: "request_draft_approval" },
+  ],
+};
+const created = (isError = false): StepLike => ({
+  content: [{ type: "tool-result", toolName: "create_campaign_draft", output: { isError } }],
+});
 const TOOLS = [
   "compare_periods",
   "show_campaign_card",
@@ -58,6 +70,24 @@ describe("control de aprobación del orquestador", () => {
     expect(policy({ stepNumber: 1, steps: [text] })).toEqual({
       activeTools: ["compare_periods", "show_campaign_card"],
     });
+  });
+
+  it("una aprobación rechazada por llegar antes de tiempo no cuenta como pedida", () => {
+    expect(missingApproval([cardWithEarlyAsk])).toBe("request_draft_approval");
+  });
+
+  it("un borrador creado sin su tarjeta obliga a mostrarla antes de pedir el envío", () => {
+    const policy = turnStepPolicy("PROMPT", TOOLS);
+    const steps = [card("proposal"), ask("request_draft_approval"), created()];
+    expect(missingDraftCard(steps)).toBe(true);
+    const forced = policy({ stepNumber: 3, steps });
+    expect(forced.activeTools).toEqual(["show_campaign_card"]);
+    expect(forced.instructions).toContain("TARJETA DEL BORRADOR PENDIENTE");
+    expect(missingDraftCard([...steps, card("draft")])).toBe(false);
+    expect(policy({ stepNumber: 4, steps: [...steps, card("draft")] }).activeTools).toEqual([
+      "request_send_approval",
+    ]);
+    expect(missingDraftCard([created(true)])).toBe(false);
   });
 
   it("sin una tarjeta válida, las herramientas de aprobación no están disponibles", () => {

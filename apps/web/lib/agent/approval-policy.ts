@@ -31,13 +31,35 @@ const TOOL_BY_STATE: Record<string, ApprovalTool> = {
 
 const approvalTools = new Set<string>(APPROVAL_TOOLS);
 
-type StepPart = { type: string; toolName?: string; input?: unknown };
+type StepPart = {
+  type: string;
+  toolName?: string;
+  input?: unknown;
+  output?: unknown;
+  invalid?: boolean;
+};
 export type StepLike = { content: ReadonlyArray<StepPart> };
 
 function cardState(part: StepPart): string | undefined {
   if (part.type !== "tool-result" || part.toolName !== "show_campaign_card") return undefined;
   return (part.input as { state?: unknown } | undefined)?.state as string | undefined;
 }
+
+// ES: Una llamada a una herramienta inactiva llega marcada como inválida y el SDK la
+//     rechaza; no cuenta como aprobación pedida (en M6, Haiku la llamaba junto con la
+//     tarjeta, cuando todavía no estaba disponible).
+// EN: A call to an inactive tool arrives marked as invalid and the SDK rejects it; it does
+//     not count as a requested approval (in M6, Haiku called it together with the card,
+//     when it was not available yet).
+const isApprovalCall = (part: StepPart) =>
+  part.type === "tool-call" && part.invalid !== true && approvalTools.has(part.toolName ?? "");
+
+const isDraftCreated = (part: StepPart) =>
+  part.type === "tool-result" &&
+  part.toolName === "create_campaign_draft" &&
+  (part.output as { isError?: unknown } | undefined)?.isError !== true;
+
+const DRAFT_STATES = new Set(["draft", "awaiting_send_approval"]);
 
 /**
  * ES: Herramienta de aprobación que falta, según la última tarjeta mostrada con éxito
@@ -48,9 +70,7 @@ function cardState(part: StepPart): string | undefined {
 export function missingApproval(steps: ReadonlyArray<StepLike>): ApprovalTool | undefined {
   let missing: ApprovalTool | undefined;
   for (const step of steps) {
-    const asked = step.content.some(
-      (part) => part.type === "tool-call" && approvalTools.has(part.toolName ?? ""),
-    );
+    const asked = step.content.some(isApprovalCall);
     const shown = step.content
       .map(cardState)
       .filter((state) => state !== undefined)
@@ -60,6 +80,29 @@ export function missingApproval(steps: ReadonlyArray<StepLike>): ApprovalTool | 
   }
   return missing;
 }
+
+/**
+ * ES: Indica si se creó un borrador en el turno y después no se mostró su tarjeta. Sin
+ *     esa tarjeta no hay aprobación de envío: en M6, Haiku creaba el borrador y pedía el
+ *     envío solo en texto.
+ * EN: Tells whether a draft was created in the turn and its card was not shown after.
+ *     Without that card there is no send approval: in M6, Haiku created the draft and
+ *     asked for sending only in text.
+ */
+export function missingDraftCard(steps: ReadonlyArray<StepLike>): boolean {
+  let missing = false;
+  for (const part of steps.flatMap((step) => step.content)) {
+    if (isDraftCreated(part)) missing = true;
+    else if (DRAFT_STATES.has(cardState(part) ?? "")) missing = false;
+  }
+  return missing;
+}
+
+const DRAFT_CARD_NOTE = [
+  "TARJETA DEL BORRADOR PENDIENTE",
+  "Ya creaste el borrador. Muéstralo ahora con show_campaign_card en estado draft, con el",
+  "campaignId que devolvió create_campaign_draft y su source.id; después pide el envío.",
+].join("\n");
 
 const approvalNote = (toolName: ApprovalTool) =>
   [
@@ -84,17 +127,25 @@ export function withoutApprovalTools(toolNames: ReadonlyArray<string>) {
 
 /**
  * ES: Paso con la aprobación pendiente: solo queda activa la herramienta que corresponde a
- *     la última tarjeta mostrada con éxito, con una instrucción para llamarla.
+ *     la última tarjeta mostrada con éxito, con una instrucción para llamarla. Si lo que
+ *     falta es la tarjeta del borrador recién creado, solo queda activa show_campaign_card.
  * EN: Step with the approval pending: only the tool matching the last successfully shown
- *     card stays active, with an instruction to call it.
+ *     card stays active, with an instruction to call it. If what is missing is the card of
+ *     the draft just created, only show_campaign_card stays active.
  */
 export function approvalStepPolicy(instructions: string) {
   return ({ steps }: { steps: ReadonlyArray<StepLike> }) => {
     const toolName = missingApproval(steps);
-    if (!toolName) return undefined;
+    if (toolName) {
+      return {
+        activeTools: [toolName],
+        instructions: `${instructions}\n\n${approvalNote(toolName)}`,
+      };
+    }
+    if (!missingDraftCard(steps)) return undefined;
     return {
-      activeTools: [toolName],
-      instructions: `${instructions}\n\n${approvalNote(toolName)}`,
+      activeTools: ["show_campaign_card"],
+      instructions: `${instructions}\n\n${DRAFT_CARD_NOTE}`,
     };
   };
 }

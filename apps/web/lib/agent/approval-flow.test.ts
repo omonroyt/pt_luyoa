@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
 import { parseChatRequest } from "./chat-request";
 import { streamAgentTurn } from "./run-turn";
 import { cardSteps, fixtureCampaignCard, scriptedModel, TEST_SERVICE_TOKEN } from "./test-support";
+import { EARLY_STEP_MESSAGE } from "./ui-errors";
 
 const SECRET = "secreto-de-prueba";
 
@@ -99,6 +100,20 @@ describe("flujo de aprobación del agente (ADR-08)", () => {
     // EN: The card passed the verifier and approval was called while it was available.
     expect(body).not.toContain("tool-output-error");
     expect(body).not.toContain("tool-input-error");
+    expect(body).not.toMatch(/"type":"error"/);
+  });
+
+  it("si pide la aprobación junto con la tarjeta, se rechaza y se exige en el paso siguiente", async () => {
+    const { mcp } = approvalsSetup();
+    const [reach, economics, show] = cardSteps(await fixtureCampaignCard());
+    const early = { toolName: "request_draft_approval", input: { campaign: DRAFT } };
+    const script = [reach!, economics!, { calls: [show as typeof early, early] }];
+    const model = scriptedModel((_hasTools, call) => script[call] ?? early);
+    const body = await (await streamAgentTurn([ASK], { model, mcp })).text();
+    const activeOnLastCall = model.doStreamCalls.at(-1)?.tools?.map((tool) => tool.name);
+    expect(model.doStreamCalls).toHaveLength(script.length + 1);
+    expect(activeOnLastCall).toEqual(["request_draft_approval"]);
+    expect(body).toContain(EARLY_STEP_MESSAGE);
     expect(body).not.toMatch(/"type":"error"/);
   });
 

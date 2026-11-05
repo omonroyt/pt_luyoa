@@ -7,7 +7,7 @@
  *     verifier are corrections the model makes in the next step (it receives the details),
  *     not service failures. Internal details never reach the browser.
  */
-import { InvalidToolInputError } from "ai";
+import { InvalidToolInputError, NoSuchToolError } from "ai";
 import { FigureVerificationError } from "./figure-verifier";
 
 export const STREAM_ERROR_MESSAGE =
@@ -16,6 +16,11 @@ export const INVALID_BLOCK_MESSAGE =
   "El agente armó un bloque con datos inválidos y lo está corrigiendo.";
 export const UNVERIFIED_BLOCK_MESSAGE =
   "El agente está corrigiendo un bloque cuyas cifras no coincidían con sus fuentes.";
+// ES: El modelo llamó una herramienta que el orquestador todavía no ofrece, como la
+//     aprobación antes de que la tarjeta pase el verificador (ADR-08).
+// EN: The model called a tool the orchestrator does not offer yet, such as approval
+//     before the card passes the verifier (ADR-08).
+export const EARLY_STEP_MESSAGE = "El agente pidió un paso antes de tiempo y lo está corrigiendo.";
 
 // ES: El AI SDK reporta un mismo error dos veces: como objeto (tool-input-error o
 //     tool-output-error) y como texto "Nombre: mensaje". Las pruebas de run-turn detectan
@@ -32,6 +37,9 @@ export function uiErrorMessage(error: unknown): string {
   }
   if (error instanceof FigureVerificationError || isNamed(error, "FigureVerificationError")) {
     return UNVERIFIED_BLOCK_MESSAGE;
+  }
+  if (NoSuchToolError.isInstance(error) || isNamed(error, "AI_NoSuchToolError")) {
+    return EARLY_STEP_MESSAGE;
   }
   return STREAM_ERROR_MESSAGE;
 }
