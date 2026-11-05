@@ -6,9 +6,10 @@
  *     verified the block; it is validated again here with the @alborada/shared schema
  *     because the UI does not trust data of unknown shape (apps/web CLAUDE.md, rule 5).
  */
-import { ChartBlock, KpisBlock, TableBlock } from "@alborada/shared";
+import { CampaignCardBlock, ChartBlock, KpisBlock, TableBlock } from "@alborada/shared";
 import type { ReactNode } from "react";
 import type { z } from "zod";
+import { CampaignCard } from "./campaign-card";
 import { ChartBlock as ChartView } from "./chart-block";
 import { KpisBlock as KpisView } from "./kpis-block";
 import { TableBlock as TableView } from "./table-block";
@@ -25,6 +26,10 @@ const RENDERERS: Record<string, Renderer<z.ZodType>> = {
   show_chart: renderer({ schema: ChartBlock, render: (block) => <ChartView block={block} /> }),
   show_table: renderer({ schema: TableBlock, render: (block) => <TableView block={block} /> }),
   show_kpis: renderer({ schema: KpisBlock, render: (block) => <KpisView block={block} /> }),
+  show_campaign_card: renderer({
+    schema: CampaignCardBlock,
+    render: (block) => <CampaignCard block={block} />,
+  }),
 };
 
 export function hasBlockView(name: string): boolean {

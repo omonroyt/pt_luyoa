@@ -2,24 +2,27 @@
 
 /**
  * ES: Entrada del chat. Enter envía y Mayús+Enter agrega una línea; mientras el copiloto
- *     responde, el botón cambia a "Detener".
+ *     responde, el botón cambia a "Detener". Mientras hay una aprobación pendiente, la
+ *     entrada se bloquea porque la decisión se toma con los botones del panel.
  * EN: Chat input. Enter sends and Shift+Enter adds a line; while the copilot answers, the
- *     button becomes "Detener".
+ *     button becomes "Detener". While an approval is pending, the input is locked because
+ *     the decision is made with the panel buttons.
  */
 import { useState, type FormEvent, type KeyboardEvent } from "react";
 
 type ChatInputProps = {
   busy: boolean;
+  locked: boolean;
   onSend: (text: string) => void;
   onStop: () => void;
 };
 
-export function ChatInput({ busy, onSend, onStop }: ChatInputProps) {
+export function ChatInput({ busy, locked, onSend, onStop }: ChatInputProps) {
   const [text, setText] = useState("");
   const submit = (event?: FormEvent) => {
     event?.preventDefault();
     const value = text.trim();
-    if (!value || busy) return;
+    if (!value || busy || locked) return;
     onSend(value);
     setText("");
   };
@@ -37,7 +40,10 @@ export function ChatInput({ busy, onSend, onStop }: ChatInputProps) {
         value={text}
         onChange={(event) => setText(event.target.value)}
         onKeyDown={onKeyDown}
-        placeholder="Pregúntame sobre tu negocio…"
+        disabled={locked}
+        placeholder={
+          locked ? "Responde la aprobación con sus botones" : "Pregúntame sobre tu negocio…"
+        }
         className="max-h-40 min-h-11 flex-1 resize-none rounded-xl border border-border bg-card px-3 py-2.5 outline-none focus:border-accent"
       />
       {busy ? (
@@ -49,7 +55,11 @@ export function ChatInput({ busy, onSend, onStop }: ChatInputProps) {
           Detener
         </button>
       ) : (
-        <button type="submit" className="h-11 rounded-xl bg-accent px-4 text-accent-foreground">
+        <button
+          type="submit"
+          disabled={locked}
+          className="h-11 rounded-xl bg-accent px-4 text-accent-foreground disabled:opacity-50"
+        >
           Enviar
         </button>
       )}
