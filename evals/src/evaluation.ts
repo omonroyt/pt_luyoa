@@ -10,6 +10,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { MESSAGE_LIMITS } from "@alborada/shared";
+import type { Budget } from "./budget";
 import { agentConfig, createAgentModel } from "@alborada/web/agent";
 import type { EvalCase } from "./cases/case-schema";
 import { loadCriteria } from "./cases/criteria";
@@ -30,6 +31,7 @@ export type RunRequest = {
   repeats: number;
   concurrency: number;
   label: string;
+  budget?: Budget;
 };
 
 export type RunReport = { meta: RunMeta; summary: RunSummary; results: CaseResult[] };
@@ -112,6 +114,7 @@ export async function runEvaluation(request: RunRequest): Promise<RunReport & { 
     ...base,
     onTranscript: (caseId: string, repeat: number, transcript: CaseTranscript) =>
       raw.transcripts.push({ caseId, repeat, transcript }),
+    budget: request.budget,
   };
   const runnable = request.cases.filter((item) => item.requires.length === 0).length;
   console.log(

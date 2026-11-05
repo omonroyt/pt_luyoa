@@ -9,6 +9,7 @@
 import type { LanguageModel } from "ai";
 import type { EvalCase } from "./cases/case-schema";
 import { loadGolden } from "./cases/load-cases";
+import { BUDGET_EXHAUSTED, type Budget } from "./budget";
 import { retryRateLimited } from "./runner/retry";
 import { runCase, type CaseTranscript, type RunDependencies } from "./runner/run-case";
 import { runChecks, type Checks } from "./scoring/checks";
@@ -83,6 +84,7 @@ export type EvaluationDependencies = RunDependencies & {
   // ES: Recibe cada transcripción completa, para guardarla y volver a calificarla.
   // EN: Receives each full transcript, to store it and re-score it later.
   onTranscript?: (caseId: string, repeat: number, transcript: CaseTranscript) => void;
+  budget?: Budget;
 };
 
 function usageOf(transcript: Awaited<ReturnType<typeof runCase>>, judgeCost: number): CaseUsage {
@@ -140,6 +142,18 @@ export async function evaluateCase(
   if (evalCase.requires.length > 0) {
     return { ...base, skipped: `Requiere ${evalCase.requires.join(", ")} (M7)` };
   }
+  if (deps.budget && !deps.budget.canStart()) return { ...base, skipped: BUDGET_EXHAUSTED };
+  const result = await runAndScore(evalCase, repeat, deps);
+  deps.budget?.add((result.usage?.agentCostUsd ?? 0) + (result.usage?.judgeCostUsd ?? 0));
+  return result;
+}
+
+async function runAndScore(
+  evalCase: EvalCase,
+  repeat: number,
+  deps: EvaluationDependencies,
+): Promise<CaseResult> {
+  const base = baseOf(evalCase, repeat);
   try {
     const transcript = await retryRateLimited(() => runCase(evalCase, deps));
     deps.onTranscript?.(evalCase.id, repeat, transcript);
