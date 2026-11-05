@@ -214,9 +214,17 @@
 
 ## ADR-14 · Vercel + Turso para la demo publicada
 
-- **Estado:** Propuesta. Se confirma al probar el despliegue.
-- **Decisión:** desplegar la app en Vercel (con el Cron del resumen semanal) y la base de datos en Turso.
-- **Alternativas:** Render, Fly.io o Railway con un contenedor; Cloudflare.
+- **Estado:** Aceptada para el código; se confirma al probar el despliegue.
+- **Decisión:** desplegar la app en Vercel (con el Cron del resumen semanal) y la base de datos en Turso, con la demo protegida en capas (IMP-63):
+  - **Puerta:** `proxy.ts` (el middleware de Next 16) exige en páginas y rutas de la interfaz una sesión en cookie firmada con HMAC. La llave se deriva de `APPROVAL_SECRET` con una etiqueta propia. La sesión se obtiene en `/acceso` con el código del negocio, comparado en tiempo constante, y fija el negocio de la sesión.
+  - **Topes:** turnos por sesión y por IP al día, en contadores de la base con incremento atómico; intentos de código por IP; gasto diario sumado desde las trazas. Todos son configurables con `DEMO_*`.
+  - **Empaquetado:** `outputFileTracingIncludes` incluye las migraciones SQL y `pnpm-workspace.yaml` en las funciones de la API, porque el rastreo de archivos no los detecta y la base no podría migrarse en Vercel.
+  - Sin código configurado no hay puerta ni topes (desarrollo local y evaluaciones).
+- **Alternativas:**
+  - **Plataforma:** Render, Fly.io o Railway con un contenedor; Cloudflare.
+  - **Puerta:** la protección con contraseña de Vercel (plan de pago); autenticación básica HTTP (sin cierre de sesión ni negocio); un proveedor de cuentas (otro servicio para una demo).
+  - **Contadores:** en memoria (no se comparten entre instancias serverless); Upstash o Vercel KV (otro servicio).
+  - **Tope de gasto:** solo el límite de la llave de OpenRouter, que se conserva como última red.
 - **Por qué:** despliegue directo desde GitHub, variables de entorno cifradas y niveles gratuitos suficientes.
 - **Consecuencias:** límite de duración por función; protección de la demo con código de acceso, límite de mensajes y tope de gasto.
 - **Cron (M7):** `apps/web/vercel.json` programa `/api/cron/weekly` los lunes a las 13:00 UTC. La ruta exige `Authorization: Bearer CRON_SECRET`, que Vercel envía cuando la variable está configurada.
@@ -237,7 +245,7 @@
   - **Candado de identidad.** El servidor MCP recibe el `businessId` esperado y no entrega datos si la llave responde con otro negocio.
   - **El negocio de una solicitud sale siempre de una credencial del servidor** (`lib/tenancy/current-business.ts`), nunca de un dato que manda el navegador:
     - en `/api/mcp`, del token de servicio, comparado en tiempo constante contra todos los negocios;
-    - en las rutas de la interfaz, del negocio por defecto hasta que el código de acceso del despliegue (IMP-63) lo ligue a la sesión.
+    - en las rutas de la interfaz, de la sesión firmada que entrega el código de acceso (IMP-63); sin códigos configurados, del negocio por defecto.
   - **Datos por fila.** Conversaciones, trazas, aprobaciones, preferencias y resúmenes guardan `business_id`, y cada almacén recibe el negocio al crearse.
   - **Cron.** Genera un resumen por cada negocio registrado, por separado.
 - **Alternativas:**

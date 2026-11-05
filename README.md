@@ -44,6 +44,7 @@ Detalle y diagramas: [`docs/specs/03_ARQUITECTURA.md`](docs/specs/03_ARQUITECTUR
    | `OPENROUTER_API_KEY` | Mismo portal; llave con límite de gasto |
    | `APPROVAL_SECRET`, `MCP_SERVICE_TOKEN`, `CRON_SECRET` | Valores aleatorios de 32 bytes: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` |
    | `BUSINESSES` (opcional) | Registro de varios negocios con los nombres de sus variables secretas; formato en `.env.example` (ADR-16) |
+   | `DEMO_ACCESS_CODE` (solo despliegue) | Código de acceso a la demo publicada; vacío en local |
 
 3. Levantar la aplicación:
 
@@ -105,6 +106,18 @@ Uso fuera de la aplicación:
 | `GET /api/health` | Variables configuradas, sin exponer valores | Pública |
 | `POST /api/mcp` | Servidor MCP por Streamable HTTP sin sesión | `Authorization: Bearer <MCP_SERVICE_TOKEN>` |
 | `POST /api/approvals` | Emite el token de aprobación cuando la persona aprueba una campaña | Solo mismo origen |
+| `POST /api/access` | Valida el código de acceso y entrega la sesión de la demo | Solo mismo origen; intentos limitados por IP |
+| `GET /api/cron/weekly` | Genera el resumen semanal de cada negocio (Vercel Cron) | `Authorization: Bearer <CRON_SECRET>` |
+
+Con `DEMO_ACCESS_CODE` configurado, `proxy.ts` exige la sesión firmada en todas las páginas y rutas de la interfaz, y `/api/chat` aplica los topes de turnos por sesión e IP y el de gasto diario (ADR-14).
+
+## Despliegue (Vercel + Turso)
+
+1. Crear la base en Turso y obtener su URL (`libsql://…`) y un token.
+2. Importar el repositorio en Vercel con **Root Directory** `apps/web`; Vercel detecta Next.js y pnpm.
+3. Definir las variables de entorno del proyecto: las de `.env.example` con `DATABASE_URL` y `DATABASE_AUTH_TOKEN` de Turso, `DEMO_ACCESS_CODE` y `CRON_SECRET`. Para pnpm 12 vía corepack, agregar `ENABLE_EXPERIMENTAL_COREPACK=1`.
+4. Desplegar. Las migraciones se aplican solas en la primera solicitud; `GET /api/health` confirma las variables y `"database": "turso"`.
+5. `apps/web/vercel.json` programa el cron semanal; Vercel lo llama con `CRON_SECRET`.
 
 ## Base de datos
 
